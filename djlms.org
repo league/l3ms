@@ -1,0 +1,59 @@
+## design of a lightweight learning management system
+
+Most content will be statically-generated thru emacs, org-mode, make,
+etc.  And I'll use subversion for code exchange.  But there are a few
+things I want a server to do...
+
+* Account management
+  For setting up authentication and authorization for HTTP generally
+  as well as Subversion.  Allow users to set/modify/reset their own
+  passwords using validated email addresses.
+
+*** need to try out postgres HTTP auth first
+
+*** can apache provide custom 401 page? with reset link?
+*** possible for django app to get username from HTTP auth?
+
+***** Initial server response
+HTTP/1.1 401 Authorization Required
+Server: HTTPd/1.0
+Date: Sat, 27 Nov 2004 10:18:15 GMT
+WWW-Authenticate: Basic realm="Secure Area"
+Content-Type: text/html
+Content-Length: 311
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<HTML>
+  <HEAD>
+    <TITLE>Error</TITLE>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+  </HEAD>
+  <BODY><H1>401 Unauthorized.</H1></BODY>
+</HTML>
+
+***** Client re-request, user "Aladdin" password "open sesame"
+GET /private/index.html HTTP/1.1
+Host: localhost
+Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+
+where base64("Aladdin:open sesame") == "QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
+
+So it should be possible to grab that header?
+
+***** Digest auth possible, but not needed with SSL
+
+***** Might want to re-auth with cookies before gradebook access
+
+* Grade keeping
+  So that students can check their grades.  Ideally MY interface to it
+  will not be web-based, but rather just an ODS file.  The program can
+  read the ODS (or perhaps exported CSV) and present that info to
+  authenticated students.
+
+* Submission (for courses not primarily using subversion)
+  Authenticated students can upload files to store into
+  subversion. Ideally will handle single or multiple files, can
+  enforce filenames, etc.
+
+
