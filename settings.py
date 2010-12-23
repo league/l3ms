@@ -1,5 +1,7 @@
 # Django settings for djlms project.
 
+from os.path import realpath, dirname, join
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 PREFIX = 'djlms/' # keep trailing slash, no leading slash, can be empty
@@ -70,6 +72,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    join(dirname(realpath(__file__)), 'templates'),
 )
 
 INSTALLED_APPS = (
