@@ -2,6 +2,7 @@
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+PREFIX = 'djlms/' # keep trailing slash, no leading slash, can be empty
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -45,7 +46,7 @@ MEDIA_URL = ''
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/django-media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'rlser#(u)qctvs48j59-1zc%ydjcuxu)#@m=m2966!+j_6_&^d'
