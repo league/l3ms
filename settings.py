@@ -1,10 +1,26 @@
 # Django settings for djlms project.
 
 from os.path import realpath, dirname, join
+from django.conf import global_settings as default
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-PREFIX = 'djlms/' # keep trailing slash, no leading slash, can be empty
+
+SITE_ROOT = '/djlms'            # All our URLs will have this prefix
+URL_PREFIX = 'djlms/'           # Django script mounted at actual root
+
+def abs_url(path):
+    assert path.startswith('/')
+    return SITE_ROOT + path
+
+def rel_url(path):
+    assert not path.startswith('/')
+    return URL_PREFIX + path
+
+
+LOGIN_URL = abs_url(default.LOGIN_URL)
+LOGOUT_URL = abs_url(default.LOGOUT_URL)
+LOGIN_REDIRECT_URL = abs_url(default.LOGIN_REDIRECT_URL)
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),

@@ -6,7 +6,7 @@ sys.path.append(dirname(dirname(realpath(__file__))))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'djlms.settings'
 
 import djlms.settings
-djlms.settings.PREFIX = ''
+djlms.settings.URL_PREFIX = ''
 
 # Recommendations for production use:
 # 1. Turn off DEBUG mode
