@@ -66,6 +66,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+
 ROOT_URLCONF = 'djlms.urls'
 
 TEMPLATE_DIRS = (
@@ -81,4 +83,5 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.admin',
     'djlms.misc',
+    'djlms.accounts',
 )

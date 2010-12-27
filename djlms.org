@@ -9,11 +9,10 @@ things I want a server to do...
   as well as Subversion.  Allow users to set/modify/reset their own
   passwords using validated email addresses.
 
-*** need to try out postgres HTTP auth first
+*** DONE need to try out postgres HTTP auth first
 
-*** can apache provide custom 401 page? with reset link?
-*** possible for django app to get username from HTTP auth?
-
+*** MAYBE can apache provide custom 401 page? with reset link?
+*** DONE possible for django app to get username from HTTP auth?
 ***** Initial server response
 HTTP/1.1 401 Authorization Required
 Server: HTTPd/1.0
@@ -44,6 +43,48 @@ So it should be possible to grab that header?
 ***** Digest auth possible, but not needed with SSL
 
 ***** Might want to re-auth with cookies before gradebook access
+
+
+*** User registration process
+
+ - admin can paste a bunch of email addresses to send invitations
+ - anyone on internet can register, subject to approval
+ - enrollment keys?
+
+         admin enters email, send validation key
+  START -------------------------> NEW_INVITE
+    |                              / |
+    | enter name, login, pass,    /  | click-back validation key
+    | send validation key        /   |
+    v                           /    v
+   NEW --------> EXPIRED <------   VALID_INVITE
+    |                                |
+    | click-back validation key      | enter name, login, pass
+    |                                |
+    v                                |
+   VALID <---------------------------+
+
+ Other operations:
+   - retrieve login (sent to email)
+   - reset password (click-back from email)
+   - update email, if logged in (validate key sent to new, notify sent to old)
+   - edit name
+
+Subversion layout can be consistent for all courses:
+
+                    USERNAME group valid-user world
+ public/                       r       --      --
+ shared/                       rw      --      --
+ private/USERNAME/     rw      --      --      --
+
+
+approved
+validated (refers to email)
+completed
+
+only when all 3 are true do they become active.
+
+enrolled
 
 * Grade keeping
   So that students can check their grades.  Ideally MY interface to it
