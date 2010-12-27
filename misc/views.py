@@ -2,6 +2,7 @@
 
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 
 def dict_to_ul(d):
     buf = '<ul>'
@@ -12,7 +13,12 @@ def dict_to_ul(d):
 
 @login_required
 def hello(request):
-    buf = '<h1>META</h1>'
+    buf = request.user.username
+    buf += '<br>'
+    buf += reverse(hello)
+    buf += '<br>'
+    buf += reverse('django.contrib.auth.views.login')
+    buf += '<h1>META</h1>'
     buf += dict_to_ul(request.META)
     buf += '<h1>environ</h1>'
     buf += dict_to_ul(request.environ)
