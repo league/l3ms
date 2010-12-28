@@ -98,3 +98,60 @@ enrolled
   enforce filenames, etc.
 
 
+
+* URL and page design
+*** /djlms/  when authenticated  "my_profile"
+    User profile, which includes:
+    - name, username, gravatar, email address
+    - about me
+    - phone number (prof only, classmates, any students)
+    - email address (prof only, classmates, any students)
+    - IM screen name (multiple: prof only, classmates, any students)
+    - enrolled course list, by semester
+    With links to:
+    - change email address
+    - edit name (jquery)
+    - edit "about me" (jquery)
+    - change gravatar (on gravatar.com)
+    - change password (jquery)
+    - all courses (expand)
+*** /djlms/ when *not* authenticated  "unauthenticated" (also the 401 page)
+    - Login/password box -- can default to REMOTE_USER if set
+    - Link to retrieve login
+    - Link to reset password
+    - Link/form to register new user
+*** /djlms/user/LOGIN/  @login_required  "user_profile"
+    - if LOGIN == request.user then same as "my_profile", otherwise:
+    - name, username, gravatar, about me
+    - phone, email (after checking permissions)
+    - enrolled course list, by semester
+    - no edit links, unless request.user.is_staff
+    - no all courses
+*** /djlms/nav/   "navbar"
+    - top of every page, including static via JS.
+    - user ID here can be based on REMOTE_USER instead of Django login
+    - but REMOTE_USER takes priority if set
+    - "Chris League _account_ cs150f10 _home_ _scores_ _students_ _trac_? _log out_"
+    - could record stats using this link too.
+    - or "Anonymous _log in_ _register_"
+*** /djlms/course/CSXXXYZZ/  @login_required, IF NOT enrolled
+    - box to enter enrollment key, or
+    - choice to enter as guest, subject to approval, or
+    - notice that you are pending approval
+*** /djlms/course/CSXXXYZZ/ @login_required, IF enrolled
+    - roster and scores, both
+    - roster has links to user_profiles
+    - scores includes graphs etc.
+*** /djlms/students/CSXXXYZZ/  @login_required, IF enrolled:
+    - links to enrolled student profiles
+*** /djlms/students/CSXXXYZZ/  @login_required but NOT enrolled
+    - show enrollment page
+*** /djlms/scores/CSXXXYZZ/   @login_required IF enrolled:
+    - grades and feedback
+*** /djlms/enroll/CSXXXYZZ/  @login_required, if NOT enrolled:
+    - box to enter enrollment key, or
+    - choice to enter as guest, subject to approval
+*** /djlms/enroll/CSXXXyyZZ/ @login_required, if enrolled already
+    - 
+
+* django apps: accounts, courses (& enrollment), scores
