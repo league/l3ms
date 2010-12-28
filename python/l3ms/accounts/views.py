@@ -77,7 +77,15 @@ def activate(request, key):
     return HttpResponse(str(k))
 
 def register(request):
-    return HttpResponse('not implemented')
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if not form.is_valid():
+            return login_page(new_form = form)
+        form.save()
+        u = auth.authenticate(username=form.cleaned_data['username'],
+                              password=form.cleaned_data['password1'])
+        auth.login(request, u)
+    return HttpResponseRedirect(reverse('home'))
 
 def edit_email(request):
     return HttpResponse('not implemented')
