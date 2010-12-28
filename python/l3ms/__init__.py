@@ -1,4 +1,4 @@
-# Module initialization for djlms project.
+# Module initialization for l3ms project.
 
 from hashlib import md5
 from django.contrib.admin.models import User

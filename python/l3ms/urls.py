@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from djlms.settings import URL_PREFIX
-from djlms.accounts import views as accounts
+from settings import URL_PREFIX
+from accounts import views as accounts
 
 def rel(path):
     assert not path.startswith('/')
@@ -28,9 +28,9 @@ urlpatterns = patterns(
     rel_url('navbar', 'nav/(?P<path>.*)$', accounts.navbar),
 
 #    rel_url('students', 'students/(?P<course_id>\w+)/$',
-#            'djlms.courses.views.students'),
+#            'l3ms.courses.views.students'),
 #    rel_url('scores', 'scores/(?P<course_id>\w+)/$',
-#            'djlms.scores.views.scores'),
+#            'l3ms.scores.views.scores'),
 
     (rel(r'admin/'), include(admin.site.urls)),
 )

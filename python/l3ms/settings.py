@@ -1,11 +1,11 @@
-# Django settings for djlms project.
+# Django settings for l3ms project.
 
 from os.path import realpath, dirname, join
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-URL_PREFIX = 'djlms/'           # Django script mounted at actual root
+URL_PREFIX = 'l3ms/'           # Django script mounted at actual root
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -69,7 +69,7 @@ MIDDLEWARE_CLASSES = (
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
-ROOT_URLCONF = 'djlms.urls'
+ROOT_URLCONF = 'l3ms.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -83,6 +83,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.admin',
-    'djlms.misc',
-    'djlms.accounts',
+    'l3ms.misc',
+    'l3ms.accounts',
 )
