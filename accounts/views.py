@@ -3,9 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from forms import *
+from models import *
 
 def home(request):
     if request.user.is_authenticated():
@@ -57,8 +58,23 @@ def forgot_password(request):
         form = ResetPasswordForm(request.POST)
         if not form.is_valid():
             return login_page(reset_form = form)
-        return HttpResponse('can reset '+str(form.cleaned_data['username']))
+        u = User.objects.get(username=form.cleaned_data['username'])
+        k = ActivationKey.objects.create(u, RESET_PASSWORD, u.email)
+        return HttpResponse('<a href="%s">reset link</a> <a href="%s">home</a>'
+                            % (k.get_absolute_url(), reverse('home')))
     return HttpResponseRedirect(reverse('home'))
+
+def activate(request, key):
+    try:
+        k = ActivationKey.objects.get(key=key)
+    except ActivationKey.DoesNotExist:
+        raise Http404
+    if k.action == VALIDATE_EMAIL:
+        u = k.user
+        u.get_profile().save_validated_email(k.email)
+        k.delete()
+        return render_to_response('thanks-email.html', {'user': u})
+    return HttpResponse(str(k))
 
 def register(request):
     return HttpResponse('not implemented')
@@ -77,6 +93,7 @@ def profile(request, username=None):
         buf += '<br><a href="%s">admin</a>' % reverse('admin:index')
     return HttpResponse(buf)
 
-def navbar(request):
-    return HttpResponse('not implemented')
+## this should really be moved to courses app
+def navbar(request, path):
+    return HttpResponse('not implemented: '+path)
 
