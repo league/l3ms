@@ -11,6 +11,8 @@ LOGIN_URL = '/l3ms/'
 HTTP_AUTH_REALM = 'Secure area'
 HTTP_AUTH_DEBUG = True
 
+FROM_EMAIL = 'noreply@liucs.net'
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
@@ -92,4 +94,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'l3ms.misc',
     'l3ms.accounts',
+    'l3ms.http_auth',
+    'l3ms.email_validation',
 )

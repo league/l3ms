@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from settings import URL_PREFIX
+from settings import URL_PREFIX, DEBUG
 from accounts import views as accounts
+from email_validation import views as validation
 import http_auth.urls
 
 def rel(path):
@@ -16,6 +17,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
+    rel_url('validate', 'validate/(?P<key>.*)$', validation.validate),
     rel_url('home', '$', accounts.home),
     rel_url('OLDlogin', 'u/login/$', accounts.login),
     rel_url('OLDlogout', 'u/logout/$', accounts.logout),
@@ -36,3 +38,11 @@ urlpatterns = patterns(
     (rel(r'auth/'), include(http_auth.urls)),
     (rel(r'admin/'), include(admin.site.urls)),
 )
+
+if DEBUG:
+    urlpatterns += patterns(
+        '',
+        rel_url('test_validation',
+                'test/valid/(?P<code>\w)(?P<user>\d+)/(?P<email>.+)$',
+                validation.test)
+        )
