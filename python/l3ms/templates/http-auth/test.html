@@ -1,0 +1,16 @@
+<h1>HTTP Auth test</h1>
+
+<p>
+  <a href="{% url auth_options %}">options</a> |
+  <a href="{% url auth_login next=next %}">log in</a> |
+  <a href="{% url auth_logout %}">log out</a>
+</p>
+
+<p style="color: #a00">{{ message }}</p>
+
+<ul>
+  <li>request.user: {{ request.user }}</li>
+  <li>session: {{ request.session.items }}</li>
+  <li>HTTP_AUTHORIZATION: {{ request.META.HTTP_AUTHORIZATION }}</li>
+  <li>next: {{ next }}</li>
+</ul>
