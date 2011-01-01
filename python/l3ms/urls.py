@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 from settings import URL_PREFIX
 from accounts import views as accounts
+import http_auth.urls
 
 def rel(path):
     assert not path.startswith('/')
@@ -16,8 +17,8 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     rel_url('home', '$', accounts.home),
-    rel_url('login', 'u/login/$', accounts.login),
-    rel_url('logout', 'u/logout/$', accounts.logout),
+    rel_url('OLDlogin', 'u/login/$', accounts.login),
+    rel_url('OLDlogout', 'u/logout/$', accounts.logout),
     rel_url('register', 'u/new/$', accounts.register),
     rel_url('activate', 'u/activate/(?P<key>.*)$', accounts.activate),
     rel_url('forgot_username', 'u/username/$', accounts.forgot_username),
@@ -32,5 +33,6 @@ urlpatterns = patterns(
 #    rel_url('scores', 'scores/(?P<course_id>\w+)/$',
 #            'l3ms.scores.views.scores'),
 
+    (rel(r'auth/'), include(http_auth.urls)),
     (rel(r'admin/'), include(admin.site.urls)),
 )
