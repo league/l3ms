@@ -6,6 +6,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 URL_PREFIX = 'l3ms/'           # Django script mounted at actual root
+LOGIN_URL = '/l3ms/'
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -19,6 +20,9 @@ DATABASE_USER = 'djlms'
 DATABASE_PASSWORD = 'wIfPF9ICqksCHNi9'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = ''
+
+if DEBUG:
+    EMAIL_PORT = 1025
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

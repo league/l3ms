@@ -15,7 +15,7 @@ def home(request):
         return login_page()
 
 def login_page(auth_form=None, retrieve_form=None,
-               reset_form=None, new_form=None):
+               reset_form=None, new_form=None, next=None):
     if not auth_form:
         auth_form = AuthenticationForm()
     if not retrieve_form:
@@ -28,15 +28,19 @@ def login_page(auth_form=None, retrieve_form=None,
                               {'auth_form': auth_form,
                                'retrieve_form': retrieve_form,
                                'reset_form': reset_form,
-                               'new_form': new_form})
+                               'new_form': new_form,
+                               'next': next})
 
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(None, request.POST)
         if not form.is_valid():
-            return login_page(auth_form = form)
+            return login_page(auth_form = form,
+                              next=request.POST.get('next', None))
         auth.login(request, form.get_user())
-    return HttpResponseRedirect(reverse('home'))
+        next = request.POST.get('next', None) or reverse('home')
+        return HttpResponseRedirect(next)
+    return login_page(next=request.GET.get('next', None))
 
 def logout(request):
     auth.logout(request)
@@ -84,6 +88,9 @@ def register(request):
         form.save()
         u = auth.authenticate(username=form.cleaned_data['username'],
                               password=form.cleaned_data['password1'])
+        k = ActivationKey.objects.create(u, VALIDATE_EMAIL, u.email)
+        url = request.build_absolute_uri(k.get_absolute_url())
+        u.email_user('validate', url)
         auth.login(request, u)
     return HttpResponseRedirect(reverse('home'))
 
@@ -95,11 +102,18 @@ def edit_profile(request):
 
 @login_required
 def profile(request, username=None):
-    buf = ('Hello %s, <a href="%s">log out</a>' %
-           (username, reverse('logout')))
-    if request.user.is_staff:
-        buf += '<br><a href="%s">admin</a>' % reverse('admin:index')
-    return HttpResponse(buf)
+    try:
+        if request.user.username == username:
+            user = request.user
+            privileged = True
+        else:
+            user = User.objects.get(username=username)
+            privileged = request.user.is_staff
+    except User.DoesNotExist:
+        raise Http404
+
+    return render_to_response('profile.html',
+                              {'user': user, 'privileged': privileged})
 
 ## this should really be moved to courses app
 def navbar(request, path):

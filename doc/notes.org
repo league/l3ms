@@ -4,6 +4,47 @@ Most content will be statically-generated thru emacs, org-mode, make,
 etc.  And I'll use subversion for code exchange.  But there are a few
 things I want a server to do...
 
+* HTTP logout
+  For some reason I haven't given up on this yet.
+  I think what you have to do is:
+
+   --- request /logout --->
+   <-- 401 auth required, same realm as always ---
+   --- invalid@invalid --->
+   <-- 200 OK
+
+   The question is whether the 401 will automatically pop up an auth
+   dialog.
+
+   Or maybe the 401 isn't necessary.. it's just that it controls the
+   realm.  But to bypass Apache's lookup, this has to be simulated,
+   rather than configured in Apache?
+
+* HTTP/Django authentication:
+  - can use ajax to send HTTP Authorization (and have browser store
+    it) when user provides session-based password to login form.
+
+  |   | REMOTE_USER | request.user | Basic auth | login_required    |
+  | 1 | blank       | blank        | 401 page = | login page        |
+  | 2 | blank       | set          | login page | works             |
+  | 3 | set         | blank        | works      | login page        |
+  | 4 | set         | set (agree)  | works      | works             |
+  | 5 | set         | set (diff)   | works      | go w/request.user |
+  |   |             |              |            |                   |
+
+
+* NIXED HTTP/Django authentication sync: take the lead from trac
+  /l3ms/login/ -- protected by HTTP auth; logs in session using REMOTE_USER
+                  then redirects to /u/USERNAME/ or GET[next]
+  /l3ms/       -- contains links to register, retreive/reset, login, logout
+  /l3ms/?next=/path/ -- give "login required" message, then link to /login/
+  /l3ms/u/USERNAME/  -- profile page, protected w/login_required
+  /l3ms/register/ -- not protected
+  /l3ms/forgot/ -- not protected
+  /l3ms/register/ -- not protected
+
+
+
 * Account management
   For setting up authentication and authorization for HTTP generally
   as well as Subversion.  Allow users to set/modify/reset their own
