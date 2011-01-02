@@ -1,8 +1,8 @@
 <h1>HTTP Auth test</h1>
 
 <p>
-  <a href="{% url auth_options %}">options</a> |
-  <a href="{% url auth_login next=next %}">log in</a> |
+  <a href="{% url auth_options %}?next={{ next }}">options</a> |
+  <a href="{% url auth_login %}?next={{ next }}">log in</a> |
   <a href="{% url auth_logout %}">log out</a>
 </p>
 

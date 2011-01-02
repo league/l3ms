@@ -16,9 +16,11 @@ def render(template, request, message='', next=''):
     return render_to_response(template, d)
 
 def options(request, message='', next=''):
+    next = request.GET.get('next', next)
     return render('http-auth/options.html', request, message, next)
 
-def login(request, next):
+def login(request, next=''):
+    next = request.GET.get('next', next)
     try:
         kind, cred = request.META['HTTP_AUTHORIZATION'].split()
         assert kind.lower() == 'basic'

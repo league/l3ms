@@ -1,0 +1,15 @@
+
+<ul>
+  {% if message %}
+  <li style="color: #a00">{{ message }}</li>
+  {% endif %}
+  {% if user.is_authenticated %}
+  <li>Hello, {{ user.get_full_name|default:user.username }}</li>
+  <li><a href="{% url auth_logout %}">log out</a></li>
+  {% else %}
+  <li><a href="{% url auth_login %}?next={{ next }}">log in</a></li>
+  <li>forgot user name</li>
+  <li>forgot password</li>
+  <li>register new user</li>
+  {% endif %}
+</ul>

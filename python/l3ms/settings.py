@@ -9,7 +9,7 @@ URL_PREFIX = 'l3ms/'           # Django script mounted at actual root
 LOGIN_URL = '/l3ms/'
 
 HTTP_AUTH_REALM = 'Secure area'
-HTTP_AUTH_DEBUG = True
+HTTP_AUTH_DEBUG = False
 
 FROM_EMAIL = 'noreply@liucs.net'
 
