@@ -1,11 +1,21 @@
 from django import forms
-from django.contrib.auth.forms import PasswordResetForm, UserCreationForm
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.template import loader, Context
 from models import UserProfile
+from settings import FROM_EMAIL, SITE_NAME
 
-class RetrieveUsernameForm(PasswordResetForm):
-    def save(self):
-        pass
+class RetrieveUsernameForm(forms.Form):
+    email = forms.EmailField(label="Email", max_length=75)
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        try:
+            self.user = User.objects.get(email=email)
+            return email
+        except User.DoesNotExist:
+            raise forms.ValidationError("That email address does not have an associated user account.")
 
 class ResetPasswordForm(forms.Form):
     username = forms.CharField(label='Username', max_length=30)

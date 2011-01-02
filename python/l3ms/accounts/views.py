@@ -24,6 +24,23 @@ def profile(request, username):
         raise Http404
     return render_to_response('profile.html', d)
 
+def forgot_username(request):
+    if request.method == 'POST':
+        form = RetrieveUsernameForm(request.POST)
+        if form.is_valid():
+            url = request.build_absolute_uri(reverse('auth_options'))
+            t = loader.get_template('email/retrieve.txt')
+            c = Context({'username': form.user.username,
+                         'site_name': SITE_NAME,
+                         'auth_url': url})
+            send_mail(SITE_NAME+' user name', t.render(c),
+                      FROM_EMAIL, [form.cleaned_data['email']])
+            request.session['message'] = \
+                'Your user name has been set by email.'
+            return HttpResponseRedirect(url)
+    else:
+        form = RetrieveUsernameForm()
+    return render_to_response('acct/retrieve.html', {'form': form})
 
 def login_page(auth_form=None, retrieve_form=None,
                reset_form=None, new_form=None, next=None):
@@ -41,32 +58,6 @@ def login_page(auth_form=None, retrieve_form=None,
                                'reset_form': reset_form,
                                'new_form': new_form,
                                'next': next})
-
-def login(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(None, request.POST)
-        if not form.is_valid():
-            return login_page(auth_form = form,
-                              next=request.POST.get('next', None))
-        auth.login(request, form.get_user())
-        next = request.POST.get('next', None) or reverse('home')
-        return HttpResponseRedirect(next)
-    return login_page(next=request.GET.get('next', None))
-
-def logout(request):
-    auth.logout(request)
-    return render_to_response('logout.html')
-
-def forgot_username(request):
-    if request.method == 'POST':
-        form = RetrieveUsernameForm(request.POST)
-        if not form.is_valid():
-            return login_page(retrieve_form = form)
-        email = form.cleaned_data['email']
-        users = User.objects.filter(email__iexact = email)
-        return HttpResponse('%s = %s<br><a href="%s">home</a>' %
-                            (email, users[0].username, reverse('home')))
-    return HttpResponseRedirect(reverse('home'))
 
 def forgot_password(request):
     if request.method == 'POST':

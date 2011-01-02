@@ -1,0 +1,6 @@
+
+Someone (possibly you) requested to retrieve your user name
+for {{ site_name }}.  It is: {{ username }}
+
+You can log in or reset your password here:
+{{ auth_url }}

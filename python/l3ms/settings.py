@@ -11,6 +11,7 @@ LOGIN_URL = '/l3ms/'
 HTTP_AUTH_REALM = 'Secure area'
 HTTP_AUTH_DEBUG = False
 
+SITE_NAME = 'liucs.net'
 FROM_EMAIL = 'noreply@liucs.net'
 
 ADMINS = (

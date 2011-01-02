@@ -8,7 +8,7 @@
   <li><a href="{% url auth_logout %}">log out</a></li>
   {% else %}
   <li><a href="{% url auth_login %}">log in</a></li>
-  <li>forgot user name</li>
+  <li><a href="{% url forgot_username %}">forgot user name</a></li>
   <li>forgot password</li>
   <li>register new user</li>
   {% endif %}

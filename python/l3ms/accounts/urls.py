@@ -4,6 +4,6 @@ import views
 
 urlpatterns = patterns(
     '',
-    url(r'^$', views.home),
+    url(r'^forgot/username$', views.forgot_username, name='forgot_username'),
     )
 

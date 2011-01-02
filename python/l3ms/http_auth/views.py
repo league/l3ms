@@ -18,6 +18,9 @@ def render(template, request, message=''):
     return render_to_response(template, d)
 
 def options(request, message=''):
+    if 'message' in request.session:
+        message = request.session['message']
+        del request.session['message']
     return render('http-auth/options.html', request, message)
 
 def login(request):
