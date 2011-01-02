@@ -1,18 +1,29 @@
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from forms import *
+from l3ms.http_auth.views import login_required
 from models import *
 
+@login_required
 def home(request):
-    if request.user.is_authenticated():
-        return profile(request, username=request.user.username)
-    else:
-        return login_page()
+    return profile(request, username=request.user.username)
+
+@login_required
+def profile(request, username):
+    try:
+        if request.user.username == username:
+            d = {'user': request.user, 'privileged': True}
+        else:
+            d = {'user': User.objects.get(username=username),
+                 'privileged': request.user.is_staff}
+    except User.DoesNotExist:
+        raise Http404
+    return render_to_response('profile.html', d)
+
 
 def login_page(auth_form=None, retrieve_form=None,
                reset_form=None, new_form=None, next=None):
@@ -100,20 +111,6 @@ def edit_email(request):
 def edit_profile(request):
     return HttpResponse('not implemented')
 
-@login_required
-def profile(request, username=None):
-    try:
-        if request.user.username == username:
-            user = request.user
-            privileged = True
-        else:
-            user = User.objects.get(username=username)
-            privileged = request.user.is_staff
-    except User.DoesNotExist:
-        raise Http404
-
-    return render_to_response('profile.html',
-                              {'user': user, 'privileged': privileged})
 
 ## this should really be moved to courses app
 def navbar(request, path):

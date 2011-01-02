@@ -58,9 +58,9 @@ def logout(request):
     return render('http-auth/logout.html', request)
 
 def login_required(f):
-    def do_it(request):
+    def do_it(request, *args, **kwargs):
         if request.user.is_authenticated():
-            return f(request)
+            return f(request, *args, **kwargs)
         else:
             dest = reverse('auth_options')
             next = urlquote(request.get_full_path())
