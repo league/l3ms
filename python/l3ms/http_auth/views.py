@@ -1,7 +1,10 @@
 from django.conf import settings
 from django.contrib import auth
+from django.contrib.auth.decorators import user_passes_test
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.utils.http import urlquote
 from settings import HTTP_AUTH_REALM, HTTP_AUTH_DEBUG
 import base64
 
@@ -53,3 +56,18 @@ def logout(request):
         request.session['logout'] = u
         request.session.set_expiry(0) # upon closing web browser
     return render('http-auth/logout.html', request)
+
+def login_required(f):
+    def do_it(request):
+        if request.user.is_authenticated():
+            return f(request)
+        else:
+            dest = reverse('auth_options')
+            next = urlquote(request.get_full_path())
+            return HttpResponseRedirect('%s?next=%s' % (dest, next))
+    return do_it
+
+@login_required
+def test(request):
+    return render('http-auth/test.html', request,
+                  message='This was to be secret!')
