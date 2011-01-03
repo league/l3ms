@@ -9,7 +9,7 @@ from django.db import models
 from django.template import loader, Context
 from hashlib import md5
 from random import random
-from settings import FROM_EMAIL
+from settings import FROM_EMAIL, SITE_NAME
 
 class Validator:
     def __init__(self, code, subject, template, handler, expiry_hours):
@@ -48,7 +48,8 @@ class ValidationManager(models.Manager):
 
         url = request.build_absolute_uri(obj.get_absolute_url())
         t = loader.get_template(v.template)
-        c = Context({'email': email, 'user': user, 'url': url})
+        c = Context({'email': email, 'user': user,
+                     'site_name': SITE_NAME, 'url': url})
         send_mail(v.subject, t.render(c), FROM_EMAIL, [email])
         return obj
 

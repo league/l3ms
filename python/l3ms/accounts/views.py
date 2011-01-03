@@ -1,11 +1,12 @@
 from django.contrib import auth
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from forms import *
-from l3ms.http_auth.views import login_required
+from l3ms.email_validation.models import ValidationKey
+from l3ms.http_auth.views import login_required, SESSION_MESSAGE
 from models import *
 
 @login_required
@@ -24,6 +25,14 @@ def profile(request, username):
         raise Http404
     return render_to_response('profile.html', d)
 
+ACCT_NAME_SENT = 'Your user name has been set by email.'
+ACCT_LINK_SENT = 'A password reset link has been set by email.'
+ACCT_PASS_CHANGED = 'Your password has been changed.'
+
+def auth_redirect(request, message):
+    request.session[SESSION_MESSAGE] = message
+    return HttpResponseRedirect(reverse('auth_options'))
+
 def forgot_username(request):
     if request.method == 'POST':
         form = RetrieveUsernameForm(request.POST)
@@ -35,52 +44,38 @@ def forgot_username(request):
                          'auth_url': url})
             send_mail(SITE_NAME+' user name', t.render(c),
                       FROM_EMAIL, [form.cleaned_data['email']])
-            request.session['message'] = \
-                'Your user name has been set by email.'
-            return HttpResponseRedirect(url)
+            return auth_redirect(request, ACCT_NAME_SENT)
     else:
         form = RetrieveUsernameForm()
     return render_to_response('acct/retrieve.html', {'form': form})
 
-def login_page(auth_form=None, retrieve_form=None,
-               reset_form=None, new_form=None, next=None):
-    if not auth_form:
-        auth_form = AuthenticationForm()
-    if not retrieve_form:
-        retrieve_form = RetrieveUsernameForm()
-    if not reset_form:
-        reset_form = ResetPasswordForm()
-    if not new_form:
-        new_form = RegistrationForm()
-    return render_to_response('login-or-register.html',
-                              {'auth_form': auth_form,
-                               'retrieve_form': retrieve_form,
-                               'reset_form': reset_form,
-                               'new_form': new_form,
-                               'next': next})
-
 def forgot_password(request):
     if request.method == 'POST':
         form = ResetPasswordForm(request.POST)
-        if not form.is_valid():
-            return login_page(reset_form = form)
-        u = User.objects.get(username=form.cleaned_data['username'])
-        k = ActivationKey.objects.create(u, RESET_PASSWORD, u.email)
-        return HttpResponse('<a href="%s">reset link</a> <a href="%s">home</a>'
-                            % (k.get_absolute_url(), reverse('home')))
-    return HttpResponseRedirect(reverse('home'))
+        if form.is_valid():
+            ValidationKey.objects.create(request, form.user.email,
+                                         form.user, 'P')
+            return auth_redirect(request, ACCT_LINK_SENT)
+    else:
+        form = ResetPasswordForm()
+    return render_to_response('acct/reset.html', {'form': form})
 
-def activate(request, key):
-    try:
-        k = ActivationKey.objects.get(key=key)
-    except ActivationKey.DoesNotExist:
-        raise Http404
-    if k.action == VALIDATE_EMAIL:
-        u = k.user
-        u.get_profile().save_validated_email(k.email)
-        k.delete()
-        return render_to_response('thanks-email.html', {'user': u})
-    return HttpResponse(str(k))
+def forgot_password_handler(request, k):
+    if request.method == 'POST':
+        form = SetPasswordForm(k.user, request.POST)
+        if form.is_valid():
+            form.save()
+            k.delete()
+            return auth_redirect(request, ACCT_PASS_CHANGED)
+    else:
+        form = SetPasswordForm(k.user)
+    url = request.get_full_path()
+    return render_to_response('acct/reset2.html',
+                              {'form': form, 'url': url})
+
+ValidationKey.objects.register(
+    'P', 'password reset', 'email/reset.txt',
+    forgot_password_handler, 96)
 
 def register(request):
     if request.method == 'POST':

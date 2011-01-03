@@ -9,13 +9,14 @@ def validate(request, key):
         k = ValidationKey.objects.get(key=key)
     except ValidationKey.DoesNotExist:
         raise Http404
-    r = ValidationKey.objects.dispatch(request, k)
-    k.delete()
-    return r
+    # Handler will be responsible for deleting k
+    return ValidationKey.objects.dispatch(request, k)
 
 if DEBUG:
     def x_handler(request, k):
-        return HttpResponse('validated %s' % k)
+        r = HttpResponse('validated %s' % k)
+        k.delete()
+        return r
     ValidationKey.objects.register(
         'X', 'X subject',
         'email-validation/test.txt',

@@ -23,7 +23,7 @@ class ResetPasswordForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data.get('username')
         try:
-            User.objects.get(username=username)
+            self.user = User.objects.get(username=username)
             return username
         except User.DoesNotExist:
             raise forms.ValidationError('That username does not exist.')
