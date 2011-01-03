@@ -8,6 +8,10 @@ from django.utils.http import urlquote
 from settings import HTTP_AUTH_REALM, HTTP_AUTH_DEBUG
 import base64
 
+SESSION_LOGOUT = 'logout'
+SESSION_NEXT_PAGE = 'next'
+SESSION_MESSAGE = 'message'
+
 def render(template, request, message=''):
     d = {'message': message,
          'user': request.user,
@@ -18,32 +22,35 @@ def render(template, request, message=''):
     return render_to_response(template, d)
 
 def options(request, message=''):
-    if 'message' in request.session:
-        message = request.session['message']
-        del request.session['message']
+    if SESSION_MESSAGE in request.session:
+        message = request.session[SESSION_MESSAGE]
+        del request.session[SESSION_MESSAGE]
     return render('http-auth/options.html', request, message)
 
 def login(request):
-    try:
-        kind, cred = request.META['HTTP_AUTHORIZATION'].split()
-        assert kind.lower() == 'basic'
-        name, pwd = base64.b64decode(cred).split(':')
-        user = auth.authenticate(username=name, password=pwd)
-        if user is None:
-            return force(request)
-        if request.session.get('logout', None) == user.username:
-            del request.session['logout']
-            request.session.set_expiry(None) # use global default
-            return force(request)
-        next = request.session.get('next', '')
-        del request.session['next']
-        auth.login(request, user)
-        return (HttpResponseRedirect(next) if next else
-                render('http-auth/login.html', request))
-    except KeyError:
+    if 'HTTP_AUTHORIZATION' not in request.META:
         return force(request)
+    kind, cred = request.META['HTTP_AUTHORIZATION'].split()
+    assert kind.lower() == 'basic'
+    name, pwd = base64.b64decode(cred).split(':')
+    user = auth.authenticate(username=name, password=pwd)
+    if user is None:
+        return force(request)
+    if SESSION_LOGOUT in request.session:
+        if request.session[SESSION_LOGOUT] == user.username:
+            return force(request)
+    next = request.session.get(SESSION_NEXT_PAGE, '')
+    auth.login(request, user)
+    if next:
+        del request.session[SESSION_NEXT_PAGE]
+        return HttpResponseRedirect(next)
+    else:
+        return render('http-auth/login.html', request)
 
 def force(request):
+    if SESSION_LOGOUT in request.session:
+        del request.session[SESSION_LOGOUT]
+        request.session.set_expiry(None) # back to global default
     r = options(request,
                 message='Authentication is required.')
     r.status_code = 401
@@ -54,7 +61,7 @@ def logout(request):
     if request.user.is_authenticated():
         u = request.user.username
         auth.logout(request)
-        request.session['logout'] = u
+        request.session[SESSION_LOGOUT] = u
         request.session.set_expiry(0) # upon closing web browser
     return render('http-auth/logout.html', request)
 
@@ -63,7 +70,8 @@ def login_required(f):
         if request.user.is_authenticated():
             return f(request, *args, **kwargs)
         else:
-            request.session['next'] = urlquote(request.get_full_path())
+            request.session[SESSION_NEXT_PAGE] = \
+                urlquote(request.get_full_path())
             request.session.set_expiry(0) # upon closing web browser
             return HttpResponseRedirect(reverse('auth_options'))
     return do_it
