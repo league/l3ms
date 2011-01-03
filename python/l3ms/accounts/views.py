@@ -15,15 +15,19 @@ def home(request):
 
 @login_required
 def profile(request, username):
-    try:
-        if request.user.username == username:
-            d = {'user': request.user, 'privileged': True}
-        else:
-            d = {'user': User.objects.get(username=username),
-                 'privileged': request.user.is_staff}
-    except User.DoesNotExist:
-        raise Http404
-    return render_to_response('profile.html', d)
+    if request.user.username == username:
+        user = request.user
+        privileged = True
+    else:
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise Http404
+        privileged = request.user.is_staff
+    gravatar = gravatar_url(user)
+    return render_to_response('profile.html',
+                              {'user': user, 'privileged': privileged,
+                               'gravatar': gravatar})
 
 ACCT_NAME_SENT = 'Your user name has been set by email.'
 ACCT_LINK_SENT = 'A password reset link has been set by email.'

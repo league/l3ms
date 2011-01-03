@@ -5,6 +5,10 @@ from django.db import models
 from hashlib import md5
 from random import random
 
+def gravatar_url(user):
+    h = md5(user.email.lower()).hexdigest()
+    return 'https://secure.gravatar.com/avatar/%s.jpg?d=retro' % h
+
 class UserProfile(models.Model):
     user = models.ForeignKey(User, unique=True)
     is_email_valid = models.BooleanField(default=False)
