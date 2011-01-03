@@ -85,7 +85,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    join(dirname(realpath(__file__)), 'templates'),
+    join(dirname(dirname(dirname(realpath(__file__)))), 'templates'),
 )
 
 INSTALLED_APPS = (
