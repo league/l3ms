@@ -1,0 +1,5 @@
+
+You must validate your new email address by clicking
+the following link:
+
+  {{ url }}

@@ -1,0 +1,6 @@
+<h1>Change email for {{ user.username }}</h1>
+
+<form method="post" action="{% url edit_email username=user.username %}">
+  {{ form.as_p }}
+  <input type="submit" value="Submit" />
+</form>
