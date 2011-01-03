@@ -1,6 +1,0 @@
-
-This is a test message.
-
-email {{ email }}
-user {{ user }}
-url {{ url }}

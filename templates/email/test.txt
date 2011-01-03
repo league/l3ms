@@ -1,0 +1,5 @@
+{'user': '{{ user.username }}',
+ 'email': '{{ email }}',
+ 'site_name': '{{ site_name }}',
+ 'url': '{{ url }}',
+ }

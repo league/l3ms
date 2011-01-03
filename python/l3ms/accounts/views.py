@@ -57,7 +57,8 @@ def forgot_password(request):
     if request.method == 'POST':
         form = ResetPasswordForm(request.POST)
         if form.is_valid():
-            ValidationKey.objects.create(request, form.user.email,
+            ValidationKey.objects.create(request.build_absolute_uri,
+                                         form.user.email,
                                          form.user, 'P')
             return auth_redirect(request, ACCT_LINK_SENT)
     else:
