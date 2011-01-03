@@ -5,11 +5,7 @@
 
 <p>privileged: {{ privileged }}</p>
 
-<p>email: {{ user.email }} 
-{% if user.get_profile.is_email_valid %}
-  (validated)
-{% else %}
-  (not yet validated)
-{% endif %}
+<p>email: {{ user.email }}
+  <a href="{% url edit_email username=user.username %}">change</a>
 
 <p><a href="{% url auth_logout %}">Log out</a></p>

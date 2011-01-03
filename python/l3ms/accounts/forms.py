@@ -6,9 +6,10 @@ from django.template import loader, Context
 from models import UserProfile
 from settings import FROM_EMAIL, SITE_NAME
 
-class RetrieveUsernameForm(forms.Form):
+class EmailBaseForm(forms.Form):
     email = forms.EmailField(label="Email", max_length=75)
 
+class RetrieveUsernameForm(EmailBaseForm):
     def clean_email(self):
         email = self.cleaned_data["email"]
         try:

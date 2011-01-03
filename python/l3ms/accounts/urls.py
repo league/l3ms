@@ -6,5 +6,6 @@ urlpatterns = patterns(
     '',
     url(r'^forgot/username$', views.forgot_username, name='forgot_username'),
     url(r'^forgot/password$', views.forgot_password, name='forgot_password'),
+    url(r'^edit/(?P<username>\w+)/email$', views.edit_email, name='edit_email'),
     )
 
