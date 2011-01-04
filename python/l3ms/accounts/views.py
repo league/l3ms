@@ -77,7 +77,9 @@ def forgot_username(request):
             return auth_redirect(request, M_USERNAME_SENT)
     else:
         form = forms.RetrieveUsernameForm()
-    return render_to_response('acct/retrieve.html', {'form': form})
+    return render_to_response('acct/retrieve.html',
+                              {'form': form,
+                               'site_name': settings.SITE_NAME})
 
 def forgot_password(request):
     if request.method == 'POST':

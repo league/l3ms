@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>{% block title %}{{ site_name }}{% endblock %}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    {% block style %}
+    <link rel="stylesheet" type="text/css" href="/l3media/960/reset.css" />
+    <link rel="stylesheet" type="text/css" href="/l3media/960/text.css" />
+    <link rel="stylesheet" type="text/css" href="/l3media/l3ms.css" />
+    <link rel="stylesheet" type="text/css" href="/l3media/960/960.css" />
+    {% endblock style %}
+    {% block scripts %}
+    <script type="text/javascript" src="/l3media/jquery.min.js"></script>
+    {% endblock scripts %}
+  </head>
+  <body>
+    <div id="header">
+      <div class="container_12 clearfix">
+        <div id="logo" class="grid_5 alpha">
+          {{ site_name }}
+        </div>
+        <div id="nav" class="grid_7 omega">
+          {% block nav %}
+          <a href="">About</a>
+          {% endblock nav %}
+        </div>
+      </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>

@@ -25,6 +25,7 @@ check your email and use the validation link."""
 def render(template, request, message=''):
     d = {'message': message,
          'user': request.user,
+         'site_name': settings.SITE_NAME,
          }
     if HTTP_AUTH_DEBUG:
         template = 'http-auth/test.html'

@@ -1,6 +1,22 @@
-<h1>Retrieve username</h1>
+{% extends "base.html" %}
 
-<form method="post" action="{% url forgot_username %}">
-  {{ form.as_p }}
-  <input type="submit" value="Submit" />
-</form>
+{% block title %}
+Retrieve {{ site_name }} user name
+{% endblock %}
+
+{% block content %}
+<div class="container_12">
+  <div class="grid_2 alpha">&nbsp;</div>
+  <div class="grid_10 omega">
+    <h1>Retrieve user name</h1>
+
+    <form method="post" action="{% url forgot_username %}">
+      {{ form.as_p }}
+      <input type="submit" value="Submit" />
+    </form>
+
+    <p><a href="{% url auth_options %}">← Back to authentication</a></p>
+  </div>
+</div>
+{% endblock %}
+
