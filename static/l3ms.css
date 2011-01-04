@@ -1,0 +1,52 @@
+/* l3ms.css */
+
+div#header {
+    background: #cef;
+    padding: 2ex 0 1ex 0;
+    border-bottom: 2px solid #8ac;
+    margin-bottom: 2ex;
+}
+div#nav {
+    text-align: right
+}
+div#messages {
+    margin-top: 2ex;
+    border-color: #c00;
+    border-style: solid;
+    border-width: 6px 2px 2px 2px;
+    background: url(error.png) no-repeat 2px 10px;
+}
+div#messages p {
+    margin: 8px 6px 1ex 21px;
+}
+.bigButton {
+    border: 2px solid #62925e;
+    background: #a1ee9a;
+    text-align: center;
+    font-size: xx-large;
+    padding: 1ex 0;
+    margin: 2ex 0;
+    text-decoration: none;
+}
+.bigButton:link, .bigButton:visited {
+    color: black
+}
+.links a {
+    display: block;
+    text-decoration: none;
+    color: #006;
+    margin: 0 0 .7ex 0;
+    padding: 0 0 0 16px;
+    background: url(bullet_blue.png) no-repeat left center;
+    font-size: larger;
+}
+.links a:link, .links a:visited {
+    color: #443f65;
+}
+#nav a:link, #nav a:visited {
+    color: #443f65;
+}
+#nav a {
+    text-decoration: none;
+    font-weight: bold;
+}
