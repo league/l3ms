@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from settings import URL_PREFIX, DEBUG
+from settings import URL_PREFIX, DEBUG, PROJECT_ROOT
 import accounts.urls
 import accounts.views
 import email_validation.views
@@ -31,3 +31,12 @@ urlpatterns = patterns(
     (r'^'+URL_PREFIX, include(subpatterns))
     )
 
+if DEBUG:
+    from django.views.static import serve
+    from os.path import join
+
+    urlpatterns += patterns(
+        '',
+        (r'^l3media/(?P<path>.*)$', serve,
+         {'document_root': join(PROJECT_ROOT, 'static')})
+        )
