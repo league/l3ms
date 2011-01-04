@@ -65,16 +65,7 @@ def forgot_username(request):
     if request.method == 'POST':
         form = forms.RetrieveUsernameForm(request.POST)
         if form.is_valid():
-            url = request.build_absolute_uri(reverse('auth_options'))
-            t = template.loader.get_template('email/retrieve.txt')
-            c = template.Context({'username': form.user.username,
-                                  'site_name': settings.SITE_NAME,
-                                  'auth_url': url})
-            send_mail(SUBJ_RETRIEVE_USERNAME % settings.SITE_NAME,
-                      t.render(c),
-                      settings.FROM_EMAIL,
-                      [form.cleaned_data['email']])
-            return auth_redirect(request, M_USERNAME_SENT)
+            return auth_redirect(request, M_USERNAME_HINT % form.user.username)
     else:
         form = forms.RetrieveUsernameForm()
     return render_to_response('acct/retrieve.html',

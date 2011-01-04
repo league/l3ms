@@ -66,3 +66,11 @@ form.simpleForm > p > input {
 form.simpleForm > input {       /*submit*/
     margin-left: 150px;
 }
+ul.errorlist {
+    color: #c00;
+    list-style: none;
+}
+ul.errorlist > li {
+    margin: 0;
+}
+

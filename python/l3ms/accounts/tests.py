@@ -57,7 +57,7 @@ class AccountTest(TestCase):
         self.assertContains(r, 'address does not')
         r = self.client.post(reverse('forgot_username'),
                              {'email': self.u1.email}, follow=True)
-        self.assertContains(r, 'has been sent')
+        self.assertContains(r, self.u1.username)
 
     def test_forgot_password(self):
         self.client.logout()
