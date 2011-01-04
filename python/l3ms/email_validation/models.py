@@ -87,18 +87,18 @@ class ValidationManager(models.Manager):
     def create(self, build_uri, email, user, code):
         """Generate a validation key, save, and send it by email.
 
-        BUILD_URI is a function to generate a full link (including
+        `build_uri` is a function to generate a full link (including
         http and hostname) given an absolute path.  It can be provided
         with request.build_absolute_uri in a view method.
 
-        EMAIL is the address to which to send the validation link.  It
-        may or may not be the same as USER.email.
+        `email` is the address to which to send the validation link.
+        It may or may not be the same as USER.email.
 
-        USER is the User instance to whom we are sending this link.
+        `user` is the User instance to whom we are sending this link.
         The EMAIL was provided separately in case we are validating a
         new address for this user.
 
-        CODE is the single-letter code to distinguish the type of
+        `code` is the single-letter code to distinguish the type of
         validation.
 
         Testing some assumptions about generating keys:
