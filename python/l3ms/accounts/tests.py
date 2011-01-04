@@ -141,3 +141,23 @@ class AccountTest(TestCase):
         self.client.logout()
 
         self.client.login(username=self.u1.username, password=self.p1)
+
+    def register(self, username='chuck', email='chuck@example.com',
+                 first='Chuck', last='Chan', p1='chu2k', p2='chu2k'):
+        return self.client.post(reverse('register'),
+                                {'first_name': first, 'last_name': last,
+                                 'username': username, 'email': email,
+                                 'password1': p1, 'password2': p2},
+                                follow=True)
+
+    def test_registration(self):
+        self.client.logout()
+        r = self.register()
+        self.assertContains(r, 'awaiting activation')
+        u = User.objects.get(username='chuck')
+        k = ValidationKey.objects.get(user=u)
+        r = self.client.get(k.get_absolute_url(), follow=True)
+        self.assertContains(r, 'is activated')
+        r = login_helper(self.client, u, 'chu2k')
+        self.assertEqual(self.client.session[SESSION_KEY], u.id)
+        self.assertContains(r, 'Chuck Chan')

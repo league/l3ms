@@ -1,0 +1,6 @@
+
+Thank you for creating a new account on {{ site_name }}.
+Your user name is {{ user.username }}
+To activate your account, use the link below.
+
+  {{url}}

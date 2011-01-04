@@ -62,12 +62,11 @@ class RegistrationForm(forms.Form):
         return password2
 
     def save(self):
-        u = User.objects.create_user(self.cleaned_data['username'],
-                                     self.cleaned_data['email'],
-                                     self.cleaned_data['password1'])
-        u.first_name = self.cleaned_data['first_name']
-        u.last_name = self.cleaned_data['last_name']
-        u.save()
-        p = UserProfile(user=u)
-        p.save()
-        return u
+        self.user = User.objects.create_user(self.cleaned_data['username'],
+                                             self.cleaned_data['email'],
+                                             self.cleaned_data['password1'])
+        self.user.first_name = self.cleaned_data['first_name']
+        self.user.last_name = self.cleaned_data['last_name']
+        self.user.is_active = False
+        self.user.save()
+        return self.user

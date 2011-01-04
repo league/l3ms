@@ -54,6 +54,8 @@ ACCT_LINK_SENT = 'A password reset link has been sent by email.'
 ACCT_PASS_CHANGED = 'Your password has been changed.'
 ACCT_MAIL_SENT = 'A validation link has been sent to your new address.'
 ACCT_MAIL_CHANGED = 'Your email address has been changed.'
+ACCT_NEW_USER = 'Your account is awaiting activation (check your email).'
+ACCT_ACTIVATED = 'Your account is activated; please log in now.'
 
 def auth_redirect(request, message):
     request.session[SESSION_MESSAGE] = message
@@ -158,16 +160,29 @@ def edit_password(request, username):
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        if not form.is_valid():
-            return login_page(new_form = form)
-        form.save()
-        u = auth.authenticate(username=form.cleaned_data['username'],
-                              password=form.cleaned_data['password1'])
-        k = ActivationKey.objects.create(u, VALIDATE_EMAIL, u.email)
-        url = request.build_absolute_uri(k.get_absolute_url())
-        u.email_user('validate', url)
-        auth.login(request, u)
-    return HttpResponseRedirect(reverse('home'))
+        if form.is_valid():
+            form.save()
+            ValidationKey.objects.create(request.build_absolute_uri,
+                                         form.cleaned_data['email'],
+                                         form.user, 'N')
+            return auth_redirect(request, ACCT_NEW_USER)
+    else:
+        form = RegistrationForm()
+    return render_to_response('acct/register.html',
+                              {'form': form,
+                               'action': request.get_full_path()})
+
+def new_account_handler(request, k):
+    u = k.user
+    u.is_active = True
+    u.save()
+    k.delete()
+    request.session[SESSION_MESSAGE] = ACCT_ACTIVATED
+    return HttpResponseRedirect(profile_of(u))
+
+ValidationKey.objects.register(
+    'N', 'account', 'email/new.txt',
+    new_account_handler, 96)
 
 def edit_profile(request):
     return HttpResponse('not implemented')

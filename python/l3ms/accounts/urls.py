@@ -9,5 +9,6 @@ urlpatterns = patterns(
     url(r'^edit/(?P<username>\w+)/email$', views.edit_email, name='edit_email'),
     url(r'^edit/(?P<username>\w+)/password$', views.edit_password,
         name='edit_password'),
+    url(r'^new$', views.register, name='register'),
     )
 
