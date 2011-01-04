@@ -36,8 +36,6 @@ div#messages p {
     text-decoration: none;
     color: #006;
     margin: 0 0 .7ex 0;
-    padding: 0 0 0 16px;
-    background: url(bullet_blue.png) no-repeat left center;
     font-size: larger;
 }
 .links a:link, .links a:visited {
@@ -49,4 +47,22 @@ div#messages p {
 #nav a {
     text-decoration: none;
     font-weight: bold;
+}
+/* -------------------------------- */
+form.simpleForm {
+    margin-bottom: 4ex;
+}
+form.simpleForm > p {
+}
+form.simpleForm > p > label {
+    display: block;
+    float: left;
+    width: 140px;
+    text-align: right;
+    margin-right: 10px;
+}
+form.simpleForm > p > input {
+}
+form.simpleForm > input {       /*submit*/
+    margin-left: 150px;
 }

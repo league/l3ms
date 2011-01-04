@@ -10,12 +10,18 @@ Retrieve {{ site_name }} user name
   <div class="grid_10 omega">
     <h1>Retrieve user name</h1>
 
-    <form method="post" action="{% url forgot_username %}">
+    <p>To retrieve your user name, please provide the email address on
+      your account.</p>
+
+    <form id="forgot_username" class="simpleForm" method="post"
+          action="{% url forgot_username %}">
       {{ form.as_p }}
-      <input type="submit" value="Submit" />
+      <input class="submit" type="submit" value="Submit" />
     </form>
 
-    <p><a href="{% url auth_options %}">← Back to authentication</a></p>
+    <p class="links">
+      <a href="{% url auth_options %}">←  Back to authentication</a>
+    </p>
   </div>
 </div>
 {% endblock %}
