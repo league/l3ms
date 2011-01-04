@@ -8,26 +8,35 @@ from django.contrib import auth
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import *
 from django.shortcuts import render_to_response
 from forms import *
 from l3ms.email_validation.models import ValidationKey
 from l3ms.http_auth.views import login_required, SESSION_MESSAGE
 from models import *
 
-@login_required
-def home(request):
-    return profile(request, username=request.user.username)
+def reverse_u(view, username):
+    return reverse(view, kwargs={'username': username})
+
+def profile_of(user):
+    return reverse_u('profile', user.username)
 
 def is_privileged(request, username):
     return request.user.is_staff or request.user.username == username
 
-@login_required
-def profile(request, username):
+def get_username_or_404(username):
     try:
-        profile_user = User.objects.get(username=username)
+        return User.objects.get(username=username)
     except User.DoesNotExist:
         raise Http404
+
+@login_required
+def home(request):
+    return profile(request, username=request.user.username)
+
+@login_required
+def profile(request, username):
+    profile_user = get_username_or_404(username)
     message = request.session.get(SESSION_MESSAGE, '')
     if message:
         del request.session[SESSION_MESSAGE]
@@ -44,6 +53,7 @@ ACCT_NAME_SENT = 'Your user name has been sent by email.'
 ACCT_LINK_SENT = 'A password reset link has been sent by email.'
 ACCT_PASS_CHANGED = 'Your password has been changed.'
 ACCT_MAIL_SENT = 'A validation link has been sent to your new address.'
+ACCT_MAIL_CHANGED = 'Your email address has been changed.'
 
 def auth_redirect(request, message):
     request.session[SESSION_MESSAGE] = message
@@ -97,29 +107,36 @@ ValidationKey.objects.register(
 def edit_email(request, username):
     if not is_privileged(request, username):
         return HttpResponseForbidden('forbidden')
-    try:
-        profile_user = User.objects.get(username=username)
-    except User.DoesNotExist:
-        raise Http404
+    profile_user = get_username_or_404(username)
     if request.method == 'POST':
         form = EmailBaseForm(request.POST)
         if form.is_valid():
             if request.user.is_staff: # just do it right away
-                raise Http404
+                profile_user.email = form.cleaned_data['email']
+                profile_user.save()
+                request.session[SESSION_MESSAGE] = ACCT_MAIL_CHANGED
             else:
                 ValidationKey.objects.create(request.build_absolute_uri,
                                              form.cleaned_data['email'],
-                                             profile_user, 'P')
+                                             profile_user, 'E')
                 request.session[SESSION_MESSAGE] = ACCT_MAIL_SENT
-                return HttpResponseRedirect(reverse('profile',
-                                                    kwargs={'username':
-                                                                username}))
+            return HttpResponseRedirect(profile_of(profile_user))
     else:
         form = EmailBaseForm()
     return render_to_response('acct/edit-email.html',
                               {'profile': profile_user,
                                'form': form,
                                'action': request.get_full_path()})
+
+def edit_email_handler(request, k):
+    k.user.email = k.email
+    k.user.save()
+    request.session[SESSION_MESSAGE] = ACCT_MAIL_CHANGED
+    return HttpResponseRedirect(profile_of(k.user))
+
+ValidationKey.objects.register(
+    'E', 'email address change', 'email/edit-email.txt',
+    edit_email_handler, 96)
 
 def register(request):
     if request.method == 'POST':

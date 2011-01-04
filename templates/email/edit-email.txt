@@ -1,0 +1,6 @@
+
+This email address ({{email}}) has been
+assigned to user {{user.username}} on {{site_name}}.
+Use the link below to confirm.
+
+  {{url}}
