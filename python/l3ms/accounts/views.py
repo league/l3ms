@@ -4,16 +4,17 @@
 # This is free software but comes with ABSOLUTELY NO WARRANTY.
 # See the GNU General Public License version 3 for details.
 
-from django.contrib import auth
-from django.contrib.auth.forms import SetPasswordForm, PasswordChangeForm
+from django import http, template
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
-from django.http import *
 from django.shortcuts import render_to_response
-from forms import *
+from hashlib import md5
 from l3ms.email_validation.models import ValidationKey
 from l3ms.http_auth.views import login_required, SESSION_MESSAGE
-from models import *
+from strings import *
+import forms
 
 def reverse_u(view, username):
     return reverse(view, kwargs={'username': username})
@@ -29,6 +30,11 @@ def get_username_or_404(username):
         return User.objects.get(username=username)
     except User.DoesNotExist:
         raise Http404
+
+def gravatar_url(request, user):
+    h = md5(user.email.lower()).hexdigest()
+    d = 'https://secure' if request.is_secure() else 'http://www'
+    return '%s.gravatar.com/avatar/%s.jpg?d=retro' % (d,h)
 
 @login_required
 def home(request):
@@ -47,57 +53,52 @@ def profile(request, username):
                                'profile': profile_user,
                                'privileged': is_privileged(request, username),
                                'message': message,
-                               'gravatar': gravatar_url(profile_user)})
+                               'gravatar': gravatar_url(request, profile_user)})
 
-ACCT_NAME_SENT = 'Your user name has been sent by email.'
-ACCT_LINK_SENT = 'A password reset link has been sent by email.'
-ACCT_PASS_CHANGED = 'Your password has been changed.'
-ACCT_MAIL_SENT = 'A validation link has been sent to your new address.'
-ACCT_MAIL_CHANGED = 'Your email address has been changed.'
-ACCT_NEW_USER = 'Your account is awaiting activation (check your email).'
-ACCT_ACTIVATED = 'Your account is activated; please log in now.'
 
 def auth_redirect(request, message):
     request.session[SESSION_MESSAGE] = message
-    return HttpResponseRedirect(reverse('auth_options'))
+    return http.HttpResponseRedirect(reverse('auth_options'))
 
 def forgot_username(request):
     if request.method == 'POST':
-        form = RetrieveUsernameForm(request.POST)
+        form = forms.RetrieveUsernameForm(request.POST)
         if form.is_valid():
             url = request.build_absolute_uri(reverse('auth_options'))
-            t = loader.get_template('email/retrieve.txt')
-            c = Context({'username': form.user.username,
-                         'site_name': SITE_NAME,
-                         'auth_url': url})
-            send_mail(SITE_NAME+' user name', t.render(c),
-                      FROM_EMAIL, [form.cleaned_data['email']])
-            return auth_redirect(request, ACCT_NAME_SENT)
+            t = template.loader.get_template('email/retrieve.txt')
+            c = template.Context({'username': form.user.username,
+                                  'site_name': settings.SITE_NAME,
+                                  'auth_url': url})
+            send_mail(SUBJ_RETRIEVE_USERNAME % settings.SITE_NAME,
+                      t.render(c),
+                      settings.FROM_EMAIL,
+                      [form.cleaned_data['email']])
+            return auth_redirect(request, M_USERNAME_SENT)
     else:
-        form = RetrieveUsernameForm()
+        form = forms.RetrieveUsernameForm()
     return render_to_response('acct/retrieve.html', {'form': form})
 
 def forgot_password(request):
     if request.method == 'POST':
-        form = ResetPasswordForm(request.POST)
+        form = forms.ResetPasswordForm(request.POST)
         if form.is_valid():
             ValidationKey.objects.create(request.build_absolute_uri,
                                          form.user.email,
                                          form.user, 'P')
-            return auth_redirect(request, ACCT_LINK_SENT)
+            return auth_redirect(request, M_PASSWORD_SENT)
     else:
-        form = ResetPasswordForm()
+        form = forms.ResetPasswordForm()
     return render_to_response('acct/reset.html', {'form': form})
 
 def forgot_password_handler(request, k):
     if request.method == 'POST':
-        form = SetPasswordForm(k.user, request.POST)
+        form = forms.SetPasswordForm(k.user, request.POST)
         if form.is_valid():
             form.save()
             k.delete()
-            return auth_redirect(request, ACCT_PASS_CHANGED)
+            return auth_redirect(request, M_PASSWORD_CHANGED)
     else:
-        form = SetPasswordForm(k.user)
+        form = forms.SetPasswordForm(k.user)
     url = request.get_full_path()
     return render_to_response('acct/reset2.html',
                               {'form': form, 'url': url})
@@ -108,23 +109,23 @@ ValidationKey.objects.register(
 
 def edit_email(request, username):
     if not is_privileged(request, username):
-        return HttpResponseForbidden('forbidden')
+        return http.HttpResponseForbidden('forbidden')
     profile_user = get_username_or_404(username)
     if request.method == 'POST':
-        form = EmailBaseForm(request.POST)
+        form = forms.EmailBaseForm(request.POST)
         if form.is_valid():
             if request.user.is_staff: # just do it right away
                 profile_user.email = form.cleaned_data['email']
                 profile_user.save()
-                request.session[SESSION_MESSAGE] = ACCT_MAIL_CHANGED
+                request.session[SESSION_MESSAGE] = M_EMAIL_CHANGED
             else:
                 ValidationKey.objects.create(request.build_absolute_uri,
                                              form.cleaned_data['email'],
                                              profile_user, 'E')
-                request.session[SESSION_MESSAGE] = ACCT_MAIL_SENT
-            return HttpResponseRedirect(profile_of(profile_user))
+                request.session[SESSION_MESSAGE] = M_EMAIL_SENT
+            return http.HttpResponseRedirect(profile_of(profile_user))
     else:
-        form = EmailBaseForm()
+        form = forms.EmailBaseForm()
     return render_to_response('acct/edit-email.html',
                               {'profile': profile_user,
                                'form': form,
@@ -133,8 +134,8 @@ def edit_email(request, username):
 def edit_email_handler(request, k):
     k.user.email = k.email
     k.user.save()
-    request.session[SESSION_MESSAGE] = ACCT_MAIL_CHANGED
-    return HttpResponseRedirect(profile_of(k.user))
+    request.session[SESSION_MESSAGE] = M_EMAIL_CHANGED
+    return http.HttpResponseRedirect(profile_of(k.user))
 
 ValidationKey.objects.register(
     'E', 'email address change', 'email/edit-email.txt',
@@ -142,16 +143,16 @@ ValidationKey.objects.register(
 
 def edit_password(request, username):
     if not is_privileged(request, username):
-        return HttpResponseForbidden('forbidden')
+        return http.HttpResponseForbidden('forbidden')
     profile_user = get_username_or_404(username)
     if request.method == 'POST':
-        form = PasswordChangeForm(profile_user, request.POST)
+        form = forms.PasswordChangeForm(profile_user, request.POST)
         if form.is_valid():
             form.save()
-            request.session[SESSION_MESSAGE] = ACCT_PASS_CHANGED
-            return HttpResponseRedirect(profile_of(profile_user))
+            request.session[SESSION_MESSAGE] = M_PASSWORD_CHANGED
+            return http.HttpResponseRedirect(profile_of(profile_user))
     else:
-        form = PasswordChangeForm(profile_user)
+        form = forms.PasswordChangeForm(profile_user)
     return render_to_response('acct/edit-password.html',
                               {'profile': profile_user,
                                'form': form,
@@ -159,15 +160,15 @@ def edit_password(request, username):
 
 def register(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = forms.RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             ValidationKey.objects.create(request.build_absolute_uri,
                                          form.cleaned_data['email'],
                                          form.user, 'N')
-            return auth_redirect(request, ACCT_NEW_USER)
+            return auth_redirect(request, M_NEW_USER_SENT)
     else:
-        form = RegistrationForm()
+        form = forms.RegistrationForm()
     return render_to_response('acct/register.html',
                               {'form': form,
                                'action': request.get_full_path()})
@@ -177,18 +178,18 @@ def new_account_handler(request, k):
     u.is_active = True
     u.save()
     k.delete()
-    request.session[SESSION_MESSAGE] = ACCT_ACTIVATED
-    return HttpResponseRedirect(profile_of(u))
+    request.session[SESSION_MESSAGE] = M_ACTIVATED
+    return http.HttpResponseRedirect(profile_of(u))
 
 ValidationKey.objects.register(
     'N', 'account', 'email/new.txt',
     new_account_handler, 96)
 
 def edit_profile(request):
-    return HttpResponse('not implemented')
+    return http.HttpResponse('not implemented')
 
 
 ## this should really be moved to courses app
 def navbar(request, path):
-    return HttpResponse('not implemented: '+path)
+    return http.HttpResponse('not implemented: '+path)
 

@@ -6,14 +6,16 @@
 
 from django import forms
 from django.conf import settings
+from django.contrib.auth.forms import SetPasswordForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.template import loader, Context
 from models import UserProfile
 from settings import FROM_EMAIL, SITE_NAME
+from strings import *
 
 class EmailBaseForm(forms.Form):
-    email = forms.EmailField(label="Email", max_length=75)
+    email = forms.EmailField(label=LABEL_EMAIL, max_length=75)
 
 class RetrieveUsernameForm(EmailBaseForm):
     def clean_email(self):
@@ -22,10 +24,10 @@ class RetrieveUsernameForm(EmailBaseForm):
             self.user = User.objects.get(email=email)
             return email
         except User.DoesNotExist:
-            raise forms.ValidationError("That email address does not have an associated user account.")
+            raise forms.ValidationError(M_EMAIL_UNKNOWN)
 
 class ResetPasswordForm(forms.Form):
-    username = forms.CharField(label='Username', max_length=30)
+    username = forms.CharField(label=LABEL_USERNAME, max_length=30)
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
@@ -33,17 +35,17 @@ class ResetPasswordForm(forms.Form):
             self.user = User.objects.get(username=username)
             return username
         except User.DoesNotExist:
-            raise forms.ValidationError('That username does not exist.')
+            raise forms.ValidationError(M_USERNAME_UNKNOWN)
 
 class RegistrationForm(forms.Form):
-    first_name = forms.CharField(label='first name', max_length=30)
-    last_name = forms.CharField(label='last name', max_length=30)
-    username = forms.RegexField(label='username', max_length=30,
+    first_name = forms.CharField(label=LABEL_FIRST_NAME, max_length=30)
+    last_name = forms.CharField(label=LABEL_LAST_NAME, max_length=30)
+    username = forms.RegexField(label=LABEL_USERNAME, max_length=30,
                                 regex=r'^\w+$')
-    email = forms.EmailField(label='email address')
-    password1 = forms.CharField(label='password', max_length=128,
+    email = forms.EmailField(label=LABEL_EMAIL)
+    password1 = forms.CharField(label=LABEL_PASSWORD_1, max_length=128,
                                 widget=forms.PasswordInput)
-    password2 = forms.CharField(label='confirm password', max_length=128,
+    password2 = forms.CharField(label=LABEL_PASSWORD_2, max_length=128,
                                 widget=forms.PasswordInput)
 
     def clean_username(self):
@@ -52,20 +54,20 @@ class RegistrationForm(forms.Form):
             User.objects.get(username=username)
         except User.DoesNotExist:
             return username
-        raise forms.ValidationError('A user with that username already exists.')
+        raise forms.ValidationError(M_USERNAME_IN_USE)
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1", "")
         password2 = self.cleaned_data["password2"]
         if password1 != password2:
-            raise forms.ValidationError('The password fields did not match.')
+            raise forms.ValidationError(M_PASSWORDS_NEQ)
         return password2
 
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
             User.objects.get(email=email)
-            raise forms.ValidationError('A user with that email already exists.')
+            raise forms.ValidationError(M_EMAIL_IN_USE)
         except User.DoesNotExist:
             return email
 
