@@ -4,12 +4,26 @@
 # This is free software but comes with ABSOLUTELY NO WARRANTY.
 # See the GNU General Public License version 3 for details.
 
+from django.contrib.auth import SESSION_KEY
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 from views import SESSION_LOGOUT
 import base64
+
+def login_helper(c, u, pw):
+    a = base64.b64encode('%s:%s' % (u.username, pw))
+    return c.get(reverse('auth_login'), {}, True,
+                 HTTP_AUTHORIZATION='Basic %s' % a)
+
+def login_redirect(test, u, pw, path):
+    test.assertTrue(SESSION_KEY not in test.client.session)
+    r = test.client.get(path)
+    test.assertRedirects(r, reverse('auth_options'))
+    r = login_helper(test.client, u, pw)
+    test.assertRedirects(r, path)
+    test.assertEqual(test.client.session[SESSION_KEY], u.id)
 
 class AuthTest(TestCase):
     def setUp(self):
@@ -19,41 +33,33 @@ class AuthTest(TestCase):
         self.u2 = User(username='bob', email='bob@example.com')
         self.u2.set_password('bob')
         self.u2.save()
-        self.c = Client()
+        self.client = Client()
 
     def test_auth_required(self):
-        r = self.c.get(reverse('auth_login'))
+        r = self.client.get(reverse('auth_login'))
         self.assertEqual(r.status_code, 401)
 
-    def login_helper(self, u, pw):
-        a = base64.b64encode('%s:%s' % (u.username, pw))
-        return self.c.get(reverse('auth_login'), {}, True,
-                          HTTP_AUTHORIZATION='Basic %s' % a)
-
     def test_login_okay(self):
-        r = self.login_helper(self.u1, 'alice')
+        r = login_helper(self.client, self.u1, 'alice')
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(self.c.session['_auth_user_id'], self.u1.id)
+        self.assertEqual(self.client.session[SESSION_KEY], self.u1.id)
 
     def test_logout(self):
-        r = self.login_helper(self.u2, 'bob')
+        r = login_helper(self.client, self.u2, 'bob')
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(self.c.session['_auth_user_id'], self.u2.id)
-        r = self.c.get(reverse('auth_logout'))
+        self.assertEqual(self.client.session[SESSION_KEY], self.u2.id)
+        r = self.client.get(reverse('auth_logout'))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue('_auth_user_id' not in self.c.session)
-        self.assertTrue(SESSION_LOGOUT in self.c.session)
-        r = self.login_helper(self.u2, 'bob')
+        self.assertTrue(SESSION_KEY not in self.client.session)
+        self.assertTrue(SESSION_LOGOUT in self.client.session)
+        r = login_helper(self.client, self.u2, 'bob')
         self.assertEqual(r.status_code, 401) # first login should fail
-        r = self.login_helper(self.u2, 'bob')
+        r = login_helper(self.client, self.u2, 'bob')
         self.assertEqual(r.status_code, 200) # but can login again after
 
     def test_login_rejected(self):
-        r = self.login_helper(self.u1, 'foo')
+        r = login_helper(self.client, self.u1, 'foo')
         self.assertEqual(r.status_code, 401)
 
     def test_login_required(self):
-        r = self.c.get(reverse('auth_test'))
-        self.assertRedirects(r, reverse('auth_options'))
-        r = self.login_helper(self.u2, 'bob')
-        self.assertRedirects(r, reverse('auth_test')) # tests next redirect
+        login_redirect(self, self.u2, 'bob', reverse('auth_test'))
