@@ -161,3 +161,18 @@ class AccountTest(TestCase):
         r = login_helper(self.client, u, 'chu2k')
         self.assertEqual(self.client.session[SESSION_KEY], u.id)
         self.assertContains(r, 'Chuck Chan')
+
+    def test_registration_errors(self):
+        self.client.logout()
+        r = self.register(username='chuck2') # should work
+        self.assertContains(r, 'awaiting activation')
+        r = self.register(username='chuck2') # fail, same username
+        self.assertContains(r, 'already exists')
+        r = self.register(username='chuck3') # fail, same email
+        self.assertContains(r, 'already exists')
+        r = self.register(username='chuck3', email='')
+        self.assertContains(r, 'is required')
+        r = self.register(username='chuck3', last='')
+        self.assertContains(r, 'is required')
+        r = self.register(username='chuck3', email='chuck3')
+        self.assertContains(r, 'Enter a valid')
