@@ -116,30 +116,27 @@ class AccountTest(TestCase):
         r = self.edit_email(self.u1, new_email)
         self.assertEquals(r.status_code, 403) # forbidden, not staff
 
+    def edit_password(self, username, oldp, newp1, newp2):
+        return self.client.post(reverse_u('edit_password', username),
+                                {'old_password': oldp,
+                                 'new_password1': newp1,
+                                 'new_password2': newp2}, follow=True)
+
     def test_edit_password(self):
         old_pw = self.p1
         self.client.login(username=self.u1.username, password=old_pw)
         self.p1 = '09872094'
-        r = self.client.post(reverse_u('edit_password', self.u1.username),
-                             {'old_password': old_pw,
-                              'new_password1': self.p1,
-                              'new_password2': self.p2}, follow=True)
+        r = self.edit_password(self.u1.username, old_pw, self.p1, self.p2)
         self.assertContains(r, 'two password fields didn')
         self.client.logout()
 
         self.client.login(username=self.u1.username, password=old_pw)
-        r = self.client.post(reverse_u('edit_password', self.u1.username),
-                             {'old_password': self.p1,
-                              'new_password1': self.p1,
-                              'new_password2': self.p1}, follow=True)
+        r = self.edit_password(self.u1.username, self.p1, self.p1, self.p1)
         self.assertContains(r, 'entered incorrectly')
         self.client.logout()
 
         self.client.login(username=self.u1.username, password=old_pw)
-        r = self.client.post(reverse_u('edit_password', self.u1.username),
-                             {'old_password': old_pw,
-                              'new_password1': self.p1,
-                              'new_password2': self.p1}, follow=True)
+        r = self.edit_password(self.u1.username, old_pw, self.p1, self.p1)
         self.assertEquals(r.status_code, 200)
         self.client.logout()
 
