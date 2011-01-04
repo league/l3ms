@@ -1,3 +1,9 @@
+# l3ms.http_auth.views    -*- coding: utf-8 -*-
+# Copyright ©2011 by Christopher League <league@contrapunctus.net>
+#
+# This is free software but comes with ABSOLUTELY NO WARRANTY.
+# See the GNU General Public License version 3 for details.
+
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
