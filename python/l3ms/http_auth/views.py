@@ -40,7 +40,7 @@ def login(request):
     assert kind.lower() == 'basic'
     name, pwd = base64.b64decode(cred).split(':')
     user = auth.authenticate(username=name, password=pwd)
-    if user is None:
+    if user is None or not user.is_active:
         return force(request)
     if SESSION_LOGOUT in request.session:
         if request.session[SESSION_LOGOUT] == user.username:
@@ -57,7 +57,7 @@ def force(request):
     if SESSION_LOGOUT in request.session:
         del request.session[SESSION_LOGOUT]
         request.session.set_expiry(None) # back to global default
-    r = options(request,
+    r = options(request,  # could be more helpful if not is_active
                 message='Authentication is required.')
     r.status_code = 401
     r['WWW-Authenticate'] = 'Basic realm="%s"' % HTTP_AUTH_REALM
