@@ -1,13 +1,10 @@
-{% extends "base.html" %}
+{% extends "auth-small-page.html" %}
 
 {% block title %}
 Retrieve {{ site_name }} user name
 {% endblock %}
 
-{% block content %}
-<div class="container_12">
-  <div class="grid_2 alpha">&nbsp;</div>
-  <div class="grid_10 omega">
+{% block small_content %}
     <h1>Retrieve user name</h1>
 
     <p>To retrieve your user name, please provide the email address on
@@ -19,10 +16,6 @@ Retrieve {{ site_name }} user name
       <input class="submit" type="submit" value="Submit" />
     </form>
 
-    <p class="links">
-      <a href="{% url auth_options %}">←  Back to authentication</a>
-    </p>
-  </div>
-</div>
+    {{ block.super }}
 {% endblock %}
 

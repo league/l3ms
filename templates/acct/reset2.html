@@ -1,6 +1,18 @@
+{% extends "auth-small-page.html" %}
+
+{% block title %}
+Reset {{ site_name }} password
+{% endblock %}
+
+{% block small_content %}
 <h1>Reset password</h1>
 
-<form method="post" action="{{ url }}">
+<p>To reset the password for your account, type it twice below.</p>
+
+<form class="simpleForm" method="post" action="{{ url }}">
   {{ form.as_p }}
   <input type="submit" value="Submit" />
 </form>
+
+{{ block.super }}
+{% endblock %}
