@@ -115,3 +115,32 @@ class AccountTest(TestCase):
         self.client.login(username=self.u2.username, password=self.p2)
         r = self.edit_email(self.u1, new_email)
         self.assertEquals(r.status_code, 403) # forbidden, not staff
+
+    def test_edit_password(self):
+        old_pw = self.p1
+        self.client.login(username=self.u1.username, password=old_pw)
+        self.p1 = '09872094'
+        r = self.client.post(reverse_u('edit_password', self.u1.username),
+                             {'old_password': old_pw,
+                              'new_password1': self.p1,
+                              'new_password2': self.p2}, follow=True)
+        self.assertContains(r, 'two password fields didn')
+        self.client.logout()
+
+        self.client.login(username=self.u1.username, password=old_pw)
+        r = self.client.post(reverse_u('edit_password', self.u1.username),
+                             {'old_password': self.p1,
+                              'new_password1': self.p1,
+                              'new_password2': self.p1}, follow=True)
+        self.assertContains(r, 'entered incorrectly')
+        self.client.logout()
+
+        self.client.login(username=self.u1.username, password=old_pw)
+        r = self.client.post(reverse_u('edit_password', self.u1.username),
+                             {'old_password': old_pw,
+                              'new_password1': self.p1,
+                              'new_password2': self.p1}, follow=True)
+        self.assertEquals(r.status_code, 200)
+        self.client.logout()
+
+        self.client.login(username=self.u1.username, password=self.p1)

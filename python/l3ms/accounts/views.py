@@ -5,7 +5,7 @@
 # See the GNU General Public License version 3 for details.
 
 from django.contrib import auth
-from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.forms import SetPasswordForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import *
@@ -137,6 +137,23 @@ def edit_email_handler(request, k):
 ValidationKey.objects.register(
     'E', 'email address change', 'email/edit-email.txt',
     edit_email_handler, 96)
+
+def edit_password(request, username):
+    if not is_privileged(request, username):
+        return HttpResponseForbidden('forbidden')
+    profile_user = get_username_or_404(username)
+    if request.method == 'POST':
+        form = PasswordChangeForm(profile_user, request.POST)
+        if form.is_valid():
+            form.save()
+            request.session[SESSION_MESSAGE] = ACCT_PASS_CHANGED
+            return HttpResponseRedirect(profile_of(profile_user))
+    else:
+        form = PasswordChangeForm(profile_user)
+    return render_to_response('acct/edit-password.html',
+                              {'profile': profile_user,
+                               'form': form,
+                               'action': request.get_full_path()})
 
 def register(request):
     if request.method == 'POST':

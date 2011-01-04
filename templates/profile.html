@@ -12,6 +12,10 @@
 <p>email: {{ profile.email }}
   {% if privileged %}
   <a href="{% url edit_email username=profile.username %}">change</a>
+
+  <p><a href="{% url edit_password username=profile.username %}"
+        >Change password</a>
+
   {% endif %}
 
 <p><a href="{% url auth_logout %}">Log out</a></p>
