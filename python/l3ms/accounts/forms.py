@@ -6,7 +6,7 @@
 
 from django import forms
 from django.conf import settings
-from django.contrib.auth.forms import SetPasswordForm, PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.template import loader, Context
@@ -36,6 +36,34 @@ class ResetPasswordForm(forms.Form):
             return username
         except User.DoesNotExist:
             raise forms.ValidationError(M_USERNAME_UNKNOWN)
+
+class SetPasswordForm(forms.Form):
+    """
+    A form that lets a user change set his/her password without
+    entering the old password
+    """
+    new_password1 = forms.CharField(label=LABEL_PASSWORD_1,
+                                    widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label=LABEL_PASSWORD_2,
+                                    widget=forms.PasswordInput)
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(SetPasswordForm, self).__init__(*args, **kwargs)
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError(M_PASSWORDS_NEQ)
+        return password2
+
+    def save(self, commit=True):
+        self.user.set_password(self.cleaned_data['new_password1'])
+        if commit:
+            self.user.save()
+        return self.user
 
 class RegistrationForm(forms.Form):
     first_name = forms.CharField(label=LABEL_FIRST_NAME, max_length=30)

@@ -82,7 +82,9 @@ def forgot_password(request):
             return auth_redirect(request, M_PASSWORD_SENT)
     else:
         form = forms.ResetPasswordForm()
-    return render_to_response('acct/reset.html', {'form': form})
+    return render_to_response('acct/reset.html',
+                              {'form': form,
+                               'site_name': settings.SITE_NAME})
 
 def forgot_password_handler(request, k):
     if request.method == 'POST':
@@ -95,7 +97,9 @@ def forgot_password_handler(request, k):
         form = forms.SetPasswordForm(k.user)
     url = request.get_full_path()
     return render_to_response('acct/reset2.html',
-                              {'form': form, 'url': url})
+                              {'form': form,
+                               'site_name': settings.SITE_NAME,
+                               'url': url})
 
 ValidationKey.objects.register(
     'P', 'password reset', 'email/reset.txt',

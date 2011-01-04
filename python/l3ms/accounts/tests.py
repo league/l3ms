@@ -71,7 +71,7 @@ class AccountTest(TestCase):
         r = self.client.post(k.get_absolute_url(),
                              {'new_password1': self.p1,
                               'new_password2': self.p2}, follow=True)
-        self.assertContains(r, 'two password fields didn')
+        self.assertContains(r, 'did not match')
         r = self.client.post(k.get_absolute_url(),
                              {'new_password1': self.p1,
                               'new_password2': self.p1}, follow=True)
