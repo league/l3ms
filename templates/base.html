@@ -19,6 +19,10 @@
           {{ site_name }}
         </div>
         <div id="nav" class="grid_7 omega">
+          {% if user.is_authenticated %}
+          <span>Hello, {{user.username}}.</span>
+          <a href="{% url auth_logout %}">Log out</a>
+          {% endif %}
           {% block nav %}
           <a href="">About</a>
           {% endblock nav %}

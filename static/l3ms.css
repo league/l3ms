@@ -48,6 +48,11 @@ div#messages p {
     text-decoration: none;
     font-weight: bold;
 }
+#nav span {
+}
+#nav a, #nav span {
+    margin-left: 1em;
+}
 /* -------------------------------- */
 form.simpleForm {
     margin-bottom: 4ex;
@@ -73,4 +78,3 @@ ul.errorlist {
 ul.errorlist > li {
     margin: 0;
 }
-
