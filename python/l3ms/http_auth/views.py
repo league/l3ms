@@ -18,6 +18,10 @@ SESSION_LOGOUT = 'logout'
 SESSION_NEXT_PAGE = 'next'
 SESSION_MESSAGE = 'message'
 
+M_AUTH_REQUIRED = """Authentication is required.  Please log in or
+register as a new user.  If you recently registered, you must first
+check your email and use the validation link."""
+
 def render(template, request, message=''):
     d = {'message': message,
          'user': request.user,
@@ -58,7 +62,7 @@ def force(request):
         del request.session[SESSION_LOGOUT]
         request.session.set_expiry(None) # back to global default
     r = options(request,  # could be more helpful if not is_active
-                message='Authentication is required.')
+                message=M_AUTH_REQUIRED)
     r.status_code = 401
     r['WWW-Authenticate'] = 'Basic realm="%s"' % HTTP_AUTH_REALM
     return r
