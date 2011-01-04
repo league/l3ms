@@ -1,11 +1,17 @@
 
-<h1>{{ user.get_full_name }} ({{ user.username }})</h1>
+<h1>{{ profile.get_full_name }} ({{ profile.username }})</h1>
 
 <img src="{{ gravatar }}" />
 
+{% if message %}
+<p style="color: #a00">{{ message }}</p>
+{% endif %}
+
 <p>privileged: {{ privileged }}</p>
 
-<p>email: {{ user.email }}
-  <a href="{% url edit_email username=user.username %}">change</a>
+<p>email: {{ profile.email }}
+  {% if privileged %}
+  <a href="{% url edit_email username=profile.username %}">change</a>
+  {% endif %}
 
 <p><a href="{% url auth_logout %}">Log out</a></p>

@@ -1,3 +1,9 @@
+# l3ms.accounts.forms    -*- coding: utf-8 -*-
+# Copyright ©2011 by Christopher League <league@contrapunctus.net>
+#
+# This is free software but comes with ABSOLUTELY NO WARRANTY.
+# See the GNU General Public License version 3 for details.
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User

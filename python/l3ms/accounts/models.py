@@ -1,5 +1,10 @@
+# l3ms.accounts.models    -*- coding: utf-8 -*-
+# Copyright ©2011 by Christopher League <league@contrapunctus.net>
+#
+# This is free software but comes with ABSOLUTELY NO WARRANTY.
+# See the GNU General Public License version 3 for details.
+
 from base64 import urlsafe_b64encode
-from django.contrib import admin
 from django.contrib.auth.models import User
 from django.db import models
 from hashlib import md5
@@ -32,4 +37,3 @@ class UserProfile(models.Model):
                     self.user.last_name and self.user.email and
                     self.user.has_usable_password())
 
-admin.site.register(UserProfile)

@@ -1,3 +1,9 @@
+# l3ms.accounts.views    -*- coding: utf-8 -*-
+# Copyright ©2011 by Christopher League <league@contrapunctus.net>
+#
+# This is free software but comes with ABSOLUTELY NO WARRANTY.
+# See the GNU General Public License version 3 for details.
+
 from django.contrib import auth
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import User
@@ -13,25 +19,31 @@ from models import *
 def home(request):
     return profile(request, username=request.user.username)
 
+def is_privileged(request, username):
+    return request.user.is_staff or request.user.username == username
+
 @login_required
 def profile(request, username):
-    if request.user.username == username:
-        user = request.user
-        privileged = True
-    else:
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            raise Http404
-        privileged = request.user.is_staff
-    gravatar = gravatar_url(user)
+    try:
+        profile_user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        raise Http404
+    message = request.session.get(SESSION_MESSAGE, '')
+    if message:
+        del request.session[SESSION_MESSAGE]
+    # Maintain the convention that {{user}} always refers to the
+    # requesting user; so here {{profile}} is the user to display.
     return render_to_response('profile.html',
-                              {'user': user, 'privileged': privileged,
-                               'gravatar': gravatar})
+                              {'user': request.user,
+                               'profile': profile_user,
+                               'privileged': is_privileged(request, username),
+                               'message': message,
+                               'gravatar': gravatar_url(profile_user)})
 
-ACCT_NAME_SENT = 'Your user name has been set by email.'
-ACCT_LINK_SENT = 'A password reset link has been set by email.'
+ACCT_NAME_SENT = 'Your user name has been sent by email.'
+ACCT_LINK_SENT = 'A password reset link has been sent by email.'
 ACCT_PASS_CHANGED = 'Your password has been changed.'
+ACCT_MAIL_SENT = 'A validation link has been sent to your new address.'
 
 def auth_redirect(request, message):
     request.session[SESSION_MESSAGE] = message
@@ -82,6 +94,33 @@ ValidationKey.objects.register(
     'P', 'password reset', 'email/reset.txt',
     forgot_password_handler, 96)
 
+def edit_email(request, username):
+    if not is_privileged(request, username):
+        return HttpResponseForbidden('forbidden')
+    try:
+        profile_user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        raise Http404
+    if request.method == 'POST':
+        form = EmailBaseForm(request.POST)
+        if form.is_valid():
+            if request.user.is_staff: # just do it right away
+                raise Http404
+            else:
+                ValidationKey.objects.create(request.build_absolute_uri,
+                                             form.cleaned_data['email'],
+                                             profile_user, 'P')
+                request.session[SESSION_MESSAGE] = ACCT_MAIL_SENT
+                return HttpResponseRedirect(reverse('profile',
+                                                    kwargs={'username':
+                                                                username}))
+    else:
+        form = EmailBaseForm()
+    return render_to_response('acct/edit-email.html',
+                              {'profile': profile_user,
+                               'form': form,
+                               'action': request.get_full_path()})
+
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -95,9 +134,6 @@ def register(request):
         u.email_user('validate', url)
         auth.login(request, u)
     return HttpResponseRedirect(reverse('home'))
-
-def edit_email(request):
-    return HttpResponse('not implemented')
 
 def edit_profile(request):
     return HttpResponse('not implemented')

@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
+from random import random
 from views import SESSION_LOGOUT
 import base64
 
@@ -25,14 +26,25 @@ def login_redirect(test, u, pw, path):
     test.assertRedirects(r, path)
     test.assertEqual(test.client.session[SESSION_KEY], u.id)
 
+def create_test_user(username, password, email='',
+                     first_name='', last_name=''):
+    u = User(username=username, email=email,
+             first_name=first_name, last_name=last_name)
+    u.set_password(password)
+    u.save()
+    return u
+
+def setup_users(test):
+    test.p1 = random().hex()
+    test.u1 = create_test_user('alice', test.p1, 'alice@example.com',
+                               'Alice', 'Andersen')
+    test.p2 = random().hex()
+    test.u2 = create_test_user('bob', test.p2, 'bob@example.com')
+User(username='alice', email='alice@example.com')
+
 class AuthTest(TestCase):
     def setUp(self):
-        self.u1 = User(username='alice', email='alice@example.com')
-        self.u1.set_password('alice')
-        self.u1.save()
-        self.u2 = User(username='bob', email='bob@example.com')
-        self.u2.set_password('bob')
-        self.u2.save()
+        setup_users(self)
         self.client = Client()
 
     def test_auth_required(self):
@@ -40,21 +52,21 @@ class AuthTest(TestCase):
         self.assertEqual(r.status_code, 401)
 
     def test_login_okay(self):
-        r = login_helper(self.client, self.u1, 'alice')
+        r = login_helper(self.client, self.u1, self.p1)
         self.assertEqual(r.status_code, 200)
         self.assertEqual(self.client.session[SESSION_KEY], self.u1.id)
 
     def test_logout(self):
-        r = login_helper(self.client, self.u2, 'bob')
+        r = login_helper(self.client, self.u2, self.p2)
         self.assertEqual(r.status_code, 200)
         self.assertEqual(self.client.session[SESSION_KEY], self.u2.id)
         r = self.client.get(reverse('auth_logout'))
         self.assertEqual(r.status_code, 200)
         self.assertTrue(SESSION_KEY not in self.client.session)
         self.assertTrue(SESSION_LOGOUT in self.client.session)
-        r = login_helper(self.client, self.u2, 'bob')
+        r = login_helper(self.client, self.u2, self.p2)
         self.assertEqual(r.status_code, 401) # first login should fail
-        r = login_helper(self.client, self.u2, 'bob')
+        r = login_helper(self.client, self.u2, self.p2)
         self.assertEqual(r.status_code, 200) # but can login again after
 
     def test_login_rejected(self):
@@ -62,4 +74,4 @@ class AuthTest(TestCase):
         self.assertEqual(r.status_code, 401)
 
     def test_login_required(self):
-        login_redirect(self, self.u2, 'bob', reverse('auth_test'))
+        login_redirect(self, self.u2, self.p2, reverse('auth_test'))
