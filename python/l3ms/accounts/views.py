@@ -34,7 +34,8 @@ def get_username_or_404(username):
 def gravatar_url(request, user):
     h = md5(user.email.lower()).hexdigest()
     d = 'https://secure' if request.is_secure() else 'http://www'
-    return '%s.gravatar.com/avatar/%s.jpg?d=retro' % (d,h)
+    return ('%s.gravatar.com/avatar/%s.jpg?d=%s' %
+            (d, h, settings.GRAVATAR_FALLBACK))
 
 @login_required
 def home(request):
