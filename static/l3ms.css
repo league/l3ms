@@ -102,3 +102,12 @@ ul.errorlist > li {
 .feedback.okay {
     background: url(accept.png) no-repeat 2px 6px;
 }
+div.allusers a {
+    text-decoration: none;
+}
+div.allusers .gravatar {
+    border: 1px solid #555;
+}
+div.allusers {
+    margin-bottom: 2ex;
+}

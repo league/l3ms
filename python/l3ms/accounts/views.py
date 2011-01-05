@@ -272,3 +272,11 @@ def edit_profile(request, username):
                                'form': form,
                                'action': request.get_full_path()})
 
+def all_users(request):
+    if not request.user.is_staff:
+        return http.HttpResponseForbidden('forbidden')
+    us = User.objects.order_by('username')
+    return render_to_response('acct/all.html',
+                              {'user': request.user,
+                               'site_name': settings.SITE_NAME,
+                               'users': us})

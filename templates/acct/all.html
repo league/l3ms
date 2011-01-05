@@ -1,0 +1,24 @@
+{% extends "layout/base.html" %}
+{% load gravatar %}
+{% block title %}
+{{ site_name }} users
+{% endblock title %}
+
+{% block content %}
+{% for u in users %}
+{% cycle '<div class="container_12 clearfix allusers">' '' '' '' %}
+  <div class="grid_1 {% cycle 'alpha' '' '' '' %}">
+    <a href="{% url profile username=u.username %}">
+      <img class="gravatar" src="{{ u|gravatar:60 }}"
+           width="60" height="60" />
+    </a>
+  </div>
+  <div class="grid_2 {% cycle '' '' '' 'omega' %}">
+    <a href="{% url profile username=u.username %}">
+      {{ u.username }}<br />
+      {{ u.get_full_name }}
+    </a>
+  </div>
+  {% cycle '' '' '' '</div>' %}
+{% endfor %}
+{% endblock %}
