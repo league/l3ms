@@ -97,6 +97,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'l3ms.misc',
     'l3ms.accounts',
+    'l3ms.courses',
     'l3ms.http_auth',
     'l3ms.email_validation',
 )
