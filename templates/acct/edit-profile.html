@@ -1,0 +1,20 @@
+{% extends "small-page.html" %}
+{% block title %}
+  Change profile info for {{ profile.username }} | {{ site_name }}
+{% endblock %}
+
+{% block small_content %}
+<h1>Change profile info for
+  {{ profile.get_full_name|default:profile.username }}</h1>
+
+<p>Edit your information below.  If you are an enrolled student,
+  please use the last name that is on the university roster.  You may
+  supplement the first name with a nickname, as long as it is obvious
+  who you are.  Also please tell us a bit about yourself: your
+  background, interests, motivations, etc.</p>
+
+<form class="simpleForm" method="post" action="{{action}}">
+  {{ form.as_p }}
+  <input type="submit" value="Submit" />
+</form>
+{% endblock %}

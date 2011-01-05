@@ -10,6 +10,7 @@ LABEL_FIRST_NAME = 'First (given) name'
 LABEL_LAST_NAME = 'Last (family) name'
 LABEL_PASSWORD_1 = 'Password'
 LABEL_PASSWORD_2 = 'Confirm password'
+LABEL_BLURB = 'About you'
 
 M_EMAIL_UNKNOWN = """That email address does not have an associated
 user account."""
@@ -39,3 +40,5 @@ M_NEW_USER_SENT = """Your account is awaiting activation (check your
 email)."""
 
 M_ACTIVATED = """Your account is activated; please log in now."""
+
+M_PROFILE_CHANGED = """Your profile information has been changed."""

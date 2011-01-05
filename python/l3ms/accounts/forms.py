@@ -65,6 +65,30 @@ class SetPasswordForm(forms.Form):
             self.user.save()
         return self.user
 
+class EditProfileForm(forms.Form):
+    last_name = forms.CharField(label=LABEL_LAST_NAME, max_length=30)
+    first_name = forms.CharField(label=LABEL_FIRST_NAME, max_length=30)
+    blurb = forms.CharField(label=LABEL_BLURB, widget=forms.Textarea)
+
+    def __init__(self, user, data={}, *args, **kwargs):
+        self.user = user
+        if 'first_name' not in data:
+            data['first_name'] = user.first_name
+        if 'last_name' not in data:
+            data['last_name'] = user.last_name
+        if 'blurb' not in data:
+            data['blurb'] = user.get_profile().blurb
+        super(EditProfileForm, self).__init__(data, *args, **kwargs)
+
+    def save(self, commit=True):
+        self.user.first_name = self.cleaned_data['first_name']
+        self.user.last_name = self.cleaned_data['last_name']
+        self.user.get_profile().blurb = self.cleaned_data['blurb']
+        if commit:
+            self.user.save()
+            self.user.get_profile().save()
+        return self.user
+
 class RegistrationForm(forms.Form):
     last_name = forms.CharField(label=LABEL_LAST_NAME, max_length=30)
     first_name = forms.CharField(label=LABEL_FIRST_NAME, max_length=30)

@@ -252,11 +252,23 @@ def check_email(request):
     else:
         return jsonResponse({'valid': False})
 
-def edit_profile(request):
-    return http.HttpResponse('not implemented')
-
-
-## this should really be moved to courses app
-def navbar(request, path):
-    return http.HttpResponse('not implemented: '+path)
+@except404([User.DoesNotExist])
+def edit_profile(request, username):
+    if not is_privileged(request, username):
+        return http.HttpResponseForbidden('forbidden')
+    profile_user = User.objects.get(username=username)
+    if request.method == 'POST':
+        form = forms.EditProfileForm(profile_user, request.POST)
+        if form.is_valid():
+            form.save()
+            request.session[SESSION_MESSAGE] = M_PROFILE_CHANGED
+            return http.HttpResponseRedirect(profile_of(profile_user))
+    else:
+        form = forms.EditProfileForm(profile_user)
+    return render_to_response('acct/edit-profile.html',
+                              {'profile': profile_user,
+                               'user': request.user,
+                               'site_name': settings.SITE_NAME,
+                               'form': form,
+                               'action': request.get_full_path()})
 

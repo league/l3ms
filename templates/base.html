@@ -24,6 +24,9 @@
           <a href="">About</a>
           {% endblock nav %}
           {% if user.is_authenticated %}
+          {% if user.is_staff %}
+          <a href="{% url admin:index %}">Admin</a>
+          {% endif %}
           <span>Hello,
             <a href="{% url profile username=user.username %}">
               {{user.username}}
