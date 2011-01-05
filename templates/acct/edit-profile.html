@@ -1,4 +1,4 @@
-{% extends "small-page.html" %}
+{% extends "acct/narrow.html" %}
 {% block title %}
   Change profile info for {{ profile.username }} | {{ site_name }}
 {% endblock %}
@@ -17,4 +17,6 @@
   {{ form.as_p }}
   <input type="submit" value="Submit" />
 </form>
+
+{{ block.super }}
 {% endblock %}

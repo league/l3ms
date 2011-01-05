@@ -1,0 +1,8 @@
+{% extends "layout/narrow.html" %}
+{% block small_content %}
+<p class="links">
+  <a href="{% url profile username=profile.username %}">
+    ←  Back to profile
+  </a>
+</p>
+{% endblock %}
