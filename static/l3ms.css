@@ -9,6 +9,8 @@ div#header {
 div#nav {
     text-align: right
 }
+div#logo {
+}
 div#messages {
     margin-top: 2ex;
     border-color: #c00;
@@ -48,10 +50,16 @@ div#messages p {
     text-decoration: none;
     font-weight: bold;
 }
-#nav span {
+#nav > span {
 }
-#nav a, #nav span {
+#nav > a, #nav > span {
     margin-left: 1em;
+}
+#nav .gravatar {
+    position: relative;
+    bottom: -1ex;
+    border: 1px inset #8ac;
+    margin: 0 2px;
 }
 /* -------------------------------- */
 form.simpleForm {

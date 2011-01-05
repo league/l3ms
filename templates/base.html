@@ -1,3 +1,4 @@
+{% load gravatar %}
 <html>
   <head>
     <title>{% block title %}{{ site_name }}{% endblock %}</title>
@@ -19,13 +20,19 @@
           {{ site_name }}
         </div>
         <div id="nav" class="grid_7 omega">
-          {% if user.is_authenticated %}
-          <span>Hello, {{user.username}}.</span>
-          <a href="{% url auth_logout %}">Log out</a>
-          {% endif %}
           {% block nav %}
           <a href="">About</a>
           {% endblock nav %}
+          {% if user.is_authenticated %}
+          <span>Hello,
+            <a href="{% url profile username=user.username %}">
+              {{user.username}}
+              <img class="gravatar" src="{{user|gravatar:24}}"
+                   width="24" height="24" />
+            </a>
+            <a href="{% url auth_logout %}">Log out</a>
+          </span>
+          {% endif %}
         </div>
       </div>
     </div>

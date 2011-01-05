@@ -16,8 +16,6 @@ HTTP_AUTH_DEBUG = False
 SITE_NAME = 'liucs.net'
 FROM_EMAIL = 'noreply@liucs.net'
 
-GRAVATAR_FALLBACK = 'retro'
-
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )

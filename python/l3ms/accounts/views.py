@@ -38,12 +38,6 @@ def user_exists(username):
     except User.DoesNotExist:
         return False
 
-def gravatar_url(request, user):
-    h = md5(user.email.lower()).hexdigest()
-    d = 'https://secure' if request.is_secure() else 'http://www'
-    return ('%s.gravatar.com/avatar/%s.jpg?d=%s' %
-            (d, h, settings.GRAVATAR_FALLBACK))
-
 @login_required
 def home(request):
     return profile(request, username=request.user.username)
@@ -61,8 +55,7 @@ def profile(request, username):
                               {'user': request.user,
                                'profile': profile_user,
                                'privileged': is_privileged(request, username),
-                               'message': message,
-                               'gravatar': gravatar_url(request, profile_user)})
+                               'message': message})
 
 
 def auth_redirect(request, message):

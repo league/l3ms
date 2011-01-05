@@ -1,7 +1,8 @@
+{% load gravatar %}
 
 <h1>{{ profile.get_full_name }} ({{ profile.username }})</h1>
 
-<img src="{{ gravatar }}" />
+<img src="{{ profile.gravatar }}" />
 
 {% if message %}
 <p style="color: #a00">{{ message }}</p>
