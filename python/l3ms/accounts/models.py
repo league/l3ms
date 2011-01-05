@@ -25,8 +25,7 @@ User.gravatar = gravatar
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, unique=True)
-    is_email_valid = models.BooleanField(default=False)
-    is_approved = models.BooleanField(default=False)
+    blurb = models.TextField(default='…')
 
     def __unicode__(self):
         return unicode(self.user)
@@ -35,14 +34,14 @@ class UserProfile(models.Model):
     def get_absolute_url(self):
         return ('profile', (), {'username': self.user.username})
 
-    def save_validated_email(self, email):
-        self.user.email = email
-        self.is_email_valid = True
-        self.user.save()
-        self.save()
+# Monkey-patch get_profile so it creates one if it doesn't exist.
 
-    def is_complete(self):
-        return bool(self.user.username and self.user.first_name and
-                    self.user.last_name and self.user.email and
-                    self.user.has_usable_password())
-
+orig_get_profile = User.get_profile
+def get_profile(self):
+    try:
+        return orig_get_profile(self)
+    except UserProfile.DoesNotExist:
+        u = UserProfile(user=self)
+        u.save()
+        return u
+User.get_profile = get_profile
