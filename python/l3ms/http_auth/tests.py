@@ -60,7 +60,7 @@ class AuthTest(TestCase):
         r = login_helper(self.client, self.u2, self.p2)
         self.assertEqual(r.status_code, 200)
         self.assertEqual(self.client.session[SESSION_KEY], self.u2.id)
-        r = self.client.get(reverse('auth_logout'))
+        r = self.client.get(reverse('auth_logout'), follow=True)
         self.assertEqual(r.status_code, 200)
         self.assertTrue(SESSION_KEY not in self.client.session)
         self.assertTrue(SESSION_LOGOUT in self.client.session)

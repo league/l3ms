@@ -22,6 +22,8 @@ M_AUTH_REQUIRED = """Authentication is required.  Please log in or
 register as a new user.  If you recently registered, you must first
 check your email and use the validation link."""
 
+M_LOGGED_OUT = """You have logged out."""
+
 def render(template, request, message=''):
     d = {'message': message,
          'user': request.user,
@@ -50,13 +52,13 @@ def login(request):
     if SESSION_LOGOUT in request.session:
         if request.session[SESSION_LOGOUT] == user.username:
             return force(request)
-    next = request.session.get(SESSION_NEXT_PAGE, '')
-    auth.login(request, user)
-    if next:
+    if SESSION_NEXT_PAGE in request.session:
+        next = request.session[SESSION_NEXT_PAGE]
         del request.session[SESSION_NEXT_PAGE]
-        return HttpResponseRedirect(next)
     else:
-        return render('http-auth/login.html', request)
+        next = reverse('home')
+    auth.login(request, user)
+    return HttpResponseRedirect(next)
 
 def force(request):
     if SESSION_LOGOUT in request.session:
@@ -74,7 +76,8 @@ def logout(request):
         auth.logout(request)
         request.session[SESSION_LOGOUT] = u
         request.session.set_expiry(0) # upon closing web browser
-    return render('http-auth/logout.html', request)
+        request.session[SESSION_MESSAGE] = M_LOGGED_OUT
+    return HttpResponseRedirect(reverse('auth_options'))
 
 def login_required(f):
     def do_it(request, *args, **kwargs):
