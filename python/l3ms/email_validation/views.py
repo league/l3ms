@@ -6,19 +6,20 @@
 
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from models import ValidationKey
-from settings import DEBUG
+from l3ms.utils import except404
 
+@except404([ValidationKey.DoesNotExist])
 def validate(request, key):
-    try:
-        k = ValidationKey.objects.get(key=key)
-    except ValidationKey.DoesNotExist:
-        raise Http404
-    # Handler will be responsible for deleting k
+    """Respond to a validation link by dispatching to handler.
+
+    The handler must be responsible for deleting `k` from the
+    database."""
+    k = ValidationKey.objects.get(key=key)
     return ValidationKey.objects.dispatch(request, k)
 
-if DEBUG:
+if settings.DEBUG:
     def x_handler(request, k):
         r = HttpResponse('validated %s' % k)
         k.delete()
@@ -29,10 +30,9 @@ if DEBUG:
         x_handler, 10
         )
 
+@except404([User.DoesNotExist])
 def test(request, code, user, email):
-    try:
-        user = User.objects.get(id=user)
-    except User.DoesNotExist:
-        raise Http404
+    assert settings.DEBUG
+    user = User.objects.get(id=user)
     k = ValidationKey.objects.create(request.build_uri, email, user, code)
     return HttpResponse('sent %s' % k)
