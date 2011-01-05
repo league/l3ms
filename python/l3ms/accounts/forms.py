@@ -68,10 +68,13 @@ class SetPasswordForm(forms.Form):
 class EditProfileForm(forms.Form):
     last_name = forms.CharField(label=LABEL_LAST_NAME, max_length=30)
     first_name = forms.CharField(label=LABEL_FIRST_NAME, max_length=30)
-    blurb = forms.CharField(label=LABEL_BLURB, widget=forms.Textarea)
+    blurb = forms.CharField(label=LABEL_BLURB, widget=forms.Textarea,
+                            required=False)
 
-    def __init__(self, user, data={}, *args, **kwargs):
+    def __init__(self, user, data=None, *args, **kwargs):
         self.user = user
+        if not data:
+            data = {}
         if 'first_name' not in data:
             data['first_name'] = user.first_name
         if 'last_name' not in data:
