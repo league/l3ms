@@ -29,9 +29,11 @@ M_PASSWORD_SENT = """A password reset link has been sent by email."""
 M_PASSWORD_CHANGED = """Your password has been changed."""
 
 M_EMAIL_SENT = """A validation link has been sent to your new
-address."""
+address.  Follow that link to update the address in our database."""
 
-M_EMAIL_CHANGED = """Your email address has been changed."""
+M_EMAIL_CHANGED = """Your email address has been changed.  (The
+‘gravatar’ was based on your email address, so it may have changed
+also.)"""
 
 M_NEW_USER_SENT = """Your account is awaiting activation (check your
 email)."""

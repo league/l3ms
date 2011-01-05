@@ -1,6 +1,19 @@
-<h1>Change email for {{ profile.username }}</h1>
+{% extends "small-page.html" %}
+{% block title %}
+  Change email for {{ profile.username }} | {{ site_name }}
+{% endblock %}
 
-<form method="post" action="{{ action }}">
+{% block small_content %}
+<h1>Change email for
+  {{ profile.get_full_name|default:profile.username }}</h1>
+
+<p>Enter your new email address below.  You will receive a validation
+  link at that address.  You must click that link to effect the
+  change.  If you uploaded a ‘gravatar’, it was based on your email
+  address, so you may have to upload a new one after.</p>
+
+<form class="simpleForm" method="post" action="{{ action }}">
   {{ form.as_p }}
   <input type="submit" value="Submit" />
 </form>
+{% endblock %}

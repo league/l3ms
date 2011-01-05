@@ -55,6 +55,7 @@ def profile(request, username):
                               {'user': request.user,
                                'profile': profile_user,
                                'privileged': is_privileged(request, username),
+                               'site_name': settings.SITE_NAME,
                                'message': message})
 
 
@@ -128,6 +129,8 @@ def edit_email(request, username):
         form = forms.EmailBaseForm()
     return render_to_response('acct/edit-email.html',
                               {'profile': profile_user,
+                               'user': request.user,
+                               'site_name': settings.SITE_NAME,
                                'form': form,
                                'action': request.get_full_path()})
 
@@ -156,6 +159,8 @@ def edit_password(request, username):
         form = forms.PasswordChangeForm(profile_user)
     return render_to_response('acct/edit-password.html',
                               {'profile': profile_user,
+                               'user': request.user,
+                               'site_name': settings.SITE_NAME,
                                'form': form,
                                'action': request.get_full_path()})
 

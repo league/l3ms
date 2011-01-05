@@ -12,7 +12,7 @@ div#nav {
 div#logo {
 }
 div#messages {
-    margin-top: 2ex;
+    margin: 2ex 0;
     border-color: #c00;
     border-style: solid;
     border-width: 6px 2px 2px 2px;
@@ -60,6 +60,10 @@ div#messages p {
     bottom: -1ex;
     border: 1px inset #8ac;
     margin: 0 2px;
+}
+#profile .gravatar {
+    margin: 1.4ex 0 4ex 0;
+    border: 1px solid #555;
 }
 /* -------------------------------- */
 form.simpleForm {

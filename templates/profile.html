@@ -1,22 +1,45 @@
+{% extends "base.html" %}
 {% load gravatar %}
 
-<h1>{{ profile.get_full_name }} ({{ profile.username }})</h1>
+{% block title %}
+{{ profile.username }} profile | {{ site_name }}
+{% endblock %}
 
-<img src="{{ profile.gravatar }}" />
+{% block content %}
+<div id="profile" class="container_12 clearfix">
+  <div class="grid_1 alpha">&nbsp;</div>
+  <div class="grid_2">
+    <img class="gravatar" src="{{ profile|gravatar:140 }}"
+         width="140" height="140" />
+    {% if privileged %}
+    <div class="links">
+      <a href="http://www.gravatar.com/">Upload avatar</a>
+      <a href="{% url edit_email username=profile.username %}">
+        Change email</a>
+      <a href="{% url edit_password username=profile.username %}">
+        Change password</a>
+      <a href="{% url edit_email username=profile.username %}">Edit
+        profile or name</a>
+    </div>
+    {% endif %}
+  </div>
 
-{% if message %}
-<p style="color: #a00">{{ message }}</p>
-{% endif %}
+  <div class="grid_9 omega">
+    {% if message %}
+    <div id="messages">
+      <p style="color: #a00">{{ message }}</p>
+    </div>
+    {% endif %}
 
-<p>privileged: {{ privileged }}</p>
+    <h1>{{ profile.get_full_name|default:profile.username }}</h1>
 
-<p>email: {{ profile.email }}
-  {% if privileged %}
-  <a href="{% url edit_email username=profile.username %}">change</a>
+    <p><b>Member since</b> {{ profile.date_joined|date:"F Y" }}</p>
 
-  <p><a href="{% url edit_password username=profile.username %}"
-        >Change password</a>
+    <p><b>Email:</b> {{ profile.email }}</p>
 
-  {% endif %}
+    <p><b>About me:</b>
+      {{ profile.get_profile.blurb }}</p>
 
-<p><a href="{% url auth_logout %}">Log out</a></p>
+  </div>
+</div>
+{% endblock %}
