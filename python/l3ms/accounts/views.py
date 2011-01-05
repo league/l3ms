@@ -14,6 +14,7 @@ from django.shortcuts import render_to_response
 from hashlib import md5
 from l3ms.email_validation.models import ValidationKey
 from l3ms.http_auth.views import login_required, SESSION_MESSAGE
+from l3ms.utils import except404
 from strings import *
 import forms
 import itertools
@@ -37,12 +38,6 @@ def user_exists(username):
     except User.DoesNotExist:
         return False
 
-def get_username_or_404(username):
-    try:
-        return User.objects.get(username=username)
-    except User.DoesNotExist:
-        raise Http404
-
 def gravatar_url(request, user):
     h = md5(user.email.lower()).hexdigest()
     d = 'https://secure' if request.is_secure() else 'http://www'
@@ -54,8 +49,9 @@ def home(request):
     return profile(request, username=request.user.username)
 
 @login_required
+@except404([User.DoesNotExist])
 def profile(request, username):
-    profile_user = get_username_or_404(username)
+    profile_user = User.objects.get(username=username)
     message = request.session.get(SESSION_MESSAGE, '')
     if message:
         del request.session[SESSION_MESSAGE]
@@ -117,10 +113,11 @@ ValidationKey.objects.register(
     'P', 'password reset', 'email/reset.txt',
     forgot_password_handler, 96)
 
+@except404([User.DoesNotExist])
 def edit_email(request, username):
     if not is_privileged(request, username):
         return http.HttpResponseForbidden('forbidden')
-    profile_user = get_username_or_404(username)
+    profile_user = User.objects.get(username=username)
     if request.method == 'POST':
         form = forms.EmailBaseForm(request.POST)
         if form.is_valid():
@@ -151,10 +148,11 @@ ValidationKey.objects.register(
     'E', 'email address change', 'email/edit-email.txt',
     edit_email_handler, 96)
 
+@except404([User.DoesNotExist])
 def edit_password(request, username):
     if not is_privileged(request, username):
         return http.HttpResponseForbidden('forbidden')
-    profile_user = get_username_or_404(username)
+    profile_user = User.objects.get(username=username)
     if request.method == 'POST':
         form = forms.PasswordChangeForm(profile_user, request.POST)
         if form.is_valid():

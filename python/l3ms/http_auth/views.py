@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.http import urlquote
 from settings import HTTP_AUTH_REALM, HTTP_AUTH_DEBUG
