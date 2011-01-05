@@ -78,3 +78,15 @@ ul.errorlist {
 ul.errorlist > li {
     margin: 0;
 }
+/* -------------------------------- */
+.feedback {
+    float: right;
+    width: 240px;
+    padding: 4px 0 0 20px;
+}
+.feedback.error {
+    background: url(error.png) no-repeat 2px 6px;
+}
+.feedback.okay {
+    background: url(accept.png) no-repeat 2px 6px;
+}

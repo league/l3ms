@@ -4,6 +4,7 @@
 # This is free software but comes with ABSOLUTELY NO WARRANTY.
 # See the GNU General Public License version 3 for details.
 
+from datetime import date
 from django import http, template
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -15,6 +16,10 @@ from l3ms.email_validation.models import ValidationKey
 from l3ms.http_auth.views import login_required, SESSION_MESSAGE
 from strings import *
 import forms
+import itertools
+import random
+import re
+import simplejson as json
 
 def reverse_u(view, username):
     return reverse(view, kwargs={'username': username})
@@ -24,6 +29,13 @@ def profile_of(user):
 
 def is_privileged(request, username):
     return request.user.is_staff or request.user.username == username
+
+def user_exists(username):
+    try:
+        User.objects.get(username=username)
+        return True
+    except User.DoesNotExist:
+        return False
 
 def get_username_or_404(username):
     try:
@@ -169,6 +181,7 @@ def register(request):
         form = forms.RegistrationForm()
     return render_to_response('acct/register.html',
                               {'form': form,
+                               'site_name': settings.SITE_NAME,
                                'action': request.get_full_path()})
 
 def new_account_handler(request, k):
@@ -182,6 +195,66 @@ def new_account_handler(request, k):
 ValidationKey.objects.register(
     'N', 'account', 'email/new.txt',
     new_account_handler, 96)
+
+BAD_USERNAME_RE = re.compile(r'\W')
+
+def jsonResponse(d):
+    return http.HttpResponse(json.dumps(d))
+
+def check_username(request):
+    """Return a list of suggestions, or empty list if it is okay."""
+    username = BAD_USERNAME_RE.sub('', request.GET.get('u', '').lower())
+    first = BAD_USERNAME_RE.sub('', request.GET.get('f', '').lower())
+    last = BAD_USERNAME_RE.sub('', request.GET.get('l', '').lower())
+    if not username:
+        return http.HttpResponse('false', status=400)
+    if user_exists(username) or request.GET['u'] != username:
+        g = gen_available_usernames(username, first, last)
+        ns = [n for n in itertools.islice(g, 0, 6)]
+        return jsonResponse({'available': False, 'suggestions': ns})
+    else:
+        return jsonResponse({'available': True, 'suggestions': []})
+
+def gen_available_usernames(username, first, last):
+    d = {}
+    for b in gen_candidate_base_names(username, first, last):
+        if b and b not in d and not user_exists(b):
+            d[b] = None
+            yield b
+        elif b:
+            for k in range(5):
+                u = '%s%d' % (b,k)
+                if u and u not in d and not user_exists(u):
+                    d[u] = None
+                    yield u
+                    break
+    for b in gen_candidate_base_names(username, first, last):
+        if b:
+            for k in itertools.count(0):
+                u = '%s%d' % (b,k)
+                if u and u not in d and not user_exists(u):
+                    d[u] = None
+                    yield u
+                    break
+
+def gen_candidate_base_names(username, first, last):
+    yield username
+    yield last
+    yield last+first
+    for i in range(1, min(3, len(first))):
+        yield last+first[:i]
+    for i in range(max(5, len(username)-3), len(username)):
+        yield username[:i]
+
+def check_email(request):
+    from django.forms.fields import email_re
+    e = request.GET.get('e', '')
+    if email_re.match(e):
+        n = User.objects.filter(email__iexact=e).count()
+        return jsonResponse({'valid': True,
+                             'available': n == 0})
+    else:
+        return jsonResponse({'valid': False})
 
 def edit_profile(request):
     return http.HttpResponse('not implemented')

@@ -66,11 +66,11 @@ class SetPasswordForm(forms.Form):
         return self.user
 
 class RegistrationForm(forms.Form):
-    first_name = forms.CharField(label=LABEL_FIRST_NAME, max_length=30)
     last_name = forms.CharField(label=LABEL_LAST_NAME, max_length=30)
+    first_name = forms.CharField(label=LABEL_FIRST_NAME, max_length=30)
+    email = forms.EmailField(label=LABEL_EMAIL)
     username = forms.RegexField(label=LABEL_USERNAME, max_length=30,
                                 regex=r'^\w+$')
-    email = forms.EmailField(label=LABEL_EMAIL)
     password1 = forms.CharField(label=LABEL_PASSWORD_1, max_length=128,
                                 widget=forms.PasswordInput)
     password2 = forms.CharField(label=LABEL_PASSWORD_2, max_length=128,

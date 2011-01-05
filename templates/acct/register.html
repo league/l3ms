@@ -1,6 +1,115 @@
-<h1>Register new user</h1>
+{% extends "auth-small-page.html" %}
 
-<form method="post" action="{{action}}">
+{% block title %}
+Sign up for {{ site_name }}
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript">
+var auto_type_username = true
+var username_okay_cache = {}
+$(document).ready(function(){
+  $("#id_username").after("<span id='feedback_username' class='feedback okay'></span>")
+  $("#id_email").after("<span id='feedback_email' class='feedback'></span>")
+  $("#id_password2").after("<span id='feedback_password2' class='feedback'>&nbsp;</span>")
+  $("#id_first_name").keyup(realNameHandler)
+  $("#id_last_name").keyup(realNameHandler)
+  $("#id_username").keyup(userNameHandler)
+  $("#id_email").focusout(emailHandler)
+  $("#id_password2").keyup(passwordHandler)
+})
+function realNameHandler() {
+  if(auto_type_username) {
+    var fn = $("#id_first_name").val()
+    var ln = $("#id_last_name").val()
+    if(fn != "" && ln != "") {
+      $("#id_username").val((ln+fn[0]).toLowerCase().replace(/[^a-z]/, ""))
+      userNameCheck()
+    }
+  }
+}
+function userNameHandler() {
+  auto_type_username = false
+  userNameCheck()
+}
+function userNameCheck() {
+  u = $("#id_username").val()
+  if( u.length > 0 ) {
+    if( u in username_okay_cache ) {
+      showUsernameFeedback({available: true})
+    }
+    else {
+      $.getJSON("{% url check_username %}",
+                {u: $("#id_username").val(),
+                 f: $("#id_first_name").val(),
+                 l: $("#id_last_name").val()},
+                function(result) {
+                  if(result.available) username_okay_cache[u] = true
+                  showUsernameFeedback(result)
+                })
+    }
+  }
+  else {
+    $("#feedback_username").removeClass("error").removeClass("okay").
+      html("&nbsp;")
+  }
+}
+function showUsernameFeedback(result) {
+  if(result.available) {
+    $("#feedback_username").removeClass("error").addClass("okay").
+      html("&nbsp;")
+  }
+  else {
+    $("#feedback_username").removeClass("okay").addClass("error").
+      text("That username is taken. Suggestions:" +
+           result.suggestions.join(" "))
+  }
+}
+function emailHandler() {
+  $.getJSON("{% url check_email %}",
+            {e: $("#id_email").val()},
+            function(result) {
+              if(!result.valid) {
+                $("#feedback_email").removeClass("okay").addClass("error").
+                  html("That is not a valid email address.")
+              }
+              else if(!result.available) {
+                $("#feedback_email").removeClass("okay").addClass("error").
+                  html("That email address is used by another account.")
+              }
+              else {
+                $("#feedback_email").removeClass("error").addClass("okay").
+                  html("&nbsp;")
+              }
+            })
+}
+function passwordHandler() {
+  var p1 = $("#id_password1").val()
+  var p2 = $("#id_password2").val()
+  if( p1.length > 0 && p2.length > 0 && p1 == p2 ) {
+    $("#feedback_password2").removeClass("error").addClass("okay")
+  }
+  else {
+    $("#feedback_password2").removeClass("okay").addClass("error")
+  }
+}
+
+</script>
+{% endblock %}
+
+
+{% block small_content %}
+<h1>Sign up</h1>
+
+<p>Please enter your details below.  All fields are required.  After
+  submitting, you will need to follow the validation link sent to your
+  email address before you can log in.</p>
+
+<form class="simpleForm" method="post" action="{{action}}">
   {{ form.as_p }}
   <input type="submit" value="Submit" />
 </form>
+
+{{ block.super }}
+{% endblock %}
