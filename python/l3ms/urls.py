@@ -12,6 +12,7 @@ subpatterns = patterns(
     '',
     url(r'^$', accounts.views.home, name='home'),
     url(r'^u/(?P<username>\w+)$', accounts.views.profile, name='profile'),
+    url(r'^u/$', accounts.views.all_users, name='all_users'),
     url(r'^validation/(?P<key>.+)$', email_validation.views.validate,
         name='validate'),
     (r'^acct/', include(accounts.urls)),

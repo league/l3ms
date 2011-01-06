@@ -12,7 +12,6 @@ urlpatterns = patterns(
     url(r'^edit/(?P<username>\w+)/profile$', views.edit_profile,
         name='edit_profile'),
     url(r'^new$', views.register, name='register'),
-    url(r'^all$', views.all_users, name='all_users'),
     url(r'^check/username$', views.check_username, name='check_username'),
     url(r'^check/email$', views.check_email, name='check_email'),
     )
