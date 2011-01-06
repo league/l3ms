@@ -64,11 +64,11 @@
   <div class="grid_6">
     <h2>About me</h2>
     <p>
-      {{ profile.get_profile.blurb }}</p>
+      {{ profile.get_profile.blurb|linebreaksbr }}</p>
   </div>
 
   <div class="grid_3 omega">
-    <h2>Courses</h2>
+    <h2>My Courses</h2>
     <ul class="courseListBySemester">
       {% for e in profile.enrollment_set.all %}
         {% ifchanged e.course.semester %}
