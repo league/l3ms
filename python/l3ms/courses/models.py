@@ -6,6 +6,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User, Group
+from urlparse import urlsplit
 
 class Semester(models.Model):
     tag = models.SlugField(primary_key=True)
@@ -31,18 +32,25 @@ class Course(models.Model):
     def __unicode__(self):
         return self.tag
 
+    def get_users_by_kind(self, kind, incl=True):
+        q = self.enrollment_set
+        q = q.filter if incl else q.exclude
+        q = q(kind=kind)
+        q = q.order_by('user__username')
+        return q
+
     def get_instructors(self):
-        return self.enrollment_set.filter(kind='I')
+        return self.get_users_by_kind('I')
+
+    def get_students(self):
+        return self.get_users_by_kind('I', False)
+
+    def get_graded_students(self):
+        return self.get_users_by_kind('G')
 
     def get_full_instructor_names(self):
         return [e.user.get_full_name().replace(' ', '&nbsp;')
                 for e in self.get_instructors()]
-
-    def get_students(self):
-        return self.enrollment_set.exclude(kind='I')
-
-    def get_graded_students(self):
-        return self.enrollment_set.filter(kind='G')
 
     class Meta:
         unique_together = ('semester', 'code')
@@ -69,10 +77,10 @@ class Enrollment(models.Model):
         ordering = ['course']
 
 LINK_KINDS = (
-    ('H', 'Home page'),
+    ('H', 'Home'),
     ('R', 'Repository'),
     ('C', 'Calendar'),
-    ('T', 'Textbook'),
+    ('T', 'Text'),
     ('F', 'Feed'),
     ('O', 'Other'),
     )
@@ -83,5 +91,11 @@ class CourseLink(models.Model):
     url = models.URLField(verify_exists=False)
 
     def __unicode__(self):
-        u = self.url[:32]+u'…' if len(self.url) > 32 else self.url
-        return '%s %s %s' % (self.course.tag, self.kind, u)
+        return '%s %s %s' % (self.course.tag, self.kind,
+                             self.get_abbrev_url())
+
+    def get_abbrev_url(self):
+        scheme, host, path, q, frag = urlsplit(self.url)
+        if len(path) > 20:
+            path = path[:20]+u'…'
+        return host+path

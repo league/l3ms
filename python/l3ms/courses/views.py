@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from l3ms.http_auth.views import login_required
 from l3ms.utils import except404
-from models import Course
+from models import Course, Enrollment
 from templatetags.enrollment import enrolled_in
 import forms
 
@@ -20,10 +20,14 @@ def all_courses(request):
 @except404([Course.DoesNotExist])
 def one_course(request, tag):
     course = Course.objects.get(pk=tag)
-    if enrolled_in(request.user, tag):
-        return HttpResponse('%s okay' % tag)
-    else:
+    if not enrolled_in(request.user, tag):
         return enroll(request, course)
+    enrollment = Enrollment.objects.get(user=request.user, course=course)
+    return render_to_response('courses/one.html',
+                              {'user': request.user,
+                               'site_name': settings.SITE_NAME,
+                               'course': course,
+                               'enrollment': enrollment})
 
 def enroll(request, course):
     assert request.user.is_authenticated()

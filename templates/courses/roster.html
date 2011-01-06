@@ -1,0 +1,12 @@
+{% load gravatar %}
+<ul id="{{id}}" class="roster">
+  {% for u in users %}
+  <li>
+    <a href="{% url profile username=u.username %}">
+      <img class="gravatar" src="{{ u|gravatar:size }}"
+           width="{{size}}" height="{{size}}" />
+      {{ u.username }}
+    </a>
+  </li>
+  {% endfor %}
+</ul>

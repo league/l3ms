@@ -69,6 +69,9 @@ h2 {
     font-size: large;
     margin-bottom: 1ex;
 }
+h2.break {
+    margin-top: 3ex;
+}
 /* -------------------------------- */
 form.simpleForm {
     margin-bottom: 4ex;
@@ -144,4 +147,15 @@ div#allCourses .course {
 }
 div#allCourses .enrolled {
     background: url(bullet_blue.png) no-repeat 0px 2px;
+}
+ul.roster {
+    list-style: none;
+}
+ul.roster > li {
+    margin-left: 0;
+}
+ul.roster img.gravatar {
+    border: 1px solid #555;
+    position: relative;
+    bottom: -10px;
 }

@@ -1,0 +1,66 @@
+{% extends "layout/base.html" %}
+{% load gravatar %}
+{% load enrollment %}
+{% block title %}
+{{course.code}} {{course.semester.name}} | {{site_name}}
+{% endblock %}
+
+{% block content %}
+<div id="coursePage">
+  <div class="container_12 clearfix">
+    <div class="grid_12 alpha omega">
+      <h1>{{course.code}}: {{course.name}} • {{course.semester.name}}</h1>
+    </div>
+  </div>
+
+  <div class="container_12 clearfix">
+    <div class="grid_2 alpha">
+      <h2>Roster</h2>
+      {{ course.get_instructors|roster_list:"instructorList" }}
+      {{ course.get_students|roster_list:"studentList" }}
+    </div>
+    <div class="grid_7 alpha">
+      <h2>Content</h2>
+      <div class="links">
+        {% for l in course.courselink_set.all %}
+        <a href="{{l.url}}">
+          {{ l.get_kind_display }}  → 
+          {{ l.get_abbrev_url }}
+        {% endfor %}
+        </a>
+      </div>
+      <h2 class="break">Feedback</h2>
+      <p>…</p>
+    </div>
+    <div class="grid_3 alpha">
+      <h2>Options</h2>
+
+      <div id="courseOptions">
+        <p>
+        <input checked="checked" type="checkbox" name="notify_commit"
+               id="id_notify_commit" />
+        <label for="id_notify_commit">Notify me about repository
+          commits</label>
+        </p>
+        <p>
+        <input checked="checked" type="checkbox" name="notify_grades"
+               id="id_notify_grades" />
+        <label for="id_notify_grades">Notify me about posted
+        grades</label>
+        </p>
+      </div>
+
+      {% ifnotequal enrollment.kind "I" %}
+      <p> I am
+        {% ifequal enrollment.kind "G" %}
+        being <b>graded.</b>
+        {% else %}
+        <b>auditing.</b>
+        {% endifequal %}
+      </p>
+      {% endifnotequal %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}
