@@ -76,7 +76,7 @@
           <li>{{ e.course.semester.name }}
           <ul>
         {% endifchanged %}
-          <li><a href="">
+          <li><a href="{% url one_course tag=e.course.tag %}">
             {{ e.course.code }} {{ e.course.name }}
           </a></li>
         {% if forloop.last %} </ul></li> {% endif %}

@@ -21,7 +21,7 @@
         </div>
         <div id="nav" class="grid_7 omega">
           {% block nav %}
-          <a href="">Courses</a>
+          <a href="{% url all_courses %}">Courses</a>
           {% endblock nav %}
           {% if user.is_staff %}
           <a href="{% url all_users %}">Users</a>
