@@ -11,7 +11,6 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.http import urlquote
-from settings import HTTP_AUTH_REALM, HTTP_AUTH_DEBUG
 import base64
 
 SESSION_LOGOUT = 'logout'
@@ -29,7 +28,7 @@ def render(template, request, message=''):
          'user': request.user,
          'site_name': settings.SITE_NAME,
          }
-    if HTTP_AUTH_DEBUG:
+    if settings.HTTP_AUTH_DEBUG:
         template = 'http-auth/test.html'
         d['request'] = request
     return render_to_response(template, d)
@@ -67,7 +66,7 @@ def force(request):
     r = options(request,  # could be more helpful if not is_active
                 message=M_AUTH_REQUIRED)
     r.status_code = 401
-    r['WWW-Authenticate'] = 'Basic realm="%s"' % HTTP_AUTH_REALM
+    r['WWW-Authenticate'] = 'Basic realm="%s"' % settings.HTTP_AUTH_REALM
     return r
 
 def logout(request):

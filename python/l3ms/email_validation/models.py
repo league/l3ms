@@ -15,7 +15,6 @@ from django.db import models
 from django.template import loader, Context
 from hashlib import md5
 from random import random
-from settings import FROM_EMAIL, SITE_NAME
 
 class UnknownValidator(StandardError):
     pass
@@ -63,7 +62,7 @@ class Validator:
         t = loader.get_template(self.template)
         c = Context({'user': obj.user,
                      'email': obj.email,
-                     'site_name': SITE_NAME,
+                     'site_name': settings.SITE_NAME,
                      'url': url})
         return t.render(c)
 
@@ -130,7 +129,7 @@ class ValidationManager(models.Manager):
         obj.save()
 
         url = build_uri(obj.get_absolute_url())
-        send_mail(v.subject, v.render(obj, url), FROM_EMAIL, [email])
+        send_mail(v.subject, v.render(obj, url), settings.FROM_EMAIL, [email])
         return obj
 
     def delete_expired(self):
