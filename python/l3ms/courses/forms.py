@@ -1,10 +1,11 @@
-from django import forms
 from datetime import date
+from django import forms
 from models import Enrollment
+from strings import *
 
 class EnrollmentForm(forms.Form):
-    key = forms.CharField(label="Enrollment key", max_length=32)
-    for_credit = forms.BooleanField(label="For credit", required=False)
+    key = forms.CharField(label=LABEL_KEY, max_length=32)
+    for_credit = forms.BooleanField(label=LABEL_FOR_CREDIT, required=False)
 
     def __init__(self, user, course, *args, **kwargs):
         self.user = user
@@ -18,9 +19,7 @@ class EnrollmentForm(forms.Form):
     def clean_key(self):
         key = self.cleaned_data['key']
         if key != self.course.key:
-            raise forms.ValidationError(
-                """That is not the correct enrollment key for this course."""
-                )
+            raise forms.ValidationError(M_INCORRECT_KEY)
         return key
 
     def save(self, commit=True):
@@ -30,3 +29,8 @@ class EnrollmentForm(forms.Form):
         if commit:
             e.save()
         return e
+
+class CourseOptionsForm(forms.ModelForm):
+    class Meta:
+        model = Enrollment
+        exclude = ['course', 'user', 'kind']
