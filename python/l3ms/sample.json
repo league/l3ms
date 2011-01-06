@@ -735,9 +735,9 @@
       "course": 4, 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
-      "student": 9, 
-      "is_enrolled": false
-    }
+      "user": 9, 
+      "kind": "A"
+      }
   }, 
   {
     "pk": 4, 
@@ -746,9 +746,9 @@
       "course": 4, 
       "notify_new_grades": true, 
       "notify_on_commit": false, 
-      "student": 7, 
-      "is_enrolled": false
-    }
+      "user": 7, 
+      "kind": "A"
+      }
   }, 
   {
     "pk": 5, 
@@ -757,8 +757,8 @@
       "course": 4, 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
-      "student": 10, 
-      "is_enrolled": true
+      "user": 10, 
+      "kind": "G"
     }
   }, 
   {
@@ -768,9 +768,9 @@
       "course": 4, 
       "notify_new_grades": true, 
       "notify_on_commit": true, 
-      "student": 11, 
-      "is_enrolled": false
-    }
+      "user": 11, 
+      "kind": "A"
+      }
   }, 
   {
     "pk": 7, 
@@ -779,8 +779,8 @@
       "course": 2, 
       "notify_new_grades": true, 
       "notify_on_commit": true, 
-      "student": 8, 
-      "is_enrolled": true
+      "user": 8, 
+      "kind": "G"
     }
   }, 
   {
@@ -790,8 +790,8 @@
       "course": 2, 
       "notify_new_grades": false, 
       "notify_on_commit": true, 
-      "student": 6, 
-      "is_enrolled": true
+      "user": 6, 
+      "kind": "G"
     }
   }, 
   {
@@ -801,9 +801,9 @@
       "course": 2, 
       "notify_new_grades": true, 
       "notify_on_commit": false, 
-      "student": 10, 
-      "is_enrolled": false
-    }
+      "user": 10, 
+      "kind": "A"
+      }
   }, 
   {
     "pk": 10, 
@@ -812,8 +812,8 @@
       "course": 2, 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
-      "student": 11, 
-      "is_enrolled": true
+      "user": 11, 
+      "kind": "G"
     }
   }, 
   {
@@ -823,8 +823,8 @@
       "course": 6, 
       "notify_new_grades": true, 
       "notify_on_commit": false, 
-      "student": 7, 
-      "is_enrolled": true
+      "user": 7, 
+      "kind": "G"
     }
   }, 
   {
@@ -834,8 +834,8 @@
       "course": 6, 
       "notify_new_grades": true, 
       "notify_on_commit": true, 
-      "student": 9, 
-      "is_enrolled": true
+      "user": 9, 
+      "kind": "G"
     }
   }, 
   {
@@ -845,9 +845,9 @@
       "course": 6, 
       "notify_new_grades": false, 
       "notify_on_commit": true, 
-      "student": 11, 
-      "is_enrolled": false
-    }
+      "user": 11, 
+      "kind": "A"
+      }
   }, 
   {
     "pk": 14, 
@@ -856,8 +856,8 @@
       "course": 6, 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
-      "student": 8, 
-      "is_enrolled": true
+      "user": 8, 
+      "kind": "G"
     }
   }, 
   {
@@ -867,8 +867,8 @@
       "course": 3, 
       "notify_new_grades": true, 
       "notify_on_commit": false, 
-      "student": 6, 
-      "is_enrolled": true
+      "user": 6, 
+      "kind": "G"
     }
   }, 
   {
@@ -878,9 +878,9 @@
       "course": 3, 
       "notify_new_grades": false, 
       "notify_on_commit": true, 
-      "student": 10, 
-      "is_enrolled": false
-    }
+      "user": 10, 
+      "kind": "A"
+      }
   }, 
   {
     "pk": 17, 
@@ -889,8 +889,8 @@
       "course": 3, 
       "notify_new_grades": true, 
       "notify_on_commit": false, 
-      "student": 9, 
-      "is_enrolled": true
+      "user": 9, 
+      "kind": "G"
     }
   }, 
   {
@@ -900,8 +900,8 @@
       "course": 3, 
       "notify_new_grades": false, 
       "notify_on_commit": true, 
-      "student": 11, 
-      "is_enrolled": true
+      "user": 11, 
+      "kind": "G"
     }
   }, 
   {
@@ -911,9 +911,9 @@
       "course": 5, 
       "notify_new_grades": true, 
       "notify_on_commit": true, 
-      "student": 9, 
-      "is_enrolled": false
-    }
+      "user": 9, 
+      "kind": "A"
+      }
   }, 
   {
     "pk": 20, 
@@ -922,8 +922,8 @@
       "course": 5, 
       "notify_new_grades": false, 
       "notify_on_commit": true, 
-      "student": 10, 
-      "is_enrolled": true
+      "user": 10, 
+      "kind": "G"
     }
   }, 
   {
@@ -933,8 +933,8 @@
       "course": 5, 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
-      "student": 8, 
-      "is_enrolled": true
+      "user": 8, 
+      "kind": "G"
     }
   }, 
   {
@@ -944,8 +944,74 @@
       "course": 5, 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
-      "student": 11, 
-      "is_enrolled": true
+      "user": 11, 
+      "kind": "G"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "course": 2, 
+      "notify_new_grades": false, 
+      "notify_on_commit": false, 
+      "user": 1, 
+      "kind": "I"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "course": 3, 
+      "notify_new_grades": false, 
+      "notify_on_commit": false, 
+      "user": 1, 
+      "kind": "I"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "course": 4, 
+      "notify_new_grades": false, 
+      "notify_on_commit": false, 
+      "user": 1, 
+      "kind": "I"
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "course": 5, 
+      "notify_new_grades": false, 
+      "notify_on_commit": false, 
+      "user": 1, 
+      "kind": "I"
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "course": 6, 
+      "notify_new_grades": false, 
+      "notify_on_commit": false, 
+      "user": 1, 
+      "kind": "I"
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "course": 7, 
+      "notify_new_grades": false, 
+      "notify_on_commit": false, 
+      "user": 1, 
+      "kind": "I"
     }
   }, 
   {

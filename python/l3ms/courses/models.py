@@ -24,7 +24,6 @@ class Course(models.Model):
     name = models.CharField(max_length=72)
     code = models.CharField(max_length=14)
     semester = models.ForeignKey(Semester)
-    instructor = models.ManyToManyField(User, through='Enrollment')
     group = models.OneToOneField(Group)
     key = models.CharField(max_length=32)
     is_active = models.BooleanField()
@@ -32,19 +31,28 @@ class Course(models.Model):
     def __unicode__(self):
         return self.tag
 
+    class Meta:
+        ordering = ['semester', 'code']
+
+ENROLLMENT_KINDS = (
+    ('I', 'Instructor'),
+    ('A', 'Audit'),
+    ('G', 'Graded'),
+    )
+
 class Enrollment(models.Model):
     course = models.ForeignKey(Course)
-    student = models.ForeignKey(User)
-    is_enrolled = models.BooleanField()
-    notify_on_commit = models.BooleanField()
-    notify_new_grades = models.BooleanField()
+    user = models.ForeignKey(User)
+    kind = models.CharField(max_length=1, choices=ENROLLMENT_KINDS)
+    notify_on_commit = models.BooleanField(default=True)
+    notify_new_grades = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return '%s in %s' % (self.student.username, self.course.tag)
+        return '%s in %s' % (self.user.username, self.course.tag)
 
     class Meta:
-        unique_together = (("course", "student"),)
-        ordering = ['course__semester']
+        unique_together = (("course", "user"),)
+        ordering = ['course']
 
 LINK_KINDS = (
     ('H', 'Home page'),
