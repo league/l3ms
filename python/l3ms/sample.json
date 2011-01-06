@@ -658,7 +658,7 @@
       "group": 2, 
       "name": "Fundamentals of Computer and Information Sciences", 
       "is_active": false, 
-      "semester": 5, 
+      "semester": "f10", 
       "tag": "cs101f10", 
       "key": "bda9b55"
     }
@@ -671,7 +671,7 @@
       "group": 4, 
       "name": "System Analysis & Design", 
       "is_active": false, 
-      "semester": 5, 
+      "semester": "f10", 
       "tag": "cs128f10", 
       "key": "2fdc422"
     }
@@ -684,7 +684,7 @@
       "group": 6, 
       "name": "Fundamentals of Computer and Information Sciences", 
       "is_active": true, 
-      "semester": 6, 
+      "semester": "f11", 
       "tag": "cs101f11", 
       "key": "32784b0"
     }
@@ -697,7 +697,7 @@
       "group": 1, 
       "name": "Operating Systems", 
       "is_active": true, 
-      "semester": 9, 
+      "semester": "s11", 
       "tag": "cs150s11", 
       "key": "d6997e8"
     }
@@ -710,7 +710,7 @@
       "group": 3, 
       "name": "Fundamentals of Computer and Information Sciences", 
       "is_active": true, 
-      "semester": 9, 
+      "semester": "s11", 
       "tag": "cs101s11", 
       "key": "232da76"
     }
@@ -723,7 +723,7 @@
       "group": 5, 
       "name": "Software Engineering", 
       "is_active": false, 
-      "semester": 9, 
+      "semester": "s11", 
       "tag": "cs164s11", 
       "key": "8922b53"
     }
@@ -732,7 +732,7 @@
     "pk": 3, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 4, 
+      "course": "cs128f10", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 9, 
@@ -743,7 +743,7 @@
     "pk": 4, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 4, 
+      "course": "cs128f10", 
       "notify_new_grades": true, 
       "notify_on_commit": false, 
       "user": 7, 
@@ -754,7 +754,7 @@
     "pk": 5, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 4, 
+      "course": "cs128f10", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 10, 
@@ -765,7 +765,7 @@
     "pk": 6, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 4, 
+      "course": "cs128f10", 
       "notify_new_grades": true, 
       "notify_on_commit": true, 
       "user": 11, 
@@ -776,7 +776,7 @@
     "pk": 7, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 2, 
+      "course": "cs101f10", 
       "notify_new_grades": true, 
       "notify_on_commit": true, 
       "user": 8, 
@@ -787,7 +787,7 @@
     "pk": 8, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 2, 
+      "course": "cs101f10", 
       "notify_new_grades": false, 
       "notify_on_commit": true, 
       "user": 6, 
@@ -798,7 +798,7 @@
     "pk": 9, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 2, 
+      "course": "cs101f10", 
       "notify_new_grades": true, 
       "notify_on_commit": false, 
       "user": 10, 
@@ -809,7 +809,7 @@
     "pk": 10, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 2, 
+      "course": "cs101f10", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 11, 
@@ -820,7 +820,7 @@
     "pk": 11, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 6, 
+      "course": "cs164s11", 
       "notify_new_grades": true, 
       "notify_on_commit": false, 
       "user": 7, 
@@ -831,7 +831,7 @@
     "pk": 12, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 6, 
+      "course": "cs164s11", 
       "notify_new_grades": true, 
       "notify_on_commit": true, 
       "user": 9, 
@@ -842,7 +842,7 @@
     "pk": 13, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 6, 
+      "course": "cs164s11", 
       "notify_new_grades": false, 
       "notify_on_commit": true, 
       "user": 11, 
@@ -853,7 +853,7 @@
     "pk": 14, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 6, 
+      "course": "cs164s11", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 8, 
@@ -864,7 +864,7 @@
     "pk": 15, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 3, 
+      "course": "cs101s11", 
       "notify_new_grades": true, 
       "notify_on_commit": false, 
       "user": 6, 
@@ -875,7 +875,7 @@
     "pk": 16, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 3, 
+      "course": "cs101s11", 
       "notify_new_grades": false, 
       "notify_on_commit": true, 
       "user": 10, 
@@ -886,7 +886,7 @@
     "pk": 17, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 3, 
+      "course": "cs101s11", 
       "notify_new_grades": true, 
       "notify_on_commit": false, 
       "user": 9, 
@@ -897,7 +897,7 @@
     "pk": 18, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 3, 
+      "course": "cs101s11", 
       "notify_new_grades": false, 
       "notify_on_commit": true, 
       "user": 11, 
@@ -908,7 +908,7 @@
     "pk": 19, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 5, 
+      "course": "cs150s11", 
       "notify_new_grades": true, 
       "notify_on_commit": true, 
       "user": 9, 
@@ -919,7 +919,7 @@
     "pk": 20, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 5, 
+      "course": "cs150s11", 
       "notify_new_grades": false, 
       "notify_on_commit": true, 
       "user": 10, 
@@ -930,7 +930,7 @@
     "pk": 21, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 5, 
+      "course": "cs150s11", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 8, 
@@ -941,7 +941,7 @@
     "pk": 22, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 5, 
+      "course": "cs150s11", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 11, 
@@ -952,7 +952,7 @@
     "pk": 23, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 2, 
+      "course": "cs101f10", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 1, 
@@ -963,7 +963,7 @@
     "pk": 24, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 3, 
+      "course": "cs101s11", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 1, 
@@ -974,7 +974,7 @@
     "pk": 25, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 4, 
+      "course": "cs128f10", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 1, 
@@ -985,7 +985,7 @@
     "pk": 26, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 5, 
+      "course": "cs150s11", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 1, 
@@ -996,7 +996,7 @@
     "pk": 27, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 6, 
+      "course": "cs164s11", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 1, 
@@ -1007,10 +1007,21 @@
     "pk": 28, 
     "model": "courses.enrollment", 
     "fields": {
-      "course": 7, 
+      "course": "cs101f11", 
       "notify_new_grades": false, 
       "notify_on_commit": false, 
       "user": 1, 
+      "kind": "I"
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "course": "cs150s11", 
+      "notify_new_grades": false, 
+      "notify_on_commit": false, 
+      "user": 6, 
       "kind": "I"
     }
   }, 
@@ -1019,7 +1030,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://liucs.net/cs101f10/", 
-      "course": 2, 
+      "course": "cs101f10", 
       "kind": "H"
     }
   }, 
@@ -1028,7 +1039,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://liucs.net/cs128f10/", 
-      "course": 4, 
+      "course": "cs128f10", 
       "kind": "H"
     }
   }, 
@@ -1037,7 +1048,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://liucs.net/cs101f11/", 
-      "course": 7, 
+      "course": "cs101f11", 
       "kind": "H"
     }
   }, 
@@ -1046,7 +1057,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://liucs.net/cs150s11/", 
-      "course": 5, 
+      "course": "cs150s11", 
       "kind": "H"
     }
   }, 
@@ -1055,7 +1066,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://liucs.net/cs101s11/", 
-      "course": 3, 
+      "course": "cs101s11", 
       "kind": "H"
     }
   }, 
@@ -1064,7 +1075,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://liucs.net/cs164s11/", 
-      "course": 6, 
+      "course": "cs164s11", 
       "kind": "H"
     }
   }, 
@@ -1073,7 +1084,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://liucs.net/svn/cs150s11/", 
-      "course": 5, 
+      "course": "cs150s11", 
       "kind": "R"
     }
   }, 
@@ -1082,7 +1093,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://liucs.net/svn/cs164s11/", 
-      "course": 6, 
+      "course": "cs164s11", 
       "kind": "R"
     }
   }, 
@@ -1091,7 +1102,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://www.amazon.com/Computer-Science-Illuminated-Fourth-Nell/dp/0763776467/ref=sr_1_1?ie=UTF8&qid=1294288827&sr=8-1", 
-      "course": 2, 
+      "course": "cs101f10", 
       "kind": "T"
     }
   }, 
@@ -1100,7 +1111,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://www.amazon.com/Computer-Science-Illuminated-Fourth-Nell/dp/0763776467/ref=sr_1_1?ie=UTF8&qid=1294288827&sr=8-1", 
-      "course": 7, 
+      "course": "cs101f11", 
       "kind": "T"
     }
   }, 
@@ -1109,7 +1120,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://www.amazon.com/Computer-Science-Illuminated-Fourth-Nell/dp/0763776467/ref=sr_1_1?ie=UTF8&qid=1294288827&sr=8-1", 
-      "course": 3, 
+      "course": "cs101s11", 
       "kind": "T"
     }
   }, 
@@ -1118,7 +1129,7 @@
     "model": "courses.courselink", 
     "fields": {
       "url": "http://www.amazon.com/Operating-System-Concepts-Abraham-Silberschatz/dp/0470128720/ref=sr_1_1?ie=UTF8&qid=1294288905&sr=8-1", 
-      "course": 5, 
+      "course": "cs150s11", 
       "kind": "T"
     }
   }

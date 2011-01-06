@@ -8,7 +8,7 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 
 class Semester(models.Model):
-    tag = models.SlugField()
+    tag = models.SlugField(primary_key=True)
     name = models.CharField(max_length=32, unique=True)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -20,7 +20,7 @@ class Semester(models.Model):
         ordering = ['-end_date']
 
 class Course(models.Model):
-    tag = models.SlugField()
+    tag = models.SlugField(primary_key=True)
     name = models.CharField(max_length=72)
     code = models.CharField(max_length=14)
     semester = models.ForeignKey(Semester)
@@ -31,7 +31,21 @@ class Course(models.Model):
     def __unicode__(self):
         return self.tag
 
+    def get_instructors(self):
+        return self.enrollment_set.filter(kind='I')
+
+    def get_full_instructor_names(self):
+        return [e.user.get_full_name().replace(' ', '&nbsp;')
+                for e in self.get_instructors()]
+
+    def get_students(self):
+        return self.enrollment_set.exclude(kind='I')
+
+    def get_graded_students(self):
+        return self.enrollment_set.filter(kind='G')
+
     class Meta:
+        unique_together = ('semester', 'code')
         ordering = ['semester', 'code']
 
 ENROLLMENT_KINDS = (
