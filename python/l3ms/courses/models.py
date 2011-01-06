@@ -1,3 +1,9 @@
+# l3ms.courses.models    -*- coding: utf-8 -*-
+# Copyright ©2011 by Christopher League <league@contrapunctus.net>
+#
+# This is free software but comes with ABSOLUTELY NO WARRANTY.
+# See the GNU General Public License version 3 for details.
+
 from django.db import models
 from django.contrib.auth.models import User, Group
 
@@ -9,6 +15,9 @@ class Semester(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        ordering = ['-end_date']
 
 class Course(models.Model):
     tag = models.SlugField()
@@ -35,12 +44,14 @@ class Enrollment(models.Model):
 
     class Meta:
         unique_together = (("course", "student"),)
+        ordering = ['course__semester']
 
 LINK_KINDS = (
     ('H', 'Home page'),
     ('R', 'Repository'),
     ('C', 'Calendar'),
     ('T', 'Textbook'),
+    ('F', 'Feed'),
     ('O', 'Other'),
     )
 
@@ -50,4 +61,5 @@ class CourseLink(models.Model):
     url = models.URLField(verify_exists=False)
 
     def __unicode__(self):
-        return '%s %s %s' % (self.course.tag, self.kind, self.url)
+        u = self.url[:32]+u'…' if len(self.url) > 32 else self.url
+        return '%s %s %s' % (self.course.tag, self.kind, u)

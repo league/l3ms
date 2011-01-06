@@ -40,14 +40,11 @@ div#messages p {
     margin: 0 0 .7ex 0;
     font-size: larger;
 }
-.links a:link, .links a:visited {
+a:link, a:visited {
     color: #443f65;
-}
-#nav a:link, #nav a:visited {
-    color: #443f65;
+    text-decoration: none;
 }
 #nav a {
-    text-decoration: none;
     font-weight: bold;
 }
 #nav > span {
@@ -64,6 +61,13 @@ div#messages p {
 #profile .gravatar {
     margin: 1.4ex 0 4ex 0;
     border: 1px solid #555;
+}
+#profile h1 {
+    margin-top: 2ex;
+}
+h2 {
+    font-size: large;
+    margin-bottom: 1ex;
 }
 /* -------------------------------- */
 form.simpleForm {
@@ -110,4 +114,23 @@ div.allusers .gravatar {
 }
 div.allusers {
     margin-bottom: 2ex;
+}
+/* -------------------------------- */
+ul.courseListBySemester {
+    list-style: none;
+}
+ul.courseListBySemester a {
+    text-decoration: none;
+}
+ul.courseListBySemester > li {
+    margin: 0;
+    font-weight: bold;
+}
+ul.courseListBySemester > li > ul {
+    list-style: none;
+    font-weight: normal;
+}
+ul.courseListBySemester > li > ul > li {
+    margin-left: 2em;
+    text-indent: -2em;
 }

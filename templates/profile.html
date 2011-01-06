@@ -5,12 +5,49 @@
 {{ profile.username }} profile | {{ site_name }}
 {% endblock %}
 
+{% comment %}
+┌───────┬────────────┬──────────────────────┬───────────────────────────┐
+│ 1     │ 2          │ 4                    │ 5                         │
+│ space │ avatar     │ name/info            │ messages                  │
+├───────┼────────────┼──────────────────────┴─────────┬─────────────────┤
+│ 1     │ 2          │ 6                              │ 3               │
+│ space │ edit       │ about me                       │ course list     │
+└───────┴────────────┴────────────────────────────────┴─────────────────┘
+{% endcomment %}
+
 {% block content %}
 <div id="profile" class="container_12 clearfix">
+
   <div class="grid_1 alpha">&nbsp;</div>
+
   <div class="grid_2">
     <img class="gravatar" src="{{ profile|gravatar:140 }}"
          width="140" height="140" />
+  </div> <!-- grid_2 (row 1) -->
+
+  <div class="grid_4">
+    <h1>{{ profile.get_full_name|default:profile.username }}</h1>
+
+    <p><b>Username:</b> {{ profile.username }}<br />
+      <b>Email:</b> {{ profile.email }}<br />
+      <b>Member since</b> {{ profile.date_joined|date:"F Y" }}
+    </p>
+  </div> <!-- grid_4 (row 1) -->
+
+  <div class="grid_5 omega">
+    {% if messages %}
+    <div id="messages">
+      <p style="color: #a00">{{ messages }}</p>
+    </div>
+    {% endif %}
+    &nbsp;
+  </div> <!-- grid_5 omega (row 1) -->
+</div>
+
+<div class="container_12 clearfix">
+  <div class="grid_1 alpha">&nbsp;</div>
+
+  <div class="grid_2">
     {% if privileged %}
     <div class="links">
       <a href="http://www.gravatar.com/">Upload avatar</a>
@@ -22,26 +59,29 @@
         profile or name</a>
     </div>
     {% endif %}
-  </div>
+  </div> <!-- grid_2 (row 2) -->
 
-  <div class="grid_9 omega">
-    {% if message %}
-    <div id="messages">
-      <p style="color: #a00">{{ message }}</p>
-    </div>
-    {% endif %}
-
-    <h1>{{ profile.get_full_name|default:profile.username }}</h1>
-
-    <p><b>Member since</b> {{ profile.date_joined|date:"F Y" }}</p>
-
-    <p><b>Username:</b> {{ profile.username }}</p>
-
-    <p><b>Email:</b> {{ profile.email }}</p>
-
-    <p><b>About me:</b>
+  <div class="grid_6">
+    <h2>About me</h2>
+    <p>
       {{ profile.get_profile.blurb }}</p>
-
   </div>
-</div>
+
+  <div class="grid_3 omega">
+    <h2>Courses</h2>
+    <ul class="courseListBySemester">
+      {% for e in profile.enrollment_set.all %}
+        {% ifchanged e.course.semester %}
+           {% if not forloop.first %} </ul></li> {% endif %}
+          <li>{{ e.course.semester.name }}
+          <ul>
+        {% endifchanged %}
+          <li><a href="">
+            {{ e.course.code }} {{ e.course.name }}
+          </a></li>
+        {% if forloop.last %} </ul></li> {% endif %}
+      {% endfor %}
+    </ul>
+  </div> <!-- grid_3 omega -->
+</div>   <!-- container_12 -->
 {% endblock %}
