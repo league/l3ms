@@ -177,6 +177,7 @@ def register(request):
         form = forms.RegistrationForm()
     return render_to_response('acct/register.html',
                               {'form': form,
+                               'user': request.user,
                                'site_name': settings.SITE_NAME,
                                'action': request.get_full_path()})
 
