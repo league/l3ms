@@ -1,0 +1,20 @@
+{% extends "layout/narrow.html" %}
+{% load enrollment %}
+{% block small_content %}
+<h1>All courses</h1>
+{% for c in courses %}
+  <div id="allCourses">
+    {% ifchanged c.semester %}
+    <div class="semester">
+      {{ c.semester }}
+    </div>
+    {% endifchanged %}
+    <div class="course {{ user|enrolled_in:c|yesno:'enrolled,unenrolled' }}">
+      <a href="{% url one_course tag=c.tag %}">{{ c.code }} {{ c.name }}</a>
+      ({{ c.get_full_instructor_names|safeseq|join:", "}})
+    </div>
+  </div>
+{% endfor %}
+
+
+{% endblock %}

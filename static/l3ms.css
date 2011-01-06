@@ -134,3 +134,14 @@ ul.courseListBySemester > li > ul > li {
     margin-left: 2em;
     text-indent: -2em;
 }
+div#allCourses .semester {
+    font-weight: bold;
+    margin-top: 1ex;
+}
+div#allCourses .course {
+    padding-left: 64px;
+    text-indent: -48px;
+}
+div#allCourses .enrolled {
+    background: url(bullet_blue.png) no-repeat 0px 2px;
+}
