@@ -8,6 +8,7 @@ from models import Course, Enrollment
 from strings import *
 from templatetags.enrollment import enrolled_in
 import forms
+import re
 
 def all_courses(request):
     my_courses = Course.objects.filter(enrollment__user=request.user)
@@ -60,3 +61,19 @@ def one_course(request, tag):
                                'form': form,
                                'action': request.get_full_path(),
                                'message': message})
+
+def nav(request, path):
+    course = None
+    message = None
+    try:
+        course = Course.objects.get(tag__in=re.split(r'[/.]', path))
+    except Course.DoesNotExist:
+        message = 'DoesNotExist'
+    except Course.MultipleObjectsReturned:
+        message = 'MultipleObjectsReturned'
+
+    return render_to_response('courses/nav.html',
+                              {'user': request.user,
+                               'site_name': settings.SITE_NAME,
+                               'message': message if settings.DEBUG else '',
+                               'course': course})

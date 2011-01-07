@@ -6,7 +6,7 @@ div#header {
     border-bottom: 2px solid #8ac;
     margin-bottom: 2ex;
 }
-div#nav {
+div#l3msNav {
     text-align: right
 }
 div#logo {
@@ -44,18 +44,18 @@ a:link, a:visited {
     color: #443f65;
     text-decoration: none;
 }
-#nav a {
+#l3msNav a {
     font-weight: bold;
 }
-#nav > span {
+#l3msNav > span {
 }
-#nav > a, #nav > span {
+#l3msNav > a, #l3msNav > span {
     margin-left: 1em;
 }
-#nav .gravatar {
+#l3msNav img.gravatar {
     position: relative;
     bottom: -1ex;
-    border: 1px inset #8ac;
+    border: 1px solid #ccc;
     margin: 0 2px;
 }
 #profile .gravatar {
