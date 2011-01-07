@@ -53,9 +53,10 @@ class CategoryManager(models.Manager):
 class Category(models.Model):
     course = models.ForeignKey(Course)
     name = models.CharField(max_length=72)
-    slice_start = models.IntegerField(null=True)
-    slice_stop = models.IntegerField(null=True)
+    slice_start = models.IntegerField(null=True, blank=True)
+    slice_stop = models.IntegerField(null=True, blank=True)
     aggregate = models.CharField(max_length=32)
+    order = models.FloatField(default=0.0, blank=True)
 
     objects = CategoryManager()
 
@@ -72,10 +73,13 @@ class Category(models.Model):
 
     class Meta:
         unique_together = ('course', 'name')
+        ordering = ['order', 'name']
+        order_with_respect_to = 'course'
 
 class GradedItemManager(models.Manager):
     def sync(self, category, data, log, commit=True):
-        item = sync_logic(['points'], self, data, log, commit,
+        item = sync_logic(['points', 'feedback'],
+                          self, data, log, commit,
                           category = category,
                           name = data['item'],
                           defaults = {'points': data['points']})
@@ -89,6 +93,9 @@ class GradedItem(models.Model):
     category = models.ForeignKey(Category)
     name = models.CharField(max_length=72)
     points = models.IntegerField()
+    feedback = models.TextField(blank=True)
+    posted = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now_add=True)
 
     objects = GradedItemManager()
 
@@ -99,10 +106,12 @@ class GradedItem(models.Model):
     def dump(self):
         return {'item': self.name,
                 'points': self.points,
+                'feedback': self.feedback,
                 'scores': Score.objects.dump(self)}
 
     class Meta:
         unique_together = ('category', 'name')
+        ordering = ['-posted']  # reverse chron
 
 class ScoreManager(models.Manager):
     def sync(self, item, data, log, commit=True):
@@ -120,6 +129,8 @@ class Score(models.Model):
     user = models.ForeignKey(User)
     points = models.IntegerField()
     feedback = models.TextField(blank=True)
+    posted = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now_add=True)
 
     objects = ScoreManager()
 

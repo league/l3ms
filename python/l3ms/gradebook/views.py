@@ -65,7 +65,7 @@ def post_grades(request, tag):
         return ResponseExn(200, '\n'.join(log) if log
                            else 'no changes').as_text()
     except Exception:
-        return ResponseExn(400, '%s\NOTHING COMMITTED\n' %
+        return ResponseExn(400, '%s\nNOTHING COMMITTED\n' %
                            traceback.format_exc()).as_text()
 
 def dump_grades(request, tag):
