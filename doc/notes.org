@@ -4,6 +4,32 @@ Most content will be statically-generated thru emacs, org-mode, make,
 etc.  And I'll use subversion for code exchange.  But there are a few
 things I want a server to do...
 
+* Grades: entry through HTML forms too annoying, what to do?
+
+course » grade category (drop, aggregate) » graded item (points) »
+score. Can show letter grades using scale.
+
+On “feedback” section of course page, can paste in text to record
+grades, or POST it from region in emacs. /l3ms/course/cs150s11/grades
+
+Must be able to edit grades already recorded too. In a chunk for each
+graded item and score, keep md5 sum of the recorded text. If it
+changes, reinterpret it.
+
+Could be a python expression? But that's very dangerous. Ok if it's of
+the form f(scores[m:n]) where m,n ints and scores in ascending order
+and f is some known safe function (like sum).
+
+  * Assignments = sum([2:])
+  *** Assignment 1 = 40
+  ***** cvirella=36
+  some feedback here
+  Some way to elide parts of this from storage (exclude blocks)
+  ***** osei=38
+  Convert org to json+HTML using emacs lisp, then post that to server
+  side interpreter.
+
+
 * HTTP logout
   For some reason I haven't given up on this yet.
   I think what you have to do is:
