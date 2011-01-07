@@ -100,4 +100,5 @@ INSTALLED_APPS = (
     'l3ms.courses',
     'l3ms.http_auth',
     'l3ms.email_validation',
+    'l3ms.gradebook',
 )
