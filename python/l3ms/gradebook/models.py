@@ -2,23 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from l3ms.courses.models import Course
 
-# JSON/Python representation: DO use dictionaries because of the
-# better error/sanity checking we get from the explicit keys.
-# Course is specified separately.
-
-sample_data = [
-    {'category':"Quizzes",'slice_start':2,'slice_stop':None,'aggregate':"sum",
-     'items': [{'item': "Quiz 1",'points':40,
-                'scores': [{'user':"league",'points':39,'feedback':"Good job"},
-                           {'user':"bob",'points':38,'feedback':"Okay now."},
-                           ]},
-               {'item': "Quiz 3",'points':40,
-                'scores': [{'user':"league",'points':35,'feedback':"Okay"},
-                           {'user':"alice",'points':40,'feedback':"Great"},
-                           ]}
-               ]}
-    ]
-
 def update_fields(entity, fields, data):
     changes = []
     for f in fields:
@@ -50,7 +33,7 @@ class CategoryManager(models.Manager):
     def dump(self, course):
         return [cat.dump() for cat in self.filter(course=course)]
 
-class Category(models.Model):
+class GradeCategory(models.Model):
     course = models.ForeignKey(Course)
     name = models.CharField(max_length=72)
     slice_start = models.IntegerField(null=True, blank=True)
@@ -90,7 +73,7 @@ class GradedItemManager(models.Manager):
         return [i.dump() for i in self.filter(category=category)]
 
 class GradedItem(models.Model):
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(GradeCategory)
     name = models.CharField(max_length=72)
     points = models.IntegerField()
     feedback = models.TextField(blank=True)

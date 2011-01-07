@@ -2,7 +2,7 @@ from django.db import transaction
 from django.http import HttpResponse
 from l3ms.courses.models import Course, Enrollment
 from l3ms.http_auth.views import check_login
-from models import *
+from models import GradeCategory
 import httplib
 import json
 import traceback
@@ -61,7 +61,7 @@ def post_grades(request, tag):
         data = json.loads(request.raw_post_data)
         log = []
         for d in data:
-            Category.objects.sync(course, d, log)
+            GradeCategory.objects.sync(course, d, log)
         return ResponseExn(200, '\n'.join(log) if log
                            else 'no changes').as_text()
     except Exception:
@@ -74,5 +74,5 @@ def dump_grades(request, tag):
     except ResponseExn as r:
         return r.as_json()
 
-    return ResponseExn(200, Category.objects.dump(course)).as_json()
+    return ResponseExn(200, GradeCategory.objects.dump(course)).as_json()
 
