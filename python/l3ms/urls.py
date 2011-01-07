@@ -6,6 +6,7 @@ import accounts.views
 import email_validation.views
 import http_auth.urls
 import courses.urls
+import gradebook.urls
 
 admin.autodiscover()
 
@@ -21,6 +22,7 @@ subpatterns = patterns(
     (r'^auth/', include(http_auth.urls)),
     (r'^admin/', include(admin.site.urls)),
     (r'^course/', include(courses.urls)),
+    (r'^grades/', include(gradebook.urls)),
     )
 
 if DEBUG:

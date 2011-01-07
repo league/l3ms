@@ -39,18 +39,24 @@ def options(request, message=''):
         del request.session[SESSION_MESSAGE]
     return render('http-auth/options.html', request, message)
 
-def login(request):
+def check_login(request):
     if 'HTTP_AUTHORIZATION' not in request.META:
-        return force(request)
+        return False
     kind, cred = request.META['HTTP_AUTHORIZATION'].split()
     assert kind.lower() == 'basic'
     name, pwd = base64.b64decode(cred).split(':')
     user = auth.authenticate(username=name, password=pwd)
     if user is None or not user.is_active:
-        return force(request)
+        return False
     if SESSION_LOGOUT in request.session:
         if request.session[SESSION_LOGOUT] == user.username:
-            return force(request)
+            return False
+    return user
+
+def login(request):
+    user = check_login(request)
+    if not user:
+        return force(request)
     if SESSION_NEXT_PAGE in request.session:
         next = request.session[SESSION_NEXT_PAGE]
         del request.session[SESSION_NEXT_PAGE]
