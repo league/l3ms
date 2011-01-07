@@ -47,6 +47,9 @@ class CategoryManager(models.Manager):
         for i in data['items']:
             GradedItem.objects.sync(category, i, log, commit)
 
+    def dump(self, course):
+        return [cat.dump() for cat in self.filter(course=course)]
+
 class Category(models.Model):
     course = models.ForeignKey(Course)
     name = models.CharField(max_length=72)
@@ -60,6 +63,13 @@ class Category(models.Model):
         """Sample: cs150s11 Quizzes"""
         return '%s %s' % (self.course.tag, self.name)
 
+    def dump(self):
+        return {'category': self.name,
+                'slice_start': self.slice_start,
+                'slice_stop': self.slice_stop,
+                'aggregate': self.aggregate,
+                'items': GradedItem.objects.dump(self)}
+
     class Meta:
         unique_together = ('course', 'name')
 
@@ -72,6 +82,9 @@ class GradedItemManager(models.Manager):
         for s in data['scores']:
             Score.objects.sync(item, s, log, commit)
 
+    def dump(self, category):
+        return [i.dump() for i in self.filter(category=category)]
+
 class GradedItem(models.Model):
     category = models.ForeignKey(Category)
     name = models.CharField(max_length=72)
@@ -83,6 +96,11 @@ class GradedItem(models.Model):
         """Sample: cs150s11 Quiz 1"""
         return '%s %s' % (self.category.course.tag, self.name)
 
+    def dump(self):
+        return {'item': self.name,
+                'points': self.points,
+                'scores': Score.objects.dump(self)}
+
     class Meta:
         unique_together = ('category', 'name')
 
@@ -93,6 +111,9 @@ class ScoreManager(models.Manager):
         sync_logic(['points', 'feedback'], self, data, log, commit,
                    item = item, user = user,
                    defaults = {'points': data['points']})
+
+    def dump(self, item):
+        return [s.dump() for s in self.filter(item=item)]
 
 class Score(models.Model):
     item = models.ForeignKey(GradedItem)
@@ -108,6 +129,11 @@ class Score(models.Model):
                                 self.item.name,
                                 self.user.username,
                                 self.points)
+
+    def dump(self):
+        return {'user': self.user.username,
+                'points': self.points,
+                'feedback': self.feedback}
 
     class Meta:
         unique_together = ('item', 'user')

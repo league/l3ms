@@ -3,41 +3,76 @@ from django.http import HttpResponse
 from l3ms.courses.models import Course, Enrollment
 from l3ms.http_auth.views import check_login
 from models import *
+import httplib
 import json
 import traceback
 
-def r(code, mesg):
-    return HttpResponse(mesg, status=code, content_type='text/plain')
+class ResponseExn:
+    def __init__(self, code, data):
+        self.code = code
+        self.data = data
 
-@transaction.commit_on_success
-def post_grades(request, tag):
-    if request.method != 'POST':
-        return r(501, 'NOT IMPLEMENTED: we only support POST')
+    def as_text(self):
+        if self.code == 200:
+            content = '%s\n' % self.data
+        else:
+            content = '%s: %s\n' % (httplib.responses[self.code], self.data)
+        return HttpResponse(content,
+                            status=self.code,
+                            content_type='text/plain')
+
+    def as_json(self):
+        return HttpResponse(json.dumps(self.data, indent=2),
+                            status=self.code,
+                            content_type='text/plain')
+
+# It will be much easier to post grades from scripts if it can use
+# HTTP Authentication, and not require a Django session.
+def validate_access(request, tag):
     try:
         course = Course.objects.get(pk=tag)
     except Course.DoesNotExist:
-        return r(404, 'NOT FOUND: %s does not exist' % tag)
-    # It will be much easier to post grades from scripts if it can use
-    # HTTP Authentication, and not require a Django session.
+        raise ResponseExn(404, 'Course %s does not exist.' % tag)
+
     if request.user.is_authenticated():
         user = request.user
     else:
         user = check_login(request)
         if not user:
-            return r(401, 'HTTP_AUTHORIZATION required\n')
-    # To post grades, user must be an instructor of the given course.
-    if not Enrollment.objects.filter(course=course, user=user, kind='I'):
-        return r(403, 'FORBIDDEN: %s is not an instructor of %s' %
-                 (user.username, course.tag))
+            raise ResponseExn(401, 'You did not send HTTP_AUTHORIZATION.')
 
-    # Okay, NOW we're ready to go.
+    if not Enrollment.objects.filter(course=course, user=user, kind='I'):
+        raise ResponseExn(403,
+                          'User %s is not an instructor of %s' %
+                          (user.username, tag))
+
+    return (course, user)
+
+@transaction.commit_on_success
+def post_grades(request, tag):
+    if request.method != 'POST':
+        return ResponseExn(501, 'This operation supports POST only').as_text()
+    try:
+        course, user = validate_access(request, tag)
+    except ResponseExn as r:
+        return r.as_text()
+
     try:
         data = json.loads(request.raw_post_data)
         log = []
         for d in data:
-            # need to catch exceptions
             Category.objects.sync(course, d, log)
-        return r(200, '%s\n' % ('\n'.join(log) if log else 'no changes'))
-    except:
-        return r(400, '%s\nTRANSACTION NOT COMMITTED\n' %
-                 traceback.format_exc())
+        return ResponseExn(200, '\n'.join(log) if log
+                           else 'no changes').as_text()
+    except Exception:
+        return ResponseExn(400, '%s\NOTHING COMMITTED\n' %
+                           traceback.format_exc()).as_text()
+
+def dump_grades(request, tag):
+    try:
+        course, user = validate_access(request, tag)
+    except ResponseExn as r:
+        return r.as_json()
+
+    return ResponseExn(200, Category.objects.dump(course)).as_json()
+
