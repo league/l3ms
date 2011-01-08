@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 from l3ms.courses.models import Course
+import aggregators
+import preprocessors
 
 def update_fields(entity, fields, data):
     changes = []
@@ -23,7 +25,7 @@ def sync_logic(fields, manager, data, log, commit, **args):
 
 class CategoryManager(models.Manager):
     def sync(self, course, data, log, commit=True):
-        category = sync_logic(['slice_start', 'slice_stop', 'aggregate'],
+        category = sync_logic(['preprocess', 'aggregate'],
                               self, data, log, commit,
                               course = course,
                               name = data['category'])
@@ -33,12 +35,18 @@ class CategoryManager(models.Manager):
     def dump(self, course):
         return [cat.dump() for cat in self.filter(course=course)]
 
+def symbols_in(module):
+    return map(lambda sym: (sym, sym),
+               filter(lambda sym: not sym.startswith('_'),
+                      dir(module)))
+
 class GradeCategory(models.Model):
     course = models.ForeignKey(Course)
     name = models.CharField(max_length=72)
-    slice_start = models.IntegerField(null=True, blank=True)
-    slice_stop = models.IntegerField(null=True, blank=True)
-    aggregate = models.CharField(max_length=32)
+    preprocess = models.CharField(max_length=32, blank=True,
+                                  choices=symbols_in(preprocessors))
+    aggregate = models.CharField(max_length=32,
+                                 choices=symbols_in(aggregators))
     order = models.FloatField(default=0.0, blank=True)
 
     objects = CategoryManager()
@@ -49,8 +57,7 @@ class GradeCategory(models.Model):
 
     def dump(self):
         return {'category': self.name,
-                'slice_start': self.slice_start,
-                'slice_stop': self.slice_stop,
+                'preprocess': self.preprocess,
                 'aggregate': self.aggregate,
                 'items': GradedItem.objects.dump(self)}
 
@@ -79,6 +86,7 @@ class GradedItem(models.Model):
     feedback = models.TextField(blank=True)
     posted = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now_add=True)
+    order = models.FloatField(default=0.0, blank=True)
 
     objects = GradedItemManager()
 
@@ -123,6 +131,12 @@ class Score(models.Model):
                                 self.item.name,
                                 self.user.username,
                                 self.points)
+
+    def percent_string(self):
+        return '%.0f%%' % self.percent()
+
+    def percent(self):
+        return self.points * 100.0 / self.item.points
 
     def dump(self):
         return {'user': self.user.username,

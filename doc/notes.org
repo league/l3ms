@@ -4,6 +4,51 @@ Most content will be statically-generated thru emacs, org-mode, make,
 etc.  And I'll use subversion for code exchange.  But there are a few
 things I want a server to do...
 
+
+* Displaying grades for students
+
+|---------------+------+-------+-------+-----+---------+------------|
+| *Assignments* |      |       |       |     |         |            |
+|    A1         |   40 | /40   |  100% | B   | _stats_ | _feedback_ |
+|    A2         | +30+ | +/40+ | +75%+ | +C+ | _stats_ | _feedback_ |
+|    A3         |   35 | /40   |   88% | B+  | _stats_ | _feedback_ |
+|   *sum*       |      |       |       |     |         |            |
+|---------------+------+-------+-------+-----+---------+------------|
+| *Quizzes*     |      |       |       |     |         |            |
+|    Q1         |   40 | /40   |  100% | B   | _stats_ | _feedback_ |
+|    Q2         | +30+ | +/40+ | +75%+ | +C+ | _stats_ | _feedback_ |
+|   *sum*       |      |       |       |     |         |            |
+|---------------+------+-------+-------+-----+---------+------------|
+| *Total*       |      |       |       |     |         |            |
+| [X] slice     |      |       |       |     |         |            |
+
+ - Make 'slice' the default if the number of dropped items is <= the
+   total number of items.
+ - To do this, we have classes on <tr>: droppable, dropped.
+ - Also have TWO sum rows, hide one display the other. Classes:
+   fullsum, dropsum.
+ - Watch for division by zero in percentages.
+ - When not sliced, low scores can still be grey/somewhat faded.
+ - When yes sliced, the numbers themselves are crossed out (not the
+   whole line)
+ - Hover over "A1" to see posted/edited dates.
+ - 
+*Assignments*
+   A1       40  /40 100%  A  _statistics_ _feedback_
+  +A2       30  /40  75%  B- _statistics_ _feedback_+
+   A3       35  /40  88%  B+ _statistics_
+   ---------------------------------------------
+   sum     105 /120  88%  B+ _statistics_
+  *sum[1:]  75  /80  94%  A  _statistics_*
+
+*Quizzes*
+   Q1
+   --
+   sum etc
+
+*Total*
+  
+
 * Grades: entry through HTML forms too annoying, what to do?
 
 course » grade category (drop, aggregate) » graded item (points) »
