@@ -35,13 +35,19 @@ def enroll(request, course):
                                'form': form,
                                'action': request.get_full_path()})
 
+ONE_COURSE_VIEWS=[]
+
 @login_required
 @except404([Course.DoesNotExist])
 def one_course(request, tag):
     course = Course.objects.get(pk=tag)
+
+    # Maybe ask for enrollment key instead
     if not enrolled_in(request.user, tag):
         return enroll(request, course)
     enrollment = Enrollment.objects.get(user=request.user, course=course)
+
+    # Course page has a preferences section, handled by this POST.
     if request.method == 'POST':
         form = forms.CourseOptionsForm(request.POST, instance=enrollment)
         if form.is_valid():
@@ -50,17 +56,27 @@ def one_course(request, tag):
             return HttpResponseRedirect(request.get_full_path())
     else:
         form = forms.CourseOptionsForm(instance=enrollment)
+
+    # Not a POST or form not valid, so display page as normal.
+
+    # Session message
     message = request.session.get(SESSION_MESSAGE, '')
     if message:
         del request.session[SESSION_MESSAGE]
-    return render_to_response('courses/one.html',
-                              {'user': request.user,
-                               'site_name': settings.SITE_NAME,
-                               'course': course,
-                               'enrollment': enrollment,
-                               'form': form,
-                               'action': request.get_full_path(),
-                               'message': message})
+
+    # Allow other functions in ONE_COURSE_VIEWS to augment context.
+    context = {'user': request.user,
+               'site_name': settings.SITE_NAME,
+               'course': course,
+               'enrollment': enrollment,
+               'form': form,
+               'action': request.get_full_path(),
+               'message': message}
+
+    for view in ONE_COURSE_VIEWS:
+        view(request, context)
+
+    return render_to_response('courses/one.html', context)
 
 def nav(request, path):
     course = None

@@ -76,3 +76,5 @@ def dump_grades(request, tag):
 
     return ResponseExn(200, GradeCategory.objects.dump(course)).as_json()
 
+def grade_summary(request, context):
+    context['summary'] = 'I was here.'
