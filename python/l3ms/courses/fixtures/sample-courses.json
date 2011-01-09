@@ -1,0 +1,1740 @@
+[
+  {
+    "pk": 1, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs101f09", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs101s11", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs101f11", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs102s10", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs102s09", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs102f10", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs117s09", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs117f10", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs117f09", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs150f11", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs150s11", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs150s10", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs164s10", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs164f09", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs164f10", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs130s10", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs130f11", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "auth.group", 
+    "fields": {
+      "name": "cs130s09", 
+      "permissions": []
+    }
+  }, 
+  {
+    "pk": "f11", 
+    "model": "courses.semester", 
+    "fields": {
+      "name": "Fall 2011", 
+      "end_date": "2011-12-31", 
+      "start_date": "2011-09-01"
+    }
+  }, 
+  {
+    "pk": "s11", 
+    "model": "courses.semester", 
+    "fields": {
+      "name": "Spring 2011", 
+      "end_date": "2011-05-30", 
+      "start_date": "2011-01-01"
+    }
+  }, 
+  {
+    "pk": "f10", 
+    "model": "courses.semester", 
+    "fields": {
+      "name": "Fall 2010", 
+      "end_date": "2010-12-31", 
+      "start_date": "2010-09-01"
+    }
+  }, 
+  {
+    "pk": "s10", 
+    "model": "courses.semester", 
+    "fields": {
+      "name": "Spring 2010", 
+      "end_date": "2010-05-30", 
+      "start_date": "2010-01-01"
+    }
+  }, 
+  {
+    "pk": "f09", 
+    "model": "courses.semester", 
+    "fields": {
+      "name": "Fall 2009", 
+      "end_date": "2009-12-31", 
+      "start_date": "2009-09-01"
+    }
+  }, 
+  {
+    "pk": "s09", 
+    "model": "courses.semester", 
+    "fields": {
+      "name": "Spring 2009", 
+      "end_date": "2009-05-30", 
+      "start_date": "2009-01-01"
+    }
+  }, 
+  {
+    "pk": "cs101f11", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 101", 
+      "group": 3, 
+      "name": "Fundamentals of Computer Science", 
+      "is_active": false, 
+      "semester": "f11", 
+      "key": "b30fe0"
+    }
+  }, 
+  {
+    "pk": "cs130f11", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 130", 
+      "group": 17, 
+      "name": "Algorithms & Data Structures", 
+      "is_active": false, 
+      "semester": "f11", 
+      "key": "1efe34"
+    }
+  }, 
+  {
+    "pk": "cs150f11", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 150", 
+      "group": 10, 
+      "name": "Operating Systems", 
+      "is_active": false, 
+      "semester": "f11", 
+      "key": "1547cc"
+    }
+  }, 
+  {
+    "pk": "cs101s11", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 101", 
+      "group": 2, 
+      "name": "Fundamentals of Computer Science", 
+      "is_active": true, 
+      "semester": "s11", 
+      "key": "cd7e90"
+    }
+  }, 
+  {
+    "pk": "cs150s11", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 150", 
+      "group": 11, 
+      "name": "Operating Systems", 
+      "is_active": false, 
+      "semester": "s11", 
+      "key": "4739c1"
+    }
+  }, 
+  {
+    "pk": "cs102f10", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 102", 
+      "group": 6, 
+      "name": "Programming I", 
+      "is_active": false, 
+      "semester": "f10", 
+      "key": "e0d73a"
+    }
+  }, 
+  {
+    "pk": "cs117f10", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 117", 
+      "group": 8, 
+      "name": "Programming II", 
+      "is_active": false, 
+      "semester": "f10", 
+      "key": "4ae62f"
+    }
+  }, 
+  {
+    "pk": "cs164f10", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 164", 
+      "group": 15, 
+      "name": "Software Engineering", 
+      "is_active": true, 
+      "semester": "f10", 
+      "key": "9a965a"
+    }
+  }, 
+  {
+    "pk": "cs102s10", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 102", 
+      "group": 4, 
+      "name": "Programming I", 
+      "is_active": false, 
+      "semester": "s10", 
+      "key": "874746"
+    }
+  }, 
+  {
+    "pk": "cs130s10", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 130", 
+      "group": 16, 
+      "name": "Algorithms & Data Structures", 
+      "is_active": true, 
+      "semester": "s10", 
+      "key": "89df0b"
+    }
+  }, 
+  {
+    "pk": "cs150s10", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 150", 
+      "group": 12, 
+      "name": "Operating Systems", 
+      "is_active": true, 
+      "semester": "s10", 
+      "key": "ae220e"
+    }
+  }, 
+  {
+    "pk": "cs164s10", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 164", 
+      "group": 13, 
+      "name": "Software Engineering", 
+      "is_active": true, 
+      "semester": "s10", 
+      "key": "86dc2"
+    }
+  }, 
+  {
+    "pk": "cs101f09", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 101", 
+      "group": 1, 
+      "name": "Fundamentals of Computer Science", 
+      "is_active": true, 
+      "semester": "f09", 
+      "key": "1fa7f1"
+    }
+  }, 
+  {
+    "pk": "cs117f09", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 117", 
+      "group": 9, 
+      "name": "Programming II", 
+      "is_active": false, 
+      "semester": "f09", 
+      "key": "926989"
+    }
+  }, 
+  {
+    "pk": "cs164f09", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 164", 
+      "group": 14, 
+      "name": "Software Engineering", 
+      "is_active": false, 
+      "semester": "f09", 
+      "key": "bf10ac"
+    }
+  }, 
+  {
+    "pk": "cs102s09", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 102", 
+      "group": 5, 
+      "name": "Programming I", 
+      "is_active": false, 
+      "semester": "s09", 
+      "key": "7792bb"
+    }
+  }, 
+  {
+    "pk": "cs117s09", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 117", 
+      "group": 7, 
+      "name": "Programming II", 
+      "is_active": true, 
+      "semester": "s09", 
+      "key": "c718ad"
+    }
+  }, 
+  {
+    "pk": "cs130s09", 
+    "model": "courses.course", 
+    "fields": {
+      "code": "CS 130", 
+      "group": 18, 
+      "name": "Algorithms & Data Structures", 
+      "is_active": false, 
+      "semester": "s09", 
+      "key": "22297a"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs101f11", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 16
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs101f11", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs101f11", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs101f11", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 89, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs130f11", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 90, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs130f11", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 15
+    }
+  }, 
+  {
+    "pk": 91, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs130f11", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 86, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs130f11", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 17
+    }
+  }, 
+  {
+    "pk": 87, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs130f11", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 12
+    }
+  }, 
+  {
+    "pk": 88, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs130f11", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 53, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs150f11", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 14
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs150f11", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 50, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs150f11", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 51, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs150f11", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 16
+    }
+  }, 
+  {
+    "pk": 52, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs150f11", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 17
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs150f11", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs101s11", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 16
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs101s11", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs101s11", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs101s11", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 55, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs150s11", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 14
+    }
+  }, 
+  {
+    "pk": 54, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs150s11", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 56, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs150s11", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 17
+    }
+  }, 
+  {
+    "pk": 57, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs150s11", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 58, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs150s11", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 15
+    }
+  }, 
+  {
+    "pk": 59, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs150s11", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102f10", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs102f10", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs102f10", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 12
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102f10", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 14
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs102f10", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs102f10", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 15
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102f10", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 17
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs117f10", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 14
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs117f10", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs117f10", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 15
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs117f10", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 80, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs164f10", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 17
+    }
+  }, 
+  {
+    "pk": 79, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs164f10", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 77, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs164f10", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 78, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs164f10", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 76, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs164f10", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 12
+    }
+  }, 
+  {
+    "pk": 75, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs164f10", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 16
+    }
+  }, 
+  {
+    "pk": 81, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs164f10", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 15
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs102s10", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 14
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102s10", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102s10", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102s10", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 17
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs102s10", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 15
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs102s10", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 16
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102s10", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 85, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs130s10", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 84, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs130s10", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 12
+    }
+  }, 
+  {
+    "pk": 83, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs130s10", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 82, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs130s10", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 15
+    }
+  }, 
+  {
+    "pk": 63, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs150s10", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 17
+    }
+  }, 
+  {
+    "pk": 62, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs150s10", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 61, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs150s10", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 60, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs150s10", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 68, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs164s10", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 69, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs164s10", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 65, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs164s10", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 12
+    }
+  }, 
+  {
+    "pk": 70, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs164s10", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 14
+    }
+  }, 
+  {
+    "pk": 66, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs164s10", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 16
+    }
+  }, 
+  {
+    "pk": 64, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs164s10", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 67, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs164s10", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs101f09", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 15
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs101f09", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs101f09", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 12
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs101f09", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs117f09", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 14
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs117f09", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs117f09", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 12
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs117f09", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 73, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs164f09", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 74, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs164f09", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 12
+    }
+  }, 
+  {
+    "pk": 71, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs164f09", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 72, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs164f09", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 16
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs102s09", 
+      "kind": "I", 
+      "notify_on_commit": false, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs102s09", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 14
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102s09", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102s09", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 16
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102s09", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs102s09", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 12
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs117s09", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs117s09", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 17
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs117s09", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 16
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs117s09", 
+      "kind": "A", 
+      "notify_on_commit": false, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs117s09", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 13
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs117s09", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 11
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs117s09", 
+      "kind": "G", 
+      "notify_on_commit": false, 
+      "user": 14
+    }
+  }, 
+  {
+    "pk": 93, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs130s09", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 17
+    }
+  }, 
+  {
+    "pk": 92, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs130s09", 
+      "kind": "I", 
+      "notify_on_commit": true, 
+      "user": 18
+    }
+  }, 
+  {
+    "pk": 95, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": true, 
+      "course": "cs130s09", 
+      "kind": "A", 
+      "notify_on_commit": true, 
+      "user": 15
+    }
+  }, 
+  {
+    "pk": 94, 
+    "model": "courses.enrollment", 
+    "fields": {
+      "notify_new_grades": false, 
+      "course": "cs130s09", 
+      "kind": "G", 
+      "notify_on_commit": true, 
+      "user": 14
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs101f09/", 
+      "course": "cs101f09", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://github.com/league/cs101f09", 
+      "course": "cs101f09", 
+      "kind": "R"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs101s11/", 
+      "course": "cs101s11", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs101f11/", 
+      "course": "cs101f11", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://amazon.com/Fundamentals of Computer Science", 
+      "course": "cs101f11", 
+      "kind": "T"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs102s10/", 
+      "course": "cs102s10", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs102s09/", 
+      "course": "cs102s09", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://amazon.com/Programming I", 
+      "course": "cs102s09", 
+      "kind": "T"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs102f10/", 
+      "course": "cs102f10", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://amazon.com/Programming I", 
+      "course": "cs102f10", 
+      "kind": "T"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/svn/cs102f10/", 
+      "course": "cs102f10", 
+      "kind": "R"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs117s09/", 
+      "course": "cs117s09", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://amazon.com/Programming II", 
+      "course": "cs117s09", 
+      "kind": "T"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://github.com/league/cs117s09", 
+      "course": "cs117s09", 
+      "kind": "R"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs117f10/", 
+      "course": "cs117f10", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs117f09/", 
+      "course": "cs117f09", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs150f11/", 
+      "course": "cs150f11", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs150s11/", 
+      "course": "cs150s11", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://github.com/league/cs150s11", 
+      "course": "cs150s11", 
+      "kind": "R"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs150s10/", 
+      "course": "cs150s10", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs164s10/", 
+      "course": "cs164s10", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs164f09/", 
+      "course": "cs164f09", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://amazon.com/Software Engineering", 
+      "course": "cs164f09", 
+      "kind": "T"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs164f10/", 
+      "course": "cs164f10", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs130s10/", 
+      "course": "cs130s10", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://amazon.com/Algorithms & Data Structures", 
+      "course": "cs130s10", 
+      "kind": "T"
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs130f11/", 
+      "course": "cs130f11", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://amazon.com/Algorithms & Data Structures", 
+      "course": "cs130f11", 
+      "kind": "T"
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://liucs.net/cs130s09/", 
+      "course": "cs130s09", 
+      "kind": "H"
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://amazon.com/Algorithms & Data Structures", 
+      "course": "cs130s09", 
+      "kind": "T"
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "courses.courselink", 
+    "fields": {
+      "url": "http://github.com/league/cs130s09", 
+      "course": "cs130s09", 
+      "kind": "R"
+    }
+  }
+]
