@@ -11,23 +11,26 @@ from django.test import TestCase
 from django.test.client import Client
 from l3ms.accounts.views import reverse_u, profile_of
 from l3ms.email_validation.models import ValidationKey
-from l3ms.http_auth.tests import login_helper, login_redirect, setup_users
+from l3ms.http_auth.tests import AuthTest
 
-class AccountTest(TestCase):
+class AccountTest(AuthTest):
+    fixtures = ['sample-users.json']
+
     def setUp(self):
-        setup_users(self)
-        self.u1.is_staff = True
-        self.u1.save()
+        self.u1 = User.objects.get(username='admin')
+        self.p1 = self.u1.username
+        self.u2 = User.objects.get(username='diane')
+        self.p2 = self.u2.username
         self.client = Client()
 
     def test_logins_required(self):
         for p in [reverse('home'),
                   profile_of(self.u2)]:
             self.client.logout()
-            login_redirect(self, self.u1, self.p1, p)
+            self.test_login_required(p)
 
     def test_profiles(self):
-        login_helper(self.client, self.u1, self.p1)
+        self.login_helper(self.u1, self.p1)
         r = self.client.get(reverse('home'))
         self.assertContains(r, self.u1.username)
         r = self.client.get(profile_of(self.u2))
@@ -35,14 +38,14 @@ class AccountTest(TestCase):
 
     def test_profile_privileges(self):
         self.assertTrue(self.u1.is_staff) # Alice is staff
-        login_helper(self.client, self.u1, self.p1)
+        self.login_helper(self.u1, self.p1)
         r = self.client.get(profile_of(self.u1)) # my own
         self.assertTrue(r.context['privileged'])
         r = self.client.get(profile_of(self.u2)) # someone else
         self.assertTrue(r.context['privileged'])
 
         self.assertFalse(self.u2.is_staff) # Bob is not staff
-        login_helper(self.client, self.u2, self.p2)
+        self.login_helper(self.u2, self.p2)
         r = self.client.get(profile_of(self.u2)) # my own
         self.assertTrue(r.context['privileged'])
         r = self.client.get(profile_of(self.u1)) # someone else
@@ -53,7 +56,7 @@ class AccountTest(TestCase):
         r = self.client.post(reverse('forgot_username'))
         self.assertContains(r, 'field is required')
         r = self.client.post(reverse('forgot_username'),
-                             {'email': 'chuck@example.com'})
+                             {'email': 'karl@example.com'})
         self.assertContains(r, 'address does not')
         r = self.client.post(reverse('forgot_username'),
                              {'email': self.u1.email}, follow=True)
@@ -77,9 +80,9 @@ class AccountTest(TestCase):
                               'new_password2': self.p1}, follow=True)
         self.assertContains(r, 'has been changed')
         self.assertEqual(0, ValidationKey.objects.filter(user=self.u1).count())
-        r = login_helper(self.client, self.u1, old_pw)
+        r = self.login_helper(self.u1, old_pw)
         self.assertEqual(r.status_code, 401)
-        r = login_helper(self.client, self.u1, self.p1)
+        r = self.login_helper(self.u1, self.p1)
         self.assertEqual(self.client.session[SESSION_KEY], self.u1.id)
 
     def edit_email(self, user, new_email):
@@ -142,8 +145,8 @@ class AccountTest(TestCase):
 
         self.client.login(username=self.u1.username, password=self.p1)
 
-    def register(self, username='chuck', email='chuck@example.com',
-                 first='Chuck', last='Chan', p1='chu2k', p2='chu2k'):
+    def register(self, username='karl', email='karl@example.com',
+                 first='Karl', last='Kolman', p1='chu2k', p2='chu2k'):
         return self.client.post(reverse('register'),
                                 {'first_name': first, 'last_name': last,
                                  'username': username, 'email': email,
@@ -154,25 +157,25 @@ class AccountTest(TestCase):
         self.client.logout()
         r = self.register()
         self.assertContains(r, 'awaiting activation')
-        u = User.objects.get(username='chuck')
+        u = User.objects.get(username='karl')
         k = ValidationKey.objects.get(user=u)
         r = self.client.get(k.get_absolute_url(), follow=True)
         self.assertContains(r, 'is activated')
-        r = login_helper(self.client, u, 'chu2k')
+        r = self.login_helper(u, 'chu2k')
         self.assertEqual(self.client.session[SESSION_KEY], u.id)
-        self.assertContains(r, 'Chuck Chan')
+        self.assertContains(r, 'Karl Kolman')
 
     def test_registration_errors(self):
         self.client.logout()
-        r = self.register(username='chuck2') # should work
+        r = self.register(username='karl2') # should work
         self.assertContains(r, 'awaiting activation')
-        r = self.register(username='chuck2') # fail, same username
+        r = self.register(username='karl2') # fail, same username
         self.assertContains(r, 'already exists')
-        r = self.register(username='chuck3') # fail, same email
+        r = self.register(username='karl3') # fail, same email
         self.assertContains(r, 'already exists')
-        r = self.register(username='chuck3', email='')
+        r = self.register(username='karl3', email='')
         self.assertContains(r, 'is required')
-        r = self.register(username='chuck3', last='')
+        r = self.register(username='karl3', last='')
         self.assertContains(r, 'is required')
-        r = self.register(username='chuck3', email='chuck3')
+        r = self.register(username='karl3', email='karl3')
         self.assertContains(r, 'Enter a valid')
