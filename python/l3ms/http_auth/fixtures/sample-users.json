@@ -1,0 +1,623 @@
+[
+  {
+    "pk": 22, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_userprofile", 
+      "name": "Can add user profile", 
+      "content_type": 8
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_userprofile", 
+      "name": "Can change user profile", 
+      "content_type": 8
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_userprofile", 
+      "name": "Can delete user profile", 
+      "content_type": 8
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_logentry", 
+      "name": "Can add log entry", 
+      "content_type": 7
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_logentry", 
+      "name": "Can change log entry", 
+      "content_type": 7
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_logentry", 
+      "name": "Can delete log entry", 
+      "content_type": 7
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_group", 
+      "name": "Can add group", 
+      "content_type": 2
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_message", 
+      "name": "Can add message", 
+      "content_type": 4
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_permission", 
+      "name": "Can add permission", 
+      "content_type": 1
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_user", 
+      "name": "Can add user", 
+      "content_type": 3
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_group", 
+      "name": "Can change group", 
+      "content_type": 2
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_message", 
+      "name": "Can change message", 
+      "content_type": 4
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_permission", 
+      "name": "Can change permission", 
+      "content_type": 1
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_user", 
+      "name": "Can change user", 
+      "content_type": 3
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_group", 
+      "name": "Can delete group", 
+      "content_type": 2
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_message", 
+      "name": "Can delete message", 
+      "content_type": 4
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_permission", 
+      "name": "Can delete permission", 
+      "content_type": 1
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_user", 
+      "name": "Can delete user", 
+      "content_type": 3
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_contenttype", 
+      "name": "Can add content type", 
+      "content_type": 5
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_contenttype", 
+      "name": "Can change content type", 
+      "content_type": 5
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_contenttype", 
+      "name": "Can delete content type", 
+      "content_type": 5
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_course", 
+      "name": "Can add course", 
+      "content_type": 10
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_courselink", 
+      "name": "Can add course link", 
+      "content_type": 12
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_enrollment", 
+      "name": "Can add enrollment", 
+      "content_type": 11
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_semester", 
+      "name": "Can add semester", 
+      "content_type": 9
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_course", 
+      "name": "Can change course", 
+      "content_type": 10
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_courselink", 
+      "name": "Can change course link", 
+      "content_type": 12
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_enrollment", 
+      "name": "Can change enrollment", 
+      "content_type": 11
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_semester", 
+      "name": "Can change semester", 
+      "content_type": 9
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_course", 
+      "name": "Can delete course", 
+      "content_type": 10
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_courselink", 
+      "name": "Can delete course link", 
+      "content_type": 12
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_enrollment", 
+      "name": "Can delete enrollment", 
+      "content_type": 11
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_semester", 
+      "name": "Can delete semester", 
+      "content_type": 9
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_validationkey", 
+      "name": "Can add validation key", 
+      "content_type": 13
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_validationkey", 
+      "name": "Can change validation key", 
+      "content_type": 13
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_validationkey", 
+      "name": "Can delete validation key", 
+      "content_type": 13
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_gradecategory", 
+      "name": "Can add grade category", 
+      "content_type": 15
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_gradeditem", 
+      "name": "Can add graded item", 
+      "content_type": 14
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_gradeditemxyz", 
+      "name": "Can add graded item xyz", 
+      "content_type": 16
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_score", 
+      "name": "Can add score", 
+      "content_type": 17
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_gradecategory", 
+      "name": "Can change grade category", 
+      "content_type": 15
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_gradeditem", 
+      "name": "Can change graded item", 
+      "content_type": 14
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_gradeditemxyz", 
+      "name": "Can change graded item xyz", 
+      "content_type": 16
+    }
+  }, 
+  {
+    "pk": 50, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_score", 
+      "name": "Can change score", 
+      "content_type": 17
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_gradecategory", 
+      "name": "Can delete grade category", 
+      "content_type": 15
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_gradeditem", 
+      "name": "Can delete graded item", 
+      "content_type": 14
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_gradeditemxyz", 
+      "name": "Can delete graded item xyz", 
+      "content_type": 16
+    }
+  }, 
+  {
+    "pk": 51, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_score", 
+      "name": "Can delete score", 
+      "content_type": 17
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_session", 
+      "name": "Can add session", 
+      "content_type": 6
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_session", 
+      "name": "Can change session", 
+      "content_type": 6
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_session", 
+      "name": "Can delete session", 
+      "content_type": 6
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "league", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": true, 
+      "is_staff": true, 
+      "last_login": "2011-01-09 07:59:26", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "900150983cd24fb0d6963f7d28e17f72", 
+      "email": "league@contrapunctus.net", 
+      "date_joined": "2011-01-09 07:59:00"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "alice", 
+      "first_name": "Alice Ann", 
+      "last_name": "Archer", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-01-09 08:01:48", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "6384e2b2184bcbf58eccf10ca7a6563c", 
+      "email": "alice@example.com", 
+      "date_joined": "2011-01-09 08:01:48"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "bobby", 
+      "first_name": "Bobby", 
+      "last_name": "O'Neill", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-01-09 08:01:48", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "a9c4cef5735770e657b7c25b9dcb807b", 
+      "email": "bobby@example.com", 
+      "date_joined": "2011-01-09 08:01:48"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "chuck", 
+      "first_name": "Chuck", 
+      "last_name": "Chan-Jones", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-01-09 08:01:48", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "4f2155e69aea499c87d1850ab8a8e183", 
+      "email": "chuck@example.com", 
+      "date_joined": "2011-01-09 08:01:48"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "diane", 
+      "first_name": "Diane", 
+      "last_name": "Depp Walker", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-01-09 08:01:48", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "91515711adb2a1f6c1f2ff6446741955", 
+      "email": "diane@example.com", 
+      "date_joined": "2011-01-09 08:01:48"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "edgar", 
+      "first_name": "Edgar", 
+      "last_name": "Ent", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-01-09 08:01:48", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "6b1d24ff83a319070db95c6c84b9be31", 
+      "email": "edgar@example.com", 
+      "date_joined": "2011-01-09 08:01:48"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "fran", 
+      "first_name": "Fran", 
+      "last_name": "Fernando", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-01-09 08:01:48", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "2c20cb5558626540a1704b1fe524ea9a", 
+      "email": "fran@example.com", 
+      "date_joined": "2011-01-09 08:01:48"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "grant", 
+      "first_name": "Grant", 
+      "last_name": "Greig", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-01-09 08:01:48", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "64fad28965d003cde964ea3016e257a3", 
+      "email": "grant@example.com", 
+      "date_joined": "2011-01-09 08:01:48"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "admin", 
+      "first_name": "Admin", 
+      "last_name": "User", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": true, 
+      "last_login": "2011-01-09 08:01:48", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "21232f297a57a5a743894a0e4a801fc3", 
+      "email": "admin@example.com", 
+      "date_joined": "2011-01-09 08:01:48"
+    }
+  }
+]

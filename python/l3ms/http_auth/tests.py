@@ -13,6 +13,26 @@ from random import random
 from views import SESSION_LOGOUT
 import base64
 
+def create_sample_users():
+    """Programmatically create the sample-users fixture."""
+    names = [("Alice Ann", "Archer"),
+             ("Bobby", "O'Neill"),
+             ("Chuck", "Chan-Jones"),
+             ("Diane", "Depp Walker"),
+             ("Edgar", "Ent"),
+             ("Fran", "Fernando"),
+             ("Grant", "Greig"),
+             ("Admin", "User")]
+
+    for f,l in names:
+        n = f.split(' ')[0].lower()
+        e = '%s@example.com' % n
+        u = User(username=n, first_name=f, last_name=l, email=e)
+        u.set_password(n)
+        if n == 'admin':
+            u.is_staff = True
+        u.save()
+
 def login_helper(c, u, pw):
     a = base64.b64encode('%s:%s' % (u.username, pw))
     return c.get(reverse('auth_login'), {}, True,
