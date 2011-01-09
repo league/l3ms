@@ -159,3 +159,16 @@ ul.roster img.gravatar {
     position: relative;
     bottom: -10px;
 }
+/* -------------------------------- */
+.composite, .item, .aggregate {
+    margin-left: 1em;
+}
+.aggregate {
+    font-weight: bold;
+}
+.dropped .scores {
+    text-decoration: line-through;
+}
+.droppable {
+    color: #777;
+}

@@ -1,8 +1,99 @@
+# l3ms.gradebook.models    -*- coding: utf-8 -*-
+# Copyright ©2011 by Christopher League <league@contrapunctus.net>
+#
+# This is free software but comes with ABSOLUTELY NO WARRANTY.
+# See the GNU General Public License version 3 for details.
+
 from django.contrib.auth.models import User
 from django.db import models
 from l3ms.courses.models import Course
 import aggregators
 import preprocessors
+
+def symbols_in(module):
+    """Return list of name/string pairs for symbols in `module`.
+
+    This is used to construct a `choices` string for fields that
+    reference functions in particular modules, like the aggregators
+    for grade categories.
+
+    >>> ('sum', 'sum') in symbols_in(aggregators)
+    True
+    """
+    return map(lambda sym: (sym, sym),
+               filter(lambda sym: not sym.startswith('_'),
+                      dir(module)))
+
+class GradedItem(models.Model):
+    """Represents either one graded item, or a category.
+
+    The connection to ‘Course’ is one-to-one, which makes it
+    convenient because we can do a_course.gradeditem to get the
+    top-level.  But this means that all descendants must have course =
+    null — instead they'll have the parent field to another
+    GradedItem."""
+    course = models.OneToOneField(Course, null=True)
+    parent = models.ForeignKey('GradedItem', null=True,
+                               related_name='children')
+    name = models.CharField(max_length=72)
+    posted = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now_add=True)
+    order = models.FloatField(default=0.0, blank=True)
+    is_composite = models.BooleanField(default=False)
+
+    # If it is composite, we use these fields:
+    preprocess = models.CharField(choices=symbols_in(preprocessors),
+                                  max_length=32, blank=True)
+    aggregate = models.CharField(choices=symbols_in(aggregators),
+                                 max_length=32, blank=True)
+
+    # If not composite, use these fields
+    points = models.IntegerField(null=True, blank=True)
+    feedback = models.TextField(blank=True)
+
+    def save(self, force_insert=False, force_update=False):
+        """Overridden to enforce composite constraints."""
+        assert bool(self.course) ^ bool(self.parent)
+        if self.is_composite:
+            assert self.aggregate    # preprocess still optional
+            assert not (self.points or self.feedback)
+        else:
+            assert self.points       # feedback still optional
+            assert not (self.preprocess or self.aggregate)
+        super(GradedItem, self).save(force_insert, force_update)
+        # Unfortunately, must verify this AFTER save, because
+        # having pk=null wreaks havoc with finding children.
+        if not self.is_composite:
+            assert self.children.count() == 0
+
+    def get_course(self):
+        """Return course to which this item is attached.
+
+        This method compensates for the fact that `self.course` is
+        null for all descendants of the root by climbing up the
+        hierarchy."""
+        return self.course or self.parent.get_course()
+
+    def __unicode__(self):
+        if self.parent:
+            return u'%s → %s' % (unicode(self.parent), self.name)
+        else:
+            return u'%s: %s' % (self.course.tag, self.name)
+
+    def dump(self):
+        """Return a representation using lists and dictionaries."""
+        if self.is_composite:
+            return {'name': self.name,
+                    'preprocess': self.preprocess,
+                    'aggregate': self.aggregate,
+                    'items': [i.dump() for i in self.children.all()]}
+        else:
+            return {'name': self.name,
+                    'points': self.points,
+                    'feedback': self.feedback}
+
+
+
 
 def update_fields(entity, fields, data):
     changes = []
@@ -35,10 +126,6 @@ class CategoryManager(models.Manager):
     def dump(self, course):
         return [cat.dump() for cat in self.filter(course=course)]
 
-def symbols_in(module):
-    return map(lambda sym: (sym, sym),
-               filter(lambda sym: not sym.startswith('_'),
-                      dir(module)))
 
 class GradeCategory(models.Model):
     course = models.ForeignKey(Course)
@@ -79,30 +166,6 @@ class GradedItemManager(models.Manager):
     def dump(self, category):
         return [i.dump() for i in self.filter(category=category)]
 
-class GradedItem(models.Model):
-    category = models.ForeignKey(GradeCategory)
-    name = models.CharField(max_length=72)
-    points = models.IntegerField()
-    feedback = models.TextField(blank=True)
-    posted = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now_add=True)
-    order = models.FloatField(default=0.0, blank=True)
-
-    objects = GradedItemManager()
-
-    def __unicode__(self):
-        """Sample: cs150s11 Quiz 1"""
-        return '%s %s' % (self.category.course.tag, self.name)
-
-    def dump(self):
-        return {'item': self.name,
-                'points': self.points,
-                'feedback': self.feedback,
-                'scores': Score.objects.dump(self)}
-
-    class Meta:
-        unique_together = ('category', 'name')
-        ordering = ['-posted']  # reverse chron
 
 class ScoreManager(models.Manager):
     def sync(self, item, data, log, commit=True):
