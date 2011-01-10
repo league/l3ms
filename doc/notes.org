@@ -4,6 +4,20 @@ Most content will be statically-generated thru emacs, org-mode, make,
 etc.  And I'll use subversion for code exchange.  But there are a few
 things I want a server to do...
 
+* Grade Items vs Categories
+
+Would be helpful to unify these. Think about composite pattern: a
+category is an item too.
+
+Course
+
+GradedItem
+  course
+  category: link to another graded item with same course, can be null
+
+
+So top level graded items in the course are 
+
 
 * Displaying grades for students
 

@@ -2,7 +2,7 @@ from django.db import transaction
 from django.http import HttpResponse
 from l3ms.courses.models import Course, Enrollment
 from l3ms.http_auth.views import check_login
-from models import GradeCategory
+from models import GradedItem
 import httplib
 import json
 import traceback

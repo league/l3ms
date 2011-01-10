@@ -41,7 +41,7 @@ def sample_standard_grading(course):
         for k in range(1, random.randrange(4,7)):
             sample_graded_item(i, '%s %d' % (c,k),
                                random.choice([30,40,50,100]))
-        sample_graded_item(tot, 'Participation', 30)
+    sample_graded_item(tot, 'Participation', 30)
 
 def sample_item_name(base):
     return '%s %03X' % (base, random.getrandbits(12))
@@ -67,3 +67,43 @@ def sample_grading():
         sample_standard_grading(c)
     for c in cs[10:15]:
         sample_elaborate_grading(c)
+
+class GradingTest(TestCase):
+    fixtures = ['sample-users.json', 'sample-courses.json',
+                'sample-grades.json']
+
+    def test_dump_leaf(self):
+        # Find a leaf item
+        g = GradedItem.objects.filter(is_composite=False)[:1][0]
+        # It should have some scores recorded
+        users = [s.user.username for s in g.score_set.all()]
+        self.assertTrue(len(users)>0)
+        data = g.dump()
+        self.assertTrue('aggregate' not in data)
+        self.assertEquals(data['points'], g.points)
+        self.assertEquals(len(data['scores']), len(users))
+        for s in data['scores']:
+            self.assertTrue(s['user'] in users)
+
+    def test_dump_sync(self):
+        """Exercise the dump() and sync() methods."""
+        for g in GradedItem.objects.filter(parent=None)[:5]:
+            data = g.dump()
+            log = []
+            GradedItem.objects.sync(data, log, course=g.course)
+            self.assertEqual(log, [])
+
+    def test_sync_create(self):
+        g = GradedItem.objects.filter(parent=None)[:1][0]
+        c = g.course
+        nm = g.name
+        data = g.dump()
+        g.delete()
+        log = []
+        GradedItem.objects.sync(data, log, course=c)
+        self.assertEqual(log[0], 'Creating %s: %s' % (c.tag, nm))
+        g = GradedItem.objects.get(course=c, parent=None)
+        # This assertion relies on ordering entities same way every
+        # time.. the `ordering` Meta option of GradedItem and Score is
+        # essential.
+        self.assertEqual(data, g.dump())

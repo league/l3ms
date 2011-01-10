@@ -27,6 +27,54 @@ def symbols_in(module):
 AGGREGATORS = symbols_in(aggregators)
 PREPROCESSORS = symbols_in(preprocessors)
 
+def update_fields(entity, fields, data):
+    """Update `fields` of `entity` to match values in `data` dict.
+
+    Return the list of fields that were changed."""
+    changes = []
+    for f in fields:
+        if getattr(entity, f) != data[f]:
+            changes.append(f)
+            setattr(entity, f, data[f])
+    return changes
+
+def sync_logic(fields, manager, data, log, **args):
+    """Get or create an entity and update its fields.
+
+    Append actions to the string list `log` and return the entity."""
+    entity, created = manager.get_or_create(**args)
+    changes = update_fields(entity, fields, data)
+    if created:
+        log.append('Creating %s' % entity)
+    elif changes:
+        log.append('Editing %s %s' % (entity, changes))
+    if created or changes:
+        entity.save()
+    return entity
+
+class GradedItemManager(models.Manager):
+    def sync(self, data, log, course=None, parent=None):
+        if 'aggregate' in data: # composite
+            gi = sync_logic(['preprocess', 'aggregate'],
+                            self, data, log,
+                            is_composite = True,
+                            course = course,
+                            parent = parent,
+                            name = data['name'],
+                            defaults = {'aggregate': data['aggregate']})
+            for i in data['items']:
+                self.sync(i, log, None, gi)
+        else:                   # leaf
+            gi = sync_logic(['points', 'feedback'],
+                            self, data, log,
+                            is_composite = False,
+                            course = course,
+                            parent = parent,
+                            name = data['name'],
+                            defaults = {'points': data['points']})
+            for s in data['scores']:
+                Score.objects.sync(gi, s, log)
+
 class GradedItem(models.Model):
     """Represents either one graded item, or a category.
 
@@ -53,6 +101,12 @@ class GradedItem(models.Model):
     # If not composite, use these fields
     points = models.IntegerField(null=True, blank=True)
     feedback = models.TextField(blank=True)
+
+    objects = GradedItemManager()
+
+    class Meta:
+        unique_together = ('course', 'parent', 'name')
+        ordering = ['order', 'posted', 'name']
 
     def save(self, force_insert=False, force_update=False):
         """Overridden to enforce composite constraints."""
@@ -94,7 +148,17 @@ class GradedItem(models.Model):
         else:
             return {'name': self.name,
                     'points': self.points,
-                    'feedback': self.feedback}
+                    'feedback': self.feedback,
+                    'scores': [s.dump() for s in self.score_set.all()]}
+
+class ScoreManager(models.Manager):
+    def sync(self, item, data, log):
+        u = User.objects.get(username=data['user'])
+        sync_logic(['points', 'feedback'],
+                   self, data, log,
+                   item = item,
+                   user = u,
+                   defaults = {'points': data['points']})
 
 class Score(models.Model):
     item = models.ForeignKey(GradedItem)
@@ -104,7 +168,17 @@ class Score(models.Model):
     posted = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now_add=True)
 
-#    objects = ScoreManager()
+    objects = ScoreManager()
+
+    class Meta:
+        unique_together = ('item', 'user')
+        order_with_respect_to = 'item'
+        ordering = ['user__username']
+
+    def save(self, force_insert=False, force_update=False):
+        """Overridden to enforce composite constraints."""
+        assert not self.item.is_composite
+        super(Score, self).save(force_insert, force_update)
 
     def __unicode__(self):
         return '%s %s %s %d' % (self.item.get_course().tag,
@@ -122,93 +196,3 @@ class Score(models.Model):
         return {'user': self.user.username,
                 'points': self.points,
                 'feedback': self.feedback}
-
-    class Meta:
-        unique_together = ('item', 'user')
-
-
-#### OLD STUFF
-def update_fields(entity, fields, data):
-    changes = []
-    for f in fields:
-        if getattr(entity, f) != data[f]:
-            changes.append(f)
-            setattr(entity, f, data[f])
-    return changes
-
-def sync_logic(fields, manager, data, log, commit, **args):
-    entity, created = manager.get_or_create(**args)
-    changes = update_fields(entity, fields, data)
-    if created:
-        log.append('Creating %s' % entity)
-    elif changes:
-        log.append('Editing %s %s' % (entity, changes))
-    if commit and (created or changes):
-        entity.save()
-    return entity
-
-class CategoryManager(models.Manager):
-    def sync(self, course, data, log, commit=True):
-        category = sync_logic(['preprocess', 'aggregate'],
-                              self, data, log, commit,
-                              course = course,
-                              name = data['category'])
-        for i in data['items']:
-            GradedItem.objects.sync(category, i, log, commit)
-
-    def dump(self, course):
-        return [cat.dump() for cat in self.filter(course=course)]
-
-
-class GradeCategory(models.Model):
-    course = models.ForeignKey(Course)
-    name = models.CharField(max_length=72)
-    preprocess = models.CharField(max_length=32, blank=True,
-                                  choices=symbols_in(preprocessors))
-    aggregate = models.CharField(max_length=32,
-                                 choices=symbols_in(aggregators))
-    order = models.FloatField(default=0.0, blank=True)
-
-    objects = CategoryManager()
-
-    def __unicode__(self):
-        """Sample: cs150s11 Quizzes"""
-        return '%s %s' % (self.course.tag, self.name)
-
-    def dump(self):
-        return {'category': self.name,
-                'preprocess': self.preprocess,
-                'aggregate': self.aggregate,
-                'items': GradedItem.objects.dump(self)}
-
-    class Meta:
-        unique_together = ('course', 'name')
-        ordering = ['order', 'name']
-        order_with_respect_to = 'course'
-
-class GradedItemManager(models.Manager):
-    def sync(self, category, data, log, commit=True):
-        item = sync_logic(['points', 'feedback'],
-                          self, data, log, commit,
-                          category = category,
-                          name = data['item'],
-                          defaults = {'points': data['points']})
-        for s in data['scores']:
-            Score.objects.sync(item, s, log, commit)
-
-    def dump(self, category):
-        return [i.dump() for i in self.filter(category=category)]
-
-
-class ScoreManager(models.Manager):
-    def sync(self, item, data, log, commit=True):
-        # TODO: need to catch User.DoesNotExist somewhere
-        user = User.objects.get(username=data['user'])
-        sync_logic(['points', 'feedback'], self, data, log, commit,
-                   item = item, user = user,
-                   defaults = {'points': data['points']})
-
-    def dump(self, item):
-        return [s.dump() for s in self.filter(item=item)]
-
-
