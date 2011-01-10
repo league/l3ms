@@ -1,3 +1,4 @@
+from django.template import loader, Context
 from django.db import transaction
 from django.http import HttpResponse
 from l3ms.courses.models import Course, Enrollment
@@ -60,8 +61,7 @@ def post_grades(request, tag):
     try:
         data = json.loads(request.raw_post_data)
         log = []
-        for d in data:
-            GradeCategory.objects.sync(course, d, log)
+        GradedItem.objects.sync(data, log, course=course)
         return ResponseExn(200, '\n'.join(log) if log
                            else 'no changes').as_text()
     except Exception:
@@ -74,7 +74,40 @@ def dump_grades(request, tag):
     except ResponseExn as r:
         return r.as_json()
 
-    return ResponseExn(200, GradeCategory.objects.dump(course)).as_json()
+    return ResponseExn(200, course.gradeditem.dump()).as_json()
 
 def grade_summary(request, context):
-    context['summary'] = 'I was here.'
+    c = context['course']
+    try:
+        g = c.gradeditem
+    except GradedItem.DoesNotExist:
+        return
+    u = request.user
+    t = loader.get_template('gradebook/summary-line.html')
+    buf = []
+
+    def percentage(data):
+        data['percent'] = ('%.0f%%' % (data['score'] * 100.0 / data['points'])
+                           if data['points'] else '')
+
+    def render(item):
+        percentage(item)
+        percentage(item['all'])
+        buf.append(t.render(Context(item)))
+
+    def recur(item):
+        if 'aggregate' in item:
+            buf.append('<div class="composite">\n')
+            for i in item['items']:
+                recur(i)
+            item['class'] = 'aggregate'
+            render(item)
+            buf.append('</div>')
+        else:
+            item['class'] = 'item'
+            render(item)
+
+    recur(c.gradeditem.summary(u))
+    context['summary'] = ''.join(buf)
+#    context['summary'] = c.gradeditem.summary(u)
+

@@ -1,0 +1,21 @@
+<div class="{{class}}">
+  {{name}}
+  &nbsp;
+  <span class="scores">
+    {{score_string}}
+    &nbsp;
+    /{{points}}
+    &nbsp;
+    {{percent}}
+  </span>
+  &nbsp;
+  <a href="">statistics</a>
+  {% if feedback_p %}
+  &nbsp;
+  <a href="">feedback</a>
+  {% endif %}
+  {% if preprocess %}
+  {{preprocess}}
+  compare {{all.score_string}}/{{all.points}} ({{all.percent}})
+  {% endif %}
+</div>

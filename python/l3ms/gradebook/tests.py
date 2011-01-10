@@ -1,6 +1,9 @@
+from django.core.urlresolvers import reverse
 from django.test import TestCase
-from l3ms.courses.models import Course
+from django.test.client import Client
+from l3ms.courses.models import Course, Enrollment
 from models import GradedItem, Score, AGGREGATORS, PREPROCESSORS
+import json
 import random
 
 def sample_feedback():
@@ -72,6 +75,9 @@ class GradingTest(TestCase):
     fixtures = ['sample-users.json', 'sample-courses.json',
                 'sample-grades.json']
 
+    def setUp(self):
+        self.client = Client()
+
     def test_dump_leaf(self):
         # Find a leaf item
         g = GradedItem.objects.filter(is_composite=False)[:1][0]
@@ -87,7 +93,7 @@ class GradingTest(TestCase):
 
     def test_dump_sync(self):
         """Exercise the dump() and sync() methods."""
-        for g in GradedItem.objects.filter(parent=None)[:5]:
+        for g in GradedItem.objects.filter(parent=None)[:2]:
             data = g.dump()
             log = []
             GradedItem.objects.sync(data, log, course=g.course)
@@ -107,3 +113,29 @@ class GradingTest(TestCase):
         # time.. the `ordering` Meta option of GradedItem and Score is
         # essential.
         self.assertEqual(data, g.dump())
+
+    def test_post_grades(self):
+        # Find a known sample instructor for a course with grades
+        known = ['alice', 'bobby', 'chuck']
+        e = Enrollment.objects.filter(user__username__in=known,
+                                      course__gradeditem__isnull=False,
+                                      kind='I')[:1][0]
+        # Make sure we can log in
+        r = self.client.login(username=e.user.username, password=e.user.username)
+        self.assertTrue(r)
+        # Dump the grades for that course
+        g = e.course.gradeditem
+        data = json.dumps(g.dump())
+        # POST that data
+        r = self.client.post(reverse('post_grades',
+                                     kwargs={'tag': g.course.tag}),
+                             data, content_type='text/plain')
+        self.assertEqual(r.status_code, 200)
+        # It shouldn't have changed anything
+        self.assertEqual(r.content, 'no changes\n')
+        # Now try to dump via HTTP
+        r = self.client.get(reverse('dump_grades',
+                                    kwargs={'tag': g.course.tag}))
+        self.assertEqual(r.status_code, 200)
+
+

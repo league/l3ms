@@ -151,6 +151,66 @@ class GradedItem(models.Model):
                     'feedback': self.feedback,
                     'scores': [s.dump() for s in self.score_set.all()]}
 
+    def summary(self, student):
+        """Summarize score hierarchy for given `student`.
+
+        This will apply the aggregation and preprocessing functions.
+        The expected shape of the returned data is as follows: `{name,
+        score, score_string, points, all: {score, score_string,
+        points}}`.  If the item is composite, include `{aggregate,
+        items}`, and possibly `{preprocess}`.  Otherwise include
+        `{feedback_p}`.
+
+        `score_string` is maintained separately, so it can be set to
+        'null' if `student` is missing a score for this item.  This is
+        calculated as zero, but should appear as 'null'."""
+
+        data = {'name': self.name}
+
+        if not self.is_composite: # Easier case first
+            try:                  # Maybe score won't exist
+                score = self.score_set.get(user=student)
+                stats = {'score': score.points,
+                         'score_string': str(score.points),
+                         'points': self.points}
+                data['feedback_p'] = bool(self.feedback or score.feedback)
+                data['all'] = stats
+                data.update(stats)
+            except Score.DoesNotExist:
+                stats = {'score': 0,
+                         'score_string': 'null',
+                         'points': self.points}
+                data['feedback_p'] = bool(self.feedback)
+                data['all'] = stats
+                data.update(stats)
+
+        else:                   # If it IS composite
+            aggregate_f = getattr(aggregators, self.aggregate)
+            data['aggregate'] = self.aggregate
+            data['preprocess'] = self.preprocess
+
+            all_ch = [c.summary(student) for c in self.children.all()]
+            data['items'] = all_ch
+
+            score = aggregate_f(lambda x: x['all']['score'], all_ch)
+            points = aggregate_f(lambda x: x['all']['points'], all_ch)
+            stats = {'score': score,
+                     'score_string': str(score),
+                     'points': points}
+            data['all'] = stats
+
+            if self.preprocess:
+                slice_f = getattr(preprocessors, self.preprocess)
+                slice_ch = slice_f(lambda x: x['score'], all_ch)
+                score = aggregate_f(lambda x: x['score'], slice_ch)
+                points = aggregate_f(lambda x: x['points'], slice_ch)
+                stats = {'score': score,
+                         'score_string': str(score),
+                         'points': points}
+            data.update(stats)
+
+        return data
+
 class ScoreManager(models.Manager):
     def sync(self, item, data, log):
         u = User.objects.get(username=data['user'])
@@ -173,7 +233,7 @@ class Score(models.Model):
     class Meta:
         unique_together = ('item', 'user')
         order_with_respect_to = 'item'
-        ordering = ['user__username']
+        ordering = ['user']
 
     def save(self, force_insert=False, force_update=False):
         """Overridden to enforce composite constraints."""
