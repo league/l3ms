@@ -86,26 +86,16 @@ def grade_summary(request, context):
     t = loader.get_template('gradebook/summary-line.html')
     buf = []
 
-    def percentage(data):
-        data['percent'] = ('%.0f%%' % (data['score'] * 100.0 / data['points'])
-                           if data['points'] else '')
-
-    def render(item):
-        percentage(item)
-        percentage(item['all'])
-        buf.append(t.render(Context(item)))
-
-    def recur(item):
+    def recur(item, depth=0):
+        item['depth'] = depth
         if 'aggregate' in item:
-            buf.append('<div class="composite">\n')
             for i in item['items']:
-                recur(i)
+                recur(i, depth+1)
             item['class'] = 'aggregate'
-            render(item)
-            buf.append('</div>')
+            buf.append(t.render(Context(item)))
         else:
             item['class'] = 'item'
-            render(item)
+            buf.append(t.render(Context(item)))
 
     recur(c.gradeditem.summary(u))
     context['summary'] = ''.join(buf)

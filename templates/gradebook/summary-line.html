@@ -1,21 +1,29 @@
-<div class="{{class}}">
-  {{name}}
-  &nbsp;
-  <span class="scores">
-    {{score_string}}
-    &nbsp;
-    /{{points}}
-    &nbsp;
-    {{percent}}
-  </span>
-  &nbsp;
-  <a href="">statistics</a>
-  {% if feedback_p %}
-  &nbsp;
-  <a href="">feedback</a>
-  {% endif %}
-  {% if preprocess %}
-  {{preprocess}}
-  compare {{all.score_string}}/{{all.points}} ({{all.percent}})
-  {% endif %}
-</div>
+<tr class="{{class}} {{dropped|yesno:'droppable,'}} depth{{depth}}">
+  <td class="strike">
+    {{name}}
+    {% if aggregate %}
+    ({{aggregate}})
+    {% endif %}
+  </td>
+  <td class="scores">
+    <span class="ifAll">{{all.score_string}}</span>
+    <span class="ifSliced hidden">{{score_string}}</span>
+  </td>
+  <td class="scores">
+    <span class="ifAll">{{all.points}}</span>
+    <span class="ifSliced hidden">{{points}}</span>
+  </td>
+  <td class="scores">
+    <span class="ifAll">{{all.percent|floatformat:0}}%</span>
+    <span class="ifSliced hidden">{{percent|floatformat:0}}%</span>
+  </td>
+  <td><a href="">statistics</a></td>
+  <td>
+    {% if feedback_p %}
+    <a href="">feedback</a>
+    {% endif %}
+    {% if preprocess %}
+    <input type="checkbox" class="sliceWidget" />&nbsp;{{preprocess}}
+    {% endif %}
+  </td>
+</tr>

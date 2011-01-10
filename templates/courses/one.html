@@ -10,6 +10,13 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $("div#messages").fadeOut(3000)
+  $(".sliceWidget").change(function() {
+    var sliced = $(this).attr('checked')
+    $(".sliceWidget").attr('checked', sliced)
+    $(".ifAll").toggleClass("hidden", sliced)
+    $(".ifSliced").toggleClass("hidden", !sliced)
+    $(".droppable").toggleClass("dropped", sliced)
+  })
 })
 </script>
 {% endblock %}
@@ -40,9 +47,9 @@ $(document).ready(function(){
       </div>
       {% if summary %}
       <h2 class="break">Assessment</h2>
-      <p>
+      <table class="gradeSummary">
       {{summary|safe}}
-      </p>
+      </table>
       {% endif %}
     </div>
     <div class="grid_3 alpha">

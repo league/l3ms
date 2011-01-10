@@ -160,15 +160,35 @@ ul.roster img.gravatar {
     bottom: -10px;
 }
 /* -------------------------------- */
-.composite, .item, .aggregate {
-    margin-left: 1em;
+tr.depth5 > td:first-child { padding-left: 5em;}
+tr.depth4 > td:first-child { padding-left: 4em;}
+tr.depth3 > td:first-child { padding-left: 3em;}
+tr.depth2 > td:first-child { padding-left: 2em;}
+tr.depth1 > td:first-child { padding-left: 1em;}
+
+table.gradeSummary {
+    border-collapse: collapse;
 }
-.aggregate {
+table.gradeSummary td {
+    padding: 2px .3em;
+}
+td.scores {
+    text-align: right;
+}
+tr.droppable .scores {
+    color: #aaa;
+}
+tr.dropped .strike {
+    text-decoration: line-through;
+    color: #aaa;
+}
+tr.aggregate {
     font-weight: bold;
 }
-.dropped .scores {
-    text-decoration: line-through;
+.hidden {
+    display: none;
 }
-.droppable {
-    color: #777;
+table.gradeSummary input {
+    position: relative;
+    bottom: -2px;
 }

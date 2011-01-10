@@ -156,10 +156,10 @@ class GradedItem(models.Model):
 
         This will apply the aggregation and preprocessing functions.
         The expected shape of the returned data is as follows: `{name,
-        score, score_string, points, all: {score, score_string,
-        points}}`.  If the item is composite, include `{aggregate,
-        items}`, and possibly `{preprocess}`.  Otherwise include
-        `{feedback_p}`.
+        score, score_string, points, percent, all: {score,
+        score_string, points, percent}}`.  If the item is composite,
+        include `{aggregate, items}`, and possibly `{preprocess}`.
+        Otherwise include `{feedback_p}`.
 
         `score_string` is maintained separately, so it can be set to
         'null' if `student` is missing a score for this item.  This is
@@ -167,27 +167,32 @@ class GradedItem(models.Model):
 
         data = {'name': self.name}
 
+        def pct(n,d):
+            return n*100.0/d if d else 0.0
+
         if not self.is_composite: # Easier case first
             try:                  # Maybe score won't exist
                 score = self.score_set.get(user=student)
                 stats = {'score': score.points,
                          'score_string': str(score.points),
-                         'points': self.points}
+                         'points': self.points,
+                         'percent': pct(score.points, self.points)}
                 data['feedback_p'] = bool(self.feedback or score.feedback)
                 data['all'] = stats
                 data.update(stats)
             except Score.DoesNotExist:
                 stats = {'score': 0,
                          'score_string': 'null',
-                         'points': self.points}
+                         'points': self.points,
+                         'percent': 0.0}
                 data['feedback_p'] = bool(self.feedback)
                 data['all'] = stats
                 data.update(stats)
 
         else:                   # If it IS composite
             aggregate_f = getattr(aggregators, self.aggregate)
-            data['aggregate'] = self.aggregate
-            data['preprocess'] = self.preprocess
+            data['aggregate'] = self.aggregate.replace('_', ' ')
+            data['preprocess'] = self.preprocess.replace('_', ' ')
 
             all_ch = [c.summary(student) for c in self.children.all()]
             data['items'] = all_ch
@@ -196,17 +201,21 @@ class GradedItem(models.Model):
             points = aggregate_f(lambda x: x['all']['points'], all_ch)
             stats = {'score': score,
                      'score_string': str(score),
-                     'points': points}
+                     'points': points,
+                     'percent': pct(score,points)}
             data['all'] = stats
 
             if self.preprocess:
                 slice_f = getattr(preprocessors, self.preprocess)
-                slice_ch = slice_f(lambda x: x['score'], all_ch)
+                slice_ch = slice_f(lambda x: x['percent'], all_ch)
                 score = aggregate_f(lambda x: x['score'], slice_ch)
                 points = aggregate_f(lambda x: x['points'], slice_ch)
                 stats = {'score': score,
                          'score_string': str(score),
-                         'points': points}
+                         'points': points,
+                         'percent': pct(score,points)}
+                for g in all_ch:
+                    g['dropped'] = g not in slice_ch
             data.update(stats)
 
         return data
