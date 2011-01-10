@@ -24,6 +24,9 @@ def symbols_in(module):
                filter(lambda sym: not sym.startswith('_'),
                       dir(module)))
 
+AGGREGATORS = symbols_in(aggregators)
+PREPROCESSORS = symbols_in(preprocessors)
+
 class GradedItem(models.Model):
     """Represents either one graded item, or a category.
 
@@ -65,6 +68,7 @@ class GradedItem(models.Model):
         # having pk=null wreaks havoc with finding children.
         if not self.is_composite:
             assert self.children.count() == 0
+        return self
 
     def get_course(self):
         """Return course to which this item is attached.
@@ -92,9 +96,38 @@ class GradedItem(models.Model):
                     'points': self.points,
                     'feedback': self.feedback}
 
+class Score(models.Model):
+    item = models.ForeignKey(GradedItem)
+    user = models.ForeignKey(User)
+    points = models.IntegerField()
+    feedback = models.TextField(blank=True)
+    posted = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now_add=True)
+
+#    objects = ScoreManager()
+
+    def __unicode__(self):
+        return '%s %s %s %d' % (self.item.get_course().tag,
+                                self.item.name,
+                                self.user.username,
+                                self.points)
+
+    def percent_string(self):
+        return '%.0f%%' % self.percent()
+
+    def percent(self):
+        return self.points * 100.0 / self.item.points
+
+    def dump(self):
+        return {'user': self.user.username,
+                'points': self.points,
+                'feedback': self.feedback}
+
+    class Meta:
+        unique_together = ('item', 'user')
 
 
-
+#### OLD STUFF
 def update_fields(entity, fields, data):
     changes = []
     for f in fields:
@@ -178,34 +211,4 @@ class ScoreManager(models.Manager):
     def dump(self, item):
         return [s.dump() for s in self.filter(item=item)]
 
-class Score(models.Model):
-    item = models.ForeignKey(GradedItem)
-    user = models.ForeignKey(User)
-    points = models.IntegerField()
-    feedback = models.TextField(blank=True)
-    posted = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now_add=True)
-
-    objects = ScoreManager()
-
-    def __unicode__(self):
-        """Sample: cs150s11 Quiz 1 league 40"""
-        return '%s %s %s %d' % (self.item.category.course.tag,
-                                self.item.name,
-                                self.user.username,
-                                self.points)
-
-    def percent_string(self):
-        return '%.0f%%' % self.percent()
-
-    def percent(self):
-        return self.points * 100.0 / self.item.points
-
-    def dump(self):
-        return {'user': self.user.username,
-                'points': self.points,
-                'feedback': self.feedback}
-
-    class Meta:
-        unique_together = ('item', 'user')
 
