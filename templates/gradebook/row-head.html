@@ -1,0 +1,14 @@
+{% load gravatar %}
+<td class="roster">
+  <a href="{% url profile username=u.username %}"
+     title="{{ u.get_full_name }}">
+    <img class="gravatar" src="{{ u|gravatar:size }}"
+         width="{{size}}" height="{{size}}" />
+  </a>
+</td>
+<td>
+  <a href="{% url profile username=u.username %}"
+     title="{{ u.get_full_name }}">
+    {{ u.username }}
+  </a>
+</td>

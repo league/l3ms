@@ -8,6 +8,7 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.template import loader, Context
 from l3ms.courses.models import Course, Enrollment
+from l3ms.courses.templatetags.enrollment import ROSTER_GRAVATAR_SIZE
 from l3ms.http_auth.views import check_login
 from models import GradedItem
 import httplib
@@ -93,9 +94,10 @@ def grade_summary(request, context):
         return
     except Enrollment.DoesNotExist:
         return
-
-    context['summary'] = (instructor_summary if e.kind=='I'
-                          else student_summary) (g, e)
+    if e.is_instructor():
+        context['gradeSheet'] = instructor_summary(g,e)
+    else:
+        context['gradeSummary'] = student_summary(g,e)
 
 def student_summary(g, e):
     t = loader.get_template('gradebook/summary-line.html')
@@ -144,17 +146,20 @@ def instructor_summary(g, e):
 
     # Use instructor's 'grades' to construct header row
     data = g.summary(e.user)
-    buf.append('<tr><th>Student</th>')
+    buf.append('<tr><th class="sorttable_nosort">&nbsp;</th><th>Student</th>')
     recur(data, e.user, loader.get_template('gradebook/sheet-head.html'))
     buf.append('</tr>')
 
+    row_head = loader.get_template('gradebook/row-head.html')
+    sheet_cell = loader.get_template('gradebook/sheet-cell.html')
     for s in e.course.get_graded_students():
-        buf.append('<tr><td>%s</td>' % s.user.username)
-        recur(g.summary(s.user), s.user,
-              loader.get_template('gradebook/sheet-cell.html'))
+        buf.append('<tr>')
+        cx = Context({'u': s.user, 'size': ROSTER_GRAVATAR_SIZE})
+        buf.append(row_head.render(cx))
+        recur(g.summary(s.user), s.user, sheet_cell)
         buf.append('</tr>')
 
-    buf.append('<tfoot><tr><td>&nbsp;</td>')
+    buf.append('<tfoot><tr><td>&nbsp;</td><td>&nbsp;</td>')
     recur(data, e.user, loader.get_template('gradebook/sheet-foot.html'))
     buf.append('</tr></tfoot></table>')
     return ''.join(buf)

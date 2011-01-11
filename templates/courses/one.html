@@ -10,7 +10,7 @@
 <script type="text/javascript" src="/l3media/sorttable.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-  $("div#messages").fadeOut(3000)
+  $(".messages").fadeOut(3000)
   $(".sliceWidget").change(function() {
     var sliced = $(this).attr('checked')
     $(".sliceWidget").attr('checked', sliced)
@@ -40,17 +40,19 @@ $(document).ready(function(){
   <div class="container_12 clearfix">
     <div class="grid_12 alpha omega">
       <h1>{{course.code}}: {{course.name}} • {{course.semester.name}}</h1>
-    </div>
-  </div>
+    </div> <!-- grid_12 -->
+  </div>   <!-- container_12 -->
 
   <div class="container_12 clearfix">
     <div class="grid_2 alpha">
       <h2>Roster</h2>
       {{ course.get_instructors|roster_list:"instructorList" }}
+      {% if enrollment.is_student %}
       {{ course.get_graded_students|roster_list:"studentList" }}
       {{ course.get_auditing_students|roster_list:"auditList" }}
-    </div>
-    <div class="grid_7 alpha">
+      {% endif %}
+    </div> <!-- grid_2 -->
+    <div class="grid_7">
       <h2>Content</h2>
       <div class="links">
         {% for l in course.courselink_set.all %}
@@ -59,26 +61,29 @@ $(document).ready(function(){
           {{ l.get_abbrev_url }}
         {% endfor %}
         </a>
-      </div>
-      {% if summary %}
+      </div> <!-- links -->
+
+      {% if gradeSummary %}
       <h2 class="break">Assessment</h2>
-      {{summary|safe}}
+      {{gradeSummary|safe}}
       {% endif %}
-    </div>
-    <div class="grid_3 alpha">
+    </div> <!-- grid_7 -->
+    <div class="grid_3 omega">
       <h2>Preferences</h2>
 
       <form method="post" action="{{action}}">
         {{form.as_p}}
         <input type="submit" value="Save" />
+        <p><span class="messages">{{ message }}</span>&nbsp;</p>
       </form>
+    </div> <!-- grid_3 -->
 
-      {% if message %}
-      <div id="messages">
-        <p>{{ message }}</p>
-      </div>
-      {% endif %}
-
-  </div>
-</div>
+    {% if enrollment.is_instructor %}
+    <div class="grid_12 alpha omega">
+      {{gradeSheet|safe}}
+      {{course.get_auditing_students|roster_list:"auditList"}}
+    </div> <!-- grid_12 -->
+    {% endif %}
+  </div>   <!-- container_12 -->
+</div>     <!-- coursePage -->
 {% endblock %}

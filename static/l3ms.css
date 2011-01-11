@@ -203,7 +203,6 @@ table#gradeSheet th .title {
 }
 table#gradeSheet th {
     text-align: right;
-    border-bottom: 1px solid #ccc;
 }
 th.sorted {
     background: #ffc;
@@ -220,5 +219,10 @@ td .expandTool.collapsed {
 }
 table#gradeSheet tfoot td {
     line-height: 18px;
-    border-top: 1px solid #ccc
+}
+table#gradeSheet a:link {
+    color: inherit;
+}
+table#gradeSheet td {
+    vertical-align: middle;
 }

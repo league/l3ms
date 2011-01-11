@@ -1,6 +1,8 @@
 <td class="scores {{classes|join:' '}}">
   <a href="{% url grade_details tag=course.tag id=id %}">/{{points}}</a>
+  {% if items %}
   <br />
   <a href="#" id="expand{{id}}"
      class="expandTool {{expanded|yesno:'expanded,collapsed'}}"></a>
+  {% endif %}
 </td>

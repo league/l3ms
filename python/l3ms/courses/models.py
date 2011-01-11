@@ -79,6 +79,18 @@ class Enrollment(models.Model):
         unique_together = (("course", "user"),)
         ordering = ['course']
 
+    def is_instructor(self):
+        return self.kind == 'I'
+
+    def is_student(self):
+        return self.kind != 'I'
+
+    def is_graded(self):
+        return self.kind == 'G'
+
+    def is_auditing(self):
+        return self.kind == 'A'
+
 LINK_KINDS = (
     ('H', 'Home'),
     ('R', 'Repository'),
