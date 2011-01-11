@@ -146,7 +146,13 @@ div#allCourses .course {
     text-indent: -48px;
 }
 div#allCourses .enrolled {
+    background: url(bullet_green.png) no-repeat 0px 2px;
+}
+div#allCourses .auditing {
     background: url(bullet_blue.png) no-repeat 0px 2px;
+}
+div#allCourses .instructor {
+    background: url(bullet_star.png) no-repeat 0px 2px;
 }
 ul.roster {
     list-style: none;
