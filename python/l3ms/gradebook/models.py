@@ -177,7 +177,7 @@ class GradedItem(models.Model):
                          'score_string': str(score.points),
                          'points': self.points,
                          'percent': pct(score.points, self.points)}
-                data['feedback_p'] = bool(self.feedback or score.feedback)
+                data['feedback'] = score.feedback
                 data['all'] = stats
                 data.update(stats)
             except Score.DoesNotExist:
@@ -185,7 +185,7 @@ class GradedItem(models.Model):
                          'score_string': 'null',
                          'points': self.points,
                          'percent': 0.0}
-                data['feedback_p'] = bool(self.feedback)
+                data['feedback'] = ''
                 data['all'] = stats
                 data.update(stats)
 

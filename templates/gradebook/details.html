@@ -1,0 +1,32 @@
+{% extends "layout/narrow.html" %}
+{% block small_content %}
+<h1>{{course.code}}: {{item.name}} · {{course.semester.name}}</h1>
+
+<p><img src="https://chart.googleapis.com/chart?{{chart}}"
+        width="{{chart_dim.0}}" height="{{chart_dim.1}}" />
+</p>
+{% if item.feedback %}
+<h2>General Feedback</h2>
+<div class="blurb">
+  {{item.feedback}}
+</div>
+{% endif %}
+
+{% for d in data %}
+<h2 name="{{d.user.username}}">Results for
+  {{d.user.get_full_name|default:d.user.username}}</h2>
+
+<div>Score: {{d.score_string}} / {{d.points}}
+  ({{d.percent|floatformat:0}}%)</div>
+
+<div class="blurb">
+{{d.feedback}}
+</div>
+{% endfor %}
+
+<p class="links">
+  <a href="{% url one_course tag=course.tag %}">←  Back to
+  {{course.code}}</a>
+</p>
+
+{% endblock %}

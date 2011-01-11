@@ -80,7 +80,11 @@ $(document).ready(function(){
 
     {% if enrollment.is_instructor %}
     <div class="grid_12 alpha omega">
-      {{gradeSheet|safe}}
+      {% if gradeSheet %}
+        {{gradeSheet|safe}}
+      {% else %}
+        {{course.get_graded_students|roster_list:"studentList"}}
+      {% endif %}
       {{course.get_auditing_students|roster_list:"auditList"}}
     </div> <!-- grid_12 -->
     {% endif %}

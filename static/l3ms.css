@@ -226,3 +226,6 @@ table#gradeSheet a:link {
 table#gradeSheet td {
     vertical-align: middle;
 }
+div.blurb {
+    margin-bottom: 3ex;
+}
