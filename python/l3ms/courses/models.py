@@ -48,6 +48,9 @@ class Course(models.Model):
     def get_graded_students(self):
         return self.get_users_by_kind('G')
 
+    def get_auditing_students(self):
+        return self.get_users_by_kind('A')
+
     def get_full_instructor_names(self):
         return [e.user.get_full_name().replace(' ', '&nbsp;')
                 for e in self.get_instructors()]

@@ -47,7 +47,8 @@ $(document).ready(function(){
     <div class="grid_2 alpha">
       <h2>Roster</h2>
       {{ course.get_instructors|roster_list:"instructorList" }}
-      {{ course.get_students|roster_list:"studentList" }}
+      {{ course.get_graded_students|roster_list:"studentList" }}
+      {{ course.get_auditing_students|roster_list:"auditList" }}
     </div>
     <div class="grid_7 alpha">
       <h2>Content</h2>
