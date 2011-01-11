@@ -7,6 +7,7 @@
 
 {% block scripts %}
 {{ block.super }}
+<script type="text/javascript" src="/l3media/sorttable.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
   $("div#messages").fadeOut(3000)
@@ -16,6 +17,19 @@ $(document).ready(function(){
     $(".ifAll").toggleClass("hidden", sliced)
     $(".ifSliced").toggleClass("hidden", !sliced)
     $(".droppable").toggleClass("dropped", sliced)
+  })
+  $(".expandTool").click(function() {
+    var expanded = $(this).hasClass("expanded")
+    var id = $(this).attr('id').substr(6)
+    if(expanded) {
+        $(this).removeClass("expanded").addClass("collapsed")
+        $(".descendantOf"+id).addClass("hidden")
+        $(".descendantOf"+id+" .expandTool").removeClass("expanded").addClass("collapsed")
+    }
+    else {
+        $(this).removeClass("collapsed").addClass("expanded")
+        $(".childOf"+id).removeClass("hidden")
+    }
   })
 })
 </script>
@@ -47,9 +61,7 @@ $(document).ready(function(){
       </div>
       {% if summary %}
       <h2 class="break">Assessment</h2>
-      <table class="gradeSummary">
       {{summary|safe}}
-      </table>
       {% endif %}
     </div>
     <div class="grid_3 alpha">

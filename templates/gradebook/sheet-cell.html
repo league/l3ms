@@ -1,0 +1,4 @@
+<td class="scores {{classes|join:' '}} {{dropped|yesno:'dropped,'}}">
+  <a href="{% url grade_details tag=course.tag id=id %}#{{user.username}}"
+     title="{{percent|floatformat:0}}%">{{score_string}}</a>
+</td>

@@ -17,11 +17,8 @@
     <span class="ifAll">{{all.percent|floatformat:0}}%</span>
     <span class="ifSliced hidden">{{percent|floatformat:0}}%</span>
   </td>
-  <td><a href="">statistics</a></td>
+  <td><a href="{% url grade_details tag=course.tag id=id %}">details</a></td>
   <td>
-    {% if feedback_p %}
-    <a href="">feedback</a>
-    {% endif %}
     {% if preprocess %}
     <input type="checkbox" class="sliceWidget" />&nbsp;{{preprocess}}
     {% endif %}

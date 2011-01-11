@@ -1,11 +1,18 @@
-from django.template import loader, Context
+# l3ms.gradebook.views    -*- coding: utf-8 -*-
+# Copyright ©2011 by Christopher League <league@contrapunctus.net>
+#
+# This is free software but comes with ABSOLUTELY NO WARRANTY.
+# See the GNU General Public License version 3 for details.
+
 from django.db import transaction
 from django.http import HttpResponse
+from django.template import loader, Context
 from l3ms.courses.models import Course, Enrollment
 from l3ms.http_auth.views import check_login
 from models import GradedItem
 import httplib
 import json
+import re
 import traceback
 
 class ResponseExn:
@@ -78,16 +85,25 @@ def dump_grades(request, tag):
 
 def grade_summary(request, context):
     c = context['course']
+    u = request.user
     try:
         g = c.gradeditem
+        e = u.enrollment_set.get(course=c)
     except GradedItem.DoesNotExist:
         return
-    u = request.user
+    except Enrollment.DoesNotExist:
+        return
+
+    context['summary'] = (instructor_summary if e.kind=='I'
+                          else student_summary) (g, e)
+
+def student_summary(g, e):
     t = loader.get_template('gradebook/summary-line.html')
-    buf = []
+    buf = ['<table id="gradeSummary">']
 
     def recur(item, depth=0):
         item['depth'] = depth
+        item['course'] = e.course
         if 'aggregate' in item:
             for i in item['items']:
                 recur(i, depth+1)
@@ -97,7 +113,48 @@ def grade_summary(request, context):
             item['class'] = 'item'
             buf.append(t.render(Context(item)))
 
-    recur(c.gradeditem.summary(u))
-    context['summary'] = ''.join(buf)
-#    context['summary'] = c.gradeditem.summary(u)
+    recur(g.summary(e.user))
+    buf.append('</table>')
+    return ''.join(buf)
 
+
+def instructor_summary(g, e):
+    orphan = re.compile(r'\s+(\w{1,2}\b)')
+    buf = ['<table id="gradeSheet" class="sortable">']
+
+    def recur(item, user, template, depth=0, ancestors=[]):
+        if depth == 0:
+            item['expanded'] = True
+            classes = []
+        else:
+            item['expanded'] = False
+            classes = ['descendantOf%d' % a for a in ancestors]
+            classes.append('childOf%d' % ancestors[0])
+            if depth >= 2:
+                classes.append('hidden')
+
+        item['classes'] = classes
+        item['name'] = orphan.sub(r'&nbsp;\1', item['name'])
+        item['course'] = e.course
+        item['user'] = user
+
+        buf.append(template.render(Context(item)))
+        for i in item.get('items', []):
+            recur(i, user, template, depth+1, [item['id']] + ancestors)
+
+    # Use instructor's 'grades' to construct header row
+    data = g.summary(e.user)
+    buf.append('<tr><th>Student</th>')
+    recur(data, e.user, loader.get_template('gradebook/sheet-head.html'))
+    buf.append('</tr>')
+
+    for s in e.course.get_graded_students():
+        buf.append('<tr><td>%s</td>' % s.user.username)
+        recur(g.summary(s.user), s.user,
+              loader.get_template('gradebook/sheet-cell.html'))
+        buf.append('</tr>')
+
+    buf.append('<tfoot><tr><td>&nbsp;</td>')
+    recur(data, e.user, loader.get_template('gradebook/sheet-foot.html'))
+    buf.append('</tr></tfoot></table>')
+    return ''.join(buf)

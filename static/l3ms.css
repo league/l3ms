@@ -172,16 +172,16 @@ tr.depth3 > td:first-child { padding-left: 3em;}
 tr.depth2 > td:first-child { padding-left: 2em;}
 tr.depth1 > td:first-child { padding-left: 1em;}
 
-table.gradeSummary {
+table {
     border-collapse: collapse;
 }
-table.gradeSummary td {
+table td, table th {
     padding: 2px .3em;
 }
 td.scores {
     text-align: right;
 }
-tr.droppable .scores {
+tr.droppable .scores, table#gradeSheet td.dropped {
     color: #aaa;
 }
 tr.dropped .strike {
@@ -194,7 +194,31 @@ tr.aggregate {
 .hidden {
     display: none;
 }
-table.gradeSummary input {
+table#gradeSummary input {
     position: relative;
     bottom: -2px;
+}
+table#gradeSheet th .title {
+    font-weight: bold;
+}
+table#gradeSheet th {
+    text-align: right;
+    border-bottom: 1px solid #ccc;
+}
+th.sorted {
+    background: #ffc;
+}
+td .expandTool {
+    padding-left: 18px;
+    padding-bottom: 18px;
+}
+td .expandTool.expanded {
+    background: url(table_delete.png) no-repeat 0px 0px;
+}
+td .expandTool.collapsed {
+    background: url(table_add.png) no-repeat 0px 0px;
+}
+table#gradeSheet tfoot td {
+    line-height: 18px;
+    border-top: 1px solid #ccc
 }

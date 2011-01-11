@@ -165,7 +165,7 @@ class GradedItem(models.Model):
         'null' if `student` is missing a score for this item.  This is
         calculated as zero, but should appear as 'null'."""
 
-        data = {'name': self.name}
+        data = {'name': self.name, 'id': self.id}
 
         def pct(n,d):
             return n*100.0/d if d else 0.0
