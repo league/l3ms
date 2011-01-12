@@ -20,7 +20,7 @@ import forms
 import itertools
 import random
 import re
-import simplejson as json
+import json
 
 def reverse_u(view, username):
     return reverse(view, kwargs={'username': username})
