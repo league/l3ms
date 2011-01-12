@@ -7,9 +7,13 @@ div#header {
     margin-bottom: 2ex;
 }
 div#l3msNav {
-    text-align: right
+    text-align: right;
 }
 div#logo {
+    background: url(logo.png) no-repeat 0px 0px;
+    height: 40px;
+    font-size: 20px;
+    font-family: serif;
 }
 div#messages {
     margin: 2ex 0;
