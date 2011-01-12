@@ -10,10 +10,15 @@ div#l3msNav {
     text-align: right;
 }
 div#logo {
-    background: url(logo.png) no-repeat 0px 0px;
     height: 40px;
     font-size: 20px;
     font-family: serif;
+}
+div#logo .site {
+    color: #555;
+}
+div#logo .sys {
+    color: #9bc;
 }
 div#messages {
     margin: 2ex 0;

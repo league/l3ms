@@ -13,12 +13,14 @@ def enrolled_in(user, course):
 @register.filter
 def enrollment_kind(user, course):
     try:
-        e = user.enrollment_set.get(course=course)
-        return {'I': 'instructor',
-                'A': 'auditing',
-                'G': 'enrolled'}[e.kind]
+        if hasattr(user, 'enrollment_set'):
+            e = user.enrollment_set.get(course=course)
+            return {'I': 'instructor',
+                    'A': 'auditing',
+                    'G': 'enrolled'}[e.kind]
     except Enrollment.DoesNotExist:
-        return 'unenrolled'
+        pass
+    return 'unenrolled'
 
 @register.filter
 def roster_list(enrollments, id):

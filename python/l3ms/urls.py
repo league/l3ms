@@ -18,6 +18,7 @@ subpatterns = patterns(
     url(r'^v/(?P<key>.+)$', email_validation.views.validate,
         name='validate'),
     url(r'^nav/(?P<path>.+)$', courses.views.nav, name='nav'),
+    url(r'about$', accounts.views.about, name='about'),
     (r'^acct/', include(accounts.urls)),
     (r'^auth/', include(http_auth.urls)),
     (r'^admin/', include(admin.site.urls)),

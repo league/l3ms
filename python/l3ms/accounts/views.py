@@ -38,6 +38,11 @@ def user_exists(username):
     except User.DoesNotExist:
         return False
 
+def about(request):
+    return render_to_response('acct/about.html',
+                              {'user': request.user,
+                               'site_name': settings.SITE_NAME})
+
 @login_required
 def home(request):
     return profile(request, username=request.user.username)

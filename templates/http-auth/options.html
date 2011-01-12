@@ -24,9 +24,14 @@
 
 <div class="container_12 clearfix">
   <div class="grid_3 alpha">&nbsp;</div>
-  <div class="links grid_9 omega">
+  <div class="links grid_3">
     <a href="{% url forgot_username %}">» Retrieve my user name</a>
     <a href="{% url forgot_password %}">» Reset my password</a>
   </div>
+  <div class="links grid_3">
+    <a href="{% url all_courses %}">» Course list</a>
+    <a href="{% url about %}">» About this site</a>
+  </div>
+  <div class="links grid_3 omega">&nbsp;</div>
 </div>
 {% endblock content %}

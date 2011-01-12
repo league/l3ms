@@ -1,0 +1,28 @@
+{% extends "http-auth/narrow.html" %}
+{% block small_content %}
+<h1>About this site</h1>
+
+<p><b>l3ms</b> is a lightweight learning management system.  It
+  provides a gradebook, account management, and authentication for
+  static pages and software repositories.  It was developed by
+  by <a href="http://contrapunctus.net/">Christopher League</a> using
+  Python and the Django web framework.  The source is available
+  on <a href="http://github.com/league/">github</a>.
+</p>
+<p>
+  <b>liucs.net</b> hosts several courses and other resources from the
+  Computer Science department at Long Island University's Brooklyn
+  Campus.
+</p>
+<p>
+  This program is <b>free software:</b> you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.  This program is
+    distributed in the hope that it will be useful, but WITHOUT ANY
+    WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+    License for more details.
+</p>
+{{block.super}}
+{% endblock %}
