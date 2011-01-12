@@ -2,10 +2,12 @@
 
 from os.path import realpath, dirname, join
 import getpass
+import os
 
 PROJECT_ROOT = dirname(dirname(dirname(realpath(__file__))))
+USER = getpass.getuser()
 
-DEBUG = True
+DEBUG = USER != 'www-data' or 'L3MS_DEBUG' in os.environ
 TEMPLATE_DEBUG = DEBUG
 
 URL_PREFIX = 'l3ms/'           # Django script mounted at actual root
@@ -25,8 +27,8 @@ MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'postgresql_psycopg2'
 DATABASE_NAME = 'l3ms'
-DATABASE_USER = getpass.getuser()
-DATABASE_PASSWORD = 'wIfPF9ICqksCHNi9'
+DATABASE_USER = USER
+DATABASE_PASSWORD = ''
 DATABASE_HOST = ''
 DATABASE_PORT = ''
 
@@ -65,7 +67,10 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/django-media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'rlser#(u)qctvs48j59-1zc%ydjcuxu)#@m=m2966!+j_6_&^d'
+try:
+    from l3ms.secrets import SECRET_KEY
+except ImportError:
+    SECRET_KEY = 'rlser#(u)qctvs48j59-1zc%ydjcuxu)#@m=m2966!+j_6_&^d'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (

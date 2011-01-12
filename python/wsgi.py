@@ -12,12 +12,5 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'l3ms.settings'
 import l3ms.settings
 l3ms.settings.URL_PREFIX = ''
 
-# Recommendations for production use:
-# 1. Turn off DEBUG mode
-#l3ms.settings.DEBUG = False
-# 2. Set SECRET_KEY to something not from source repo
-# 3. Set DATABASE_ settings to use ident auth from www-data
-
-
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
