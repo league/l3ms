@@ -108,7 +108,7 @@ class GradedItem(models.Model):
         unique_together = ('course', 'parent', 'name')
         ordering = ['order', 'posted', 'name']
 
-    def save(self, force_insert=False, force_update=False):
+    def save(self, *args, **kwargs):
         """Overridden to enforce composite constraints."""
         assert bool(self.course) ^ bool(self.parent)
         if self.is_composite:
@@ -117,7 +117,7 @@ class GradedItem(models.Model):
         else:
             assert self.points       # feedback still optional
             assert not (self.preprocess or self.aggregate)
-        super(GradedItem, self).save(force_insert, force_update)
+        super(GradedItem, self).save(*args, **kwargs)
         # Unfortunately, must verify this AFTER save, because
         # having pk=null wreaks havoc with finding children.
         if not self.is_composite:
@@ -244,10 +244,10 @@ class Score(models.Model):
         order_with_respect_to = 'item'
         ordering = ['user']
 
-    def save(self, force_insert=False, force_update=False):
+    def save(self, *args, **kwargs):
         """Overridden to enforce composite constraints."""
         assert not self.item.is_composite
-        super(Score, self).save(force_insert, force_update)
+        super(Score, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return '%s %s %s %d' % (self.item.get_course().tag,
