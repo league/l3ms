@@ -1,6 +1,7 @@
 # Django settings for l3ms project.
 
 from os.path import realpath, dirname, join
+import getpass
 
 PROJECT_ROOT = dirname(dirname(dirname(realpath(__file__))))
 
@@ -23,10 +24,10 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'postgresql_psycopg2'
-DATABASE_NAME = 'djlms'
-DATABASE_USER = 'djlms'
+DATABASE_NAME = 'l3ms'
+DATABASE_USER = getpass.getuser()
 DATABASE_PASSWORD = 'wIfPF9ICqksCHNi9'
-DATABASE_HOST = 'localhost'
+DATABASE_HOST = ''
 DATABASE_PORT = ''
 
 if DEBUG:
