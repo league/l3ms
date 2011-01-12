@@ -109,7 +109,7 @@ def forgot_password_handler(request, k):
                                'url': url})
 
 ValidationKey.objects.register(
-    'P', 'password reset', 'email/reset.txt',
+    'P', '%s password reset' % settings.SITE_NAME, 'email/reset.txt',
     forgot_password_handler, 96)
 
 @except404([User.DoesNotExist])
@@ -146,7 +146,8 @@ def edit_email_handler(request, k):
     return http.HttpResponseRedirect(profile_of(k.user))
 
 ValidationKey.objects.register(
-    'E', 'email address change', 'email/edit-email.txt',
+    'E', '%s email address change' % settings.SITE_NAME,
+    'email/edit-email.txt',
     edit_email_handler, 96)
 
 @except404([User.DoesNotExist])
@@ -195,7 +196,7 @@ def new_account_handler(request, k):
     return http.HttpResponseRedirect(profile_of(u))
 
 ValidationKey.objects.register(
-    'N', 'account', 'email/new.txt',
+    'N', '%s account' % settings.SITE_NAME, 'email/new.txt',
     new_account_handler, 96)
 
 BAD_USERNAME_RE = re.compile(r'\W')
@@ -248,8 +249,12 @@ def gen_candidate_base_names(username, first, last):
     for i in range(max(5, len(username)-3), len(username)):
         yield username[:i]
 
+email_re = re.compile(
+    r"(^[-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*"  # dot-atom
+    r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*"' # quoted-string
+    r')@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?$', re.IGNORECASE)  # domain
+
 def check_email(request):
-    from django.forms.fields import email_re
     e = request.GET.get('e', '')
     if email_re.match(e):
         n = User.objects.filter(email__iexact=e).count()

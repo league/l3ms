@@ -11,12 +11,10 @@ import forms
 import re
 
 def all_courses(request):
-    my_courses = Course.objects.filter(enrollment__user=request.user)
     return render_to_response('courses/all.html',
                               {'user': request.user,
                                'site_name': settings.SITE_NAME,
-                               'courses': Course.objects.all(),
-                               'my_courses': my_courses})
+                               'courses': Course.objects.all()})
 
 def enroll(request, course):
     assert request.user.is_authenticated()
