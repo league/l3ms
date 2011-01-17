@@ -12,5 +12,8 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'l3ms.settings'
 import l3ms.settings
 l3ms.settings.URL_PREFIX = ''
 
+from django.conf import settings
+settings.FORCE_SCRIPT_NAME = '/l3ms'
+
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
