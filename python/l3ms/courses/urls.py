@@ -6,5 +6,6 @@ urlpatterns = patterns(
     '',
     url(r'^$', views.all_courses, name='all_courses'),
     url(r'^(?P<tag>\w+)/$', views.one_course, name='one_course'),
+    url(r'^(?P<tag>\w+)/emails$', views.mass_email, name='mass_email'),
     )
 

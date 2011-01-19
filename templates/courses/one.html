@@ -50,6 +50,8 @@ $(document).ready(function(){
       {% if enrollment.is_student %}
       {{ course.get_graded_students|roster_list:"studentList" }}
       {{ course.get_auditing_students|roster_list:"auditList" }}
+      {% else %}
+      <p><a href="{% url mass_email tag=course.tag %}">Students' emails</a></p>
       {% endif %}
     </div> <!-- grid_2 -->
     <div class="grid_7">

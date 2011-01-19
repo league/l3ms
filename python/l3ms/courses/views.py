@@ -76,6 +76,15 @@ def one_course(request, tag):
 
     return render_to_response('courses/one.html', context)
 
+@login_required
+@except404([Course.DoesNotExist])
+def mass_email(request, tag):
+    course = Course.objects.get(pk=tag)
+    emails = ['%s <%s>' % (e.user.get_full_name(), e.user.email)
+              for e in course.get_students()]
+    emails = ',\n    '.join(emails)
+    return HttpResponse(emails, content_type='text/plain')
+
 def nav(request, path):
     course = None
     message = None
